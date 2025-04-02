@@ -43,7 +43,12 @@
     "@types/node": "^22.13.11",
     "eslint": "^9.23.0",
     "nuxt": "^3.16.1",
+<<<<<<< HEAD
     "nuxt-auth-sanctum": "^0.6.0",
+=======
+    "nuxt-auth-sanctum": "^0.6.1",
+    "nuxt-laravel-echo": "^0.2.3",
+>>>>>>> e4d8a7c3f07311e16d42a15347792918f2d5601b
     "typescript": "^5.8.2",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
