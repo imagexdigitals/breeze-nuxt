@@ -14,7 +14,6 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
   ],
 
-<<<<<<< HEAD
   fonts: {
     defaults: {
       weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
@@ -65,10 +64,6 @@ export default defineNuxtConfig({
     key: '',
     scheme: 'http',
   },
-=======
-  ssr: true,
-  devtools: { enabled: true },
->>>>>>> e4d8a7c3f07311e16d42a15347792918f2d5601b
 
   app: {
     head: {
@@ -103,42 +98,4 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-07-14',
-<<<<<<< HEAD
 });
-=======
-
-  nitro: {
-    compressPublicAssets: true,
-  },
-
-  vite: {
-    optimizeDeps: {
-      include: ['pusher-js'],
-    },
-  },
-
-  typescript: {
-    strict: true,
-    typeCheck: 'build',
-  },
-
-  echo: {
-    key: '',
-    scheme: 'http',
-  },
-
-  eslint: {
-    config: {
-      stylistic: true,
-    },
-  },
-
-  sanctum: {
-    baseUrl: 'http://localhost:80',
-    redirect: {
-      onGuestOnly: '/dashboard',
-      onLogin: '/dashboard',
-    },
-  },
-})
->>>>>>> e4d8a7c3f07311e16d42a15347792918f2d5601b
