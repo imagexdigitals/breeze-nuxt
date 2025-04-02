@@ -17,3 +17,10 @@ useHead({
 
   <UNotifications />
 </template>
+
+<style>
+/* If you write something like this: */
+:root {
+  font-family: Figtree;
+}
+</style>

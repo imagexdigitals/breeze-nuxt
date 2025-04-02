@@ -4,11 +4,12 @@ import type { NuxtApp } from '#app'
 
 export default defineAppConfig({
   ui: {
-    primary: 'red',
+    primary: 'indigo',
     gray: 'neutral',
   },
 
-  siteTitle: 'ProjectName',
+
+  siteTitle: 'NxtKart',
 
   sanctum: {
     interceptors: {

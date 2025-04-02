@@ -1,18 +1,20 @@
 <script lang="ts" setup>
+import { useMobileDetection } from '~/composables/useMobileDetection'
 const { isAuthenticated } = useSanctumAuth()
+
+// Use the composable to get the isMobile state
+const { isMobile } = useMobileDetection()
 </script>
 
 <template>
-  <template v-if="isAuthenticated">
-    <div class="flex py-4 px-5 justify-between items-center">
-      <NavBar />
-      <ProfileMenu />
-    </div>
+  <div>
+    <HeaderDesktop v-if="!isMobile" />
+    <HeaderMobile v-if="isMobile" />
 
-    <UContainer class="mt-6 flex flex-col gap-4">
+
       <slot />
-    </UContainer>
-  </template>
+
+  </div>
 </template>
 
 <style scoped></style>

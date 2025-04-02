@@ -7,11 +7,12 @@ type ColorMode = {
 
 const mode = useNuxtApp().$colorMode
 
+
 const availableModes: ColorMode[] = [
   {
     icon: 'i-heroicons-computer-desktop',
     label: 'System',
-    value: 'system',
+    value: 'light',
   },
   {
     icon: 'i-heroicons-light-bulb',

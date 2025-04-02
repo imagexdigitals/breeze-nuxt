@@ -9,6 +9,10 @@ export default <Partial<Config>>{
         square: '1 / 1',
         video: '16 / 9',
       },
+      colors: {
+        nxtkartBlue: '#009FDB',
+        nxtkartsecondaryBlue: '#007AE2',
+      },
     },
   },
 }

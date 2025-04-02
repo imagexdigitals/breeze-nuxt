@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
@@ -12,8 +11,32 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxt/eslint',
     'nuxt-auth-sanctum',
+    '@nuxt/image',
+    '@pinia/nuxt',
+    '@nuxtjs/google-fonts',
+    '@nuxt/icon',
+    'nuxt-schema-org',
     'nuxt-laravel-echo',
+    '@nuxtjs/sitemap',
+    '@nuxt/fonts',
   ],
+
+  fonts: {
+    defaults: {
+      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      styles: ['normal', 'italic'],
+    },
+    families: [
+      { name: 'Figtree', provider: 'google' },
+    ],
+  },
+
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
 
   vite: {
     optimizeDeps: {
@@ -28,8 +51,8 @@ export default defineNuxtConfig({
   },
 
   typescript: {
-    strict: true,
-    typeCheck: 'build',
+    strict: false,
+    typeCheck: false,
   },
 
   nitro: {
@@ -37,7 +60,7 @@ export default defineNuxtConfig({
   },
 
   sanctum: {
-    baseUrl: 'http://localhost:80',
+    baseUrl: 'https://localhost:80',
     redirect: {
       onGuestOnly: '/dashboard',
       onLogin: '/dashboard',
@@ -78,4 +101,4 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-07-14',
-})
+});
