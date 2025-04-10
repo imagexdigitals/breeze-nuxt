@@ -47,8 +47,8 @@
     </div>
 
     <!-- Modal Structure -->
-    <div v-if="isModalOpen" class="fixed inset-0 bg-zinc-900 bg-opacity-50 flex justify-center items-center z-50">
-      <div class="bg-white rounded-lg p-6 max-w-3xl w-full relative">
+    <div v-if="isModalOpen" class="fixed inset-0 bg-zinc-900 bg-opacity-50 flex justify-center items-end md:items-center z-50" @touchstart="handleTouchStart" @touchmove="handleTouchMove">
+      <div class="bg-white rounded-t-2xl md:rounded-lg md:p-6 p-3 w-full md:max-w-3xl md:h-auto h-[70vh] overflow-y-auto relative transform transition-transform duration-500 ease-in-out" :class="{'translate-y-full': !isModalOpen}">
         <button @click="closeModal" class="absolute top-2 right-2 text-red-600 hover:text-red-700">
           <Icon name="fontisto:close" class="w-5 h-5" />
         </button>
@@ -60,7 +60,6 @@
           <p>Get a GST invoice and save up to 18% on business purchases. Registered users can buy products
             for business use and receive a business (GST) invoice with their company name and GST number.</p>
         </div>
-
 
         <h5 class="font-semibold mt-4 mb-2">How It Works:</h5>
         <ul class="list-disc list-inside mb-4">
@@ -87,6 +86,7 @@
 import { ref } from 'vue';
 
 const isModalOpen = ref(false);
+let touchStartY = 0;
 
 const openModal = () => {
   isModalOpen.value = true;
@@ -95,10 +95,38 @@ const openModal = () => {
 const closeModal = () => {
   isModalOpen.value = false;
 };
+
+const handleTouchStart = (event: TouchEvent) => {
+  touchStartY = event.touches[0].clientY;
+};
+
+const handleTouchMove = (event: TouchEvent) => {
+  const touchEndY = event.touches[0].clientY;
+  if (touchEndY - touchStartY > 50) {
+    closeModal();
+  }
+};
 </script>
 
 <style scoped>
 li {
   margin-left: 15px;
+}
+
+/* Ensure the modal takes 70% of the viewport height */
+.h-[70vh] {
+  height: 70vh;
+}
+
+/* Enable vertical scrolling if content overflows */
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+/* Smooth transition for modal */
+.transition-transform {
+  transition-property: transform;
+  transition-duration: 500ms; /* Increased duration for smoother transition */
+  transition-timing-function: ease-in-out; /* Easing function for smooth acceleration and deceleration */
 }
 </style>

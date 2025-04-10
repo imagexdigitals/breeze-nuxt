@@ -16,7 +16,7 @@ onMounted(() => {
 <template>
   <div>
     <HeaderDesktop v-if="!isMobile" />
-    <HeaderMobile v-if="isMobile" />
+    <HeaderMobile v-else />
     <slot />
   </div>
 </template>

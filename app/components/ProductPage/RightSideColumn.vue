@@ -80,8 +80,8 @@
     <PincodeChecker />
 
     <!-- Mobile Sticky Container -->
-    <div class="mobile-sticky-container md:hidden">
-      <div class="flex mt-2 space-x-3 items-center" v-if="props.product.status !== 2">
+    <div class="mobile-sticky-container md:hidden" v-if="props.product.status !== 2">
+      <div class="flex mt-2 space-x-3 items-center">
         <!-- Quantity Section -->
         <div class="bg-[#F4F6F8] p-[4px] border-solid flex flex-nowrap justify-center items-center border-[1px]"
           style="border-color: #fcfcfc !important;">
