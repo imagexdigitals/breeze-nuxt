@@ -6,6 +6,7 @@ export function useMobileDetection() {
 
   const checkScreenSize = () => {
     isMobile.value = window.innerWidth < 768
+    console.log('Screen width:', window.innerWidth, 'isMobile:', isMobile.value)
   }
 
   onMounted(() => {

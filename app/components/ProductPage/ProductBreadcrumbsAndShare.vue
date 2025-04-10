@@ -1,10 +1,10 @@
 <template>
-  <div class="px-5 py-2 border-b flex justify-between items-center relative">
+  <div class="py-2 border-b flex justify-between items-center relative">
     <!-- Breadcrumbs on the left -->
     <ProductPageProductBreadcrumbs :breadcrumbs="breadcrumbs" />
 
     <!-- Share button with dropdown -->
-    <div class="relative">
+    <div class="relative mr-1.5 md:mr-3">
       <button @click="toggleDropdown" class="text-green-600 hover:text-secondaryBlue text-xl flex items-center space-x-1">
         <span class="text-sm text-gray-700 font-semibold">Share</span>
         <Icon name="tdesign:share-filled" />

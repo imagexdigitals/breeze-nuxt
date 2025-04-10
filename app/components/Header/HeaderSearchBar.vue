@@ -30,7 +30,7 @@
         </li>
 
         <!-- See More Results -->
-        <li v-if="seeMore" class="px-4 py-2 text-center text-white bg-primary hover:bg-secondaryBlue cursor-pointer font-semibold">
+        <li v-if="seeMore" class="px-4 py-2 text-center text-white bg-primary hover:bg-secondaryBlue cursor-pointer font-semibold" @click="viewMoreResults">
           See More Results
         </li>
       </ul>
@@ -86,8 +86,6 @@ const searchProducts = async () => {
   }
 };
 
-
-
 const highlightMatch = (text: string): string => {
   if (!searchQuery.value.trim()) {
     return text;
@@ -111,22 +109,10 @@ const navigateResults = (direction: 'up' | 'down') => {
 };
 
 const handleEnterKey = (event: KeyboardEvent) => {
-  if (event.key === 'Enter' && selectedIndex.value !== null) {
-    // Ensure selectedIndex is within bounds
-    if (selectedIndex.value >= 0 && selectedIndex.value < searchResults.value.length) {
-      const selectedProduct = searchResults.value[selectedIndex.value];
-
-      // Check if selectedProduct is defined
-      if (selectedProduct) {
-        console.log('Selected Product:', selectedProduct); // Debugging line
-        router.push(selectedProduct.slug);
-        resetSearch();
-      } else {
-        console.error('Selected product is undefined');
-      }
-    } else {
-      console.error('Invalid selectedIndex:', selectedIndex.value);
-    }
+  if (event.key === 'Enter') {
+    // Navigate to the search results page with the current search query
+    router.push({ path: '/search', query: { query: searchQuery.value } });
+    resetSearch();
   }
 };
 
@@ -142,6 +128,10 @@ const resetSearch = () => {
   selectedIndex.value = null;
 };
 
+const viewMoreResults = () => {
+  router.push({ path: '/search', query: { query: searchQuery.value } });
+  resetSearch();
+};
 </script>
 
 <style scoped>
@@ -158,6 +148,4 @@ const resetSearch = () => {
   border-radius: 0 0 8px 8px; /* Rounded corners at the bottom */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow for elevation effect */
 }
-
-
 </style>

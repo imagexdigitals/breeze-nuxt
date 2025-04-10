@@ -1,7 +1,12 @@
 <template>
   <div class="bg-gray-100">
-    <div class="mx-auto py-5 flex gap-8 items-start justify-center">
-      <div v-if="product" class="flex w-[90%] gap-x-3 ">
+    <div v-if="isLoading" class="flex items-center justify-center h-screen">
+      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
+    </div>
+
+    <!-- PC Version -->
+    <div v-else-if="!isMobile" class="mx-auto py-5 flex gap-8 items-start justify-center">
+      <div v-if="product" class="flex w-[90%] gap-x-3">
         <!-- Left Column -->
         <ProductPageOverallLeftColumn :product="product" class="flex-left-column" />
 
@@ -9,11 +14,22 @@
         <RightSideColumn :product="product" class="flex-right-column" />
       </div>
     </div>
+
+    <!-- Mobile Version -->
+    <div v-else class="mx-auto py-2 md:py-5">
+      <div v-if="product" class="flex flex-col gap-y-4">
+        <!-- Product Details -->
+        <ProductPageOverallLeftColumn :product="product" class="w-full" />
+
+        <!-- Right Side Column (Non-Sticky) -->
+        <RightSideColumn :product="product" class="w-full" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRuntimeConfig } from '#app';
 import { useCartStore } from '@/stores/cart';
@@ -21,6 +37,10 @@ import { useQuoteStore } from '@/stores/quote';
 import { usePincodeStore } from '@/stores/pincode';
 import RightSideColumn from '@/components/ProductPage/RightSideColumn.vue';
 import ProductPageOverallLeftColumn from '@/components/ProductPage/OverallLeftColumn.vue';
+import { useMobileDetection } from '~/composables/useMobileDetection';
+
+// Use the composable to get the isMobile state
+const { isMobile } = useMobileDetection();
 const sanctumFetch = useSanctumClient();
 
 interface Product {
@@ -57,7 +77,7 @@ interface Product {
   description: string;
   related_products: Array<{
     id: number;
-    name:string;
+    name: string;
     image: string;
     sale_price: string;
     mrp_price: string;
@@ -67,16 +87,15 @@ interface Product {
     status: number;
     brand_slug: string | null;
     minimum_qty: number;
-  }>; // Add related_products field
+  }>;
 }
-
-
 
 const route = useRoute();
 const config = useRuntimeConfig();
 const backendUrl = config.public.BACKEND_URL;
 
 const product = ref<Product | null>(null);
+const isLoading = ref(true);
 const cartStore = useCartStore();
 const quoteStore = useQuoteStore();
 const pincodeStore = usePincodeStore();
@@ -87,13 +106,13 @@ const fetchProductDetails = async (slug: string) => {
       method: 'GET',
     });
 
-    // Assuming the response is already in JSON format
     product.value = response;
   } catch (error) {
     console.error('Error fetching product details:', error);
+  } finally {
+    isLoading.value = false;
   }
 };
-
 
 onMounted(() => {
   const slug = Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug;
@@ -103,6 +122,44 @@ onMounted(() => {
   cartStore.loadFromLocalStorage();
   quoteStore.loadFromLocalStorage();
   pincodeStore.loadFromLocalStorage();
+});
+
+const stripHtmlTags = (html: string): string => {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  return doc.body.textContent || '';
+};
+
+useHead({
+  title: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details'),
+  meta: [
+    { name: 'description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
+    { name: 'keywords', content: computed(() => product.value ? `${product.value.name}, ${product.value.brand}, product details` : 'product details') },
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: computed(() => JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": product.value?.name || '',
+        "image": product.value?.image || '',
+        "description": product.value ? stripHtmlTags(product.value.description) : '',
+        "sku": product.value?.sku || '',
+        "brand": {
+          "@type": "Brand",
+          "name": product.value?.brand || 'Unknown'
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": `${backendUrl}/product/${product.value?.slug}`,
+          "priceCurrency": "INR",
+          "price": product.value?.sale_price || '',
+          "itemCondition": product.value?.condition === 1 ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
+          "availability": product.value?.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+        },
+      })),
+    },
+  ],
 });
 </script>
 

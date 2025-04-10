@@ -68,5 +68,6 @@ const brandLink = props.brandSlug || '#';
   /* Standard property */
   overflow: hidden;
   text-overflow: ellipsis;
+  min-height: 2.5em; /* Adjust this value as needed */
 }
 </style>

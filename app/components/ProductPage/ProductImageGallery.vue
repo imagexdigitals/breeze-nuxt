@@ -23,7 +23,6 @@
             class="absolute inset-0 w-full h-full object-cover cursor-pointer border-2 p-1"
             :class="{ 'border-blue-500': img === currentImage }"
             @mouseover="changeMainImage(img)"
-            @click="openModal(img)"
           />
         </div>
       </div>

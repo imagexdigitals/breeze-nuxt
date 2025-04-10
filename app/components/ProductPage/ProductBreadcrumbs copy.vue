@@ -1,7 +1,7 @@
 <template>
-  <nav aria-label="breadcrumb" class="breadcrumb-container">
-    <ol class="flex overflow-x-auto">
-      <li v-for="(crumb, index) in breadcrumbs" :key="index" class="flex items-center text-sm shrink-0">
+  <nav aria-label="breadcrumb">
+    <ol class="flex">
+      <li v-for="(crumb, index) in breadcrumbs" :key="index" class="flex items-center text-sm">
         <NuxtLink :to="crumb.url" class="text-gray-700 font-medium hover:text-secondaryBlue">{{ crumb.name }}</NuxtLink>
         <span v-if="index < breadcrumbs.length - 1" class="mx-1">/</span>
       </li>
@@ -49,35 +49,5 @@ useHead({
 </script>
 
 <style scoped>
-/* Enable horizontal scrolling on mobile */
-.breadcrumb-container {
-  width: 100%;
-  overflow-x: auto;
-  padding: 0 1rem;
-  /* Optional: Add padding for better spacing */
-  box-sizing: border-box;
-  -webkit-overflow-scrolling: touch;
-  /* For smooth scrolling on iOS */
-}
-
-ol {
-  display: flex;
-  white-space: nowrap;
-}
-
-li {
-  display: inline-flex;
-}
-
-
-ol.flex.overflow-x-auto::-webkit-scrollbar {
-  display: none;
-}
-
-.breadcrumb-container {
-  -ms-overflow-style: none;
-  /* Internet Explorer 10+ */
-  scrollbar-width: none;
-  /* Firefox */
-}
+/* Add any additional custom styles here if needed */
 </style>

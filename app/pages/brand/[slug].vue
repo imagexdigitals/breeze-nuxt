@@ -1,5 +1,5 @@
 <template>
-  <ProductList apiEndpoint="/api/category" :isBrandPage="false" />
+  <ProductList apiEndpoint="/api/brand" :isBrandPage="true" />
 </template>
 
 <script lang="ts" setup>

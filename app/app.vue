@@ -6,6 +6,8 @@ useHead({
     return title ? `${title} | ${appConfig.siteTitle}` : appConfig.siteTitle
   },
 })
+
+
 </script>
 
 <template>
