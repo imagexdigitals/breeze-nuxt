@@ -155,7 +155,9 @@ export default defineNuxtConfig({
     description: 'NxtKart is a one-stop tech store offering robotics kits, electronic components, custom PCs, laptops, and smart home devices. Explore innovative technology with fast delivery and expert support across India.',
     url: 'https://www.nxtkart.com',
   },
-
+  ui: {
+    colorMode: false
+  },
   runtimeConfig: {
     public: {
       baseURL: process.env.NUXT_SITE_URL || 'localhost:3000',

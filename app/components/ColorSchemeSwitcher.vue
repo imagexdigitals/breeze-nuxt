@@ -22,7 +22,7 @@ const availableModes: ColorMode[] = [
   {
     icon: 'i-heroicons-moon',
     label: 'Dark',
-    value: 'light',
+    value: 'dark',
   },
 ]
 
