@@ -1,7 +1,7 @@
 <template>
-  <section class="rounded-sm overflow-y-auto w-full pt-4">
-    <h2 class="text-xl font-semibold">Related Products</h2>
-    <div class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4 mt-4">
+  <section class="rounded-sm overflow-y-auto w-full md:pt-4">
+    <h2 class="text-xl font-semibold px-3 md:px-0">Related Products</h2>
+    <div class="grid grid-cols-2 gap-2 md:grid-cols-2 lg:grid-cols-4 mt-4">
       <ProductArchive
         v-for="product in relatedProducts"
         :key="product.id"

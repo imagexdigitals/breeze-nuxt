@@ -34,10 +34,14 @@
         <ReturnWarrantyPolicy :warranty="product.warranty" />
 
         <!-- Specification and Description -->
-        <section class="rounded-sm shadow-md overflow-y-auto w-full bg-white">
+        <section class="rounded-sm border-y md:shadow-md overflow-y-auto w-full bg-white">
           <SpecificationDescriptionDetails :specifications="product.specifications" :attachments="product.attachments"
             :description="product.description" />
         </section>
+
+        <!-- Related Products -->
+        <ProductRelated v-if="product.related_products && product.related_products.length"
+          :relatedProducts="product.related_products" />
       </div>
     </div>
   </div>
@@ -55,6 +59,7 @@ import ProductPageOverallLeftColumn from '@/components/ProductPage/OverallLeftCo
 import ProductBenefits from '@/components/ProductPage/ProductBenefits.vue';
 import ReturnWarrantyPolicy from '@/components/ProductPage/ReturnWarrantyPolicy.vue';
 import SpecificationDescriptionDetails from '@/components/ProductPage/SpecificationDescriptionDetails.vue';
+import ProductRelated from '@/components/ProductPage/ProductRelated.vue';
 import { useMobileDetection } from '~/composables/useMobileDetection';
 
 // Use the composable to get the isMobile state
@@ -196,4 +201,8 @@ useHead({
   top: 0;
   align-self: flex-start;
 }
+
+
+
+
 </style>

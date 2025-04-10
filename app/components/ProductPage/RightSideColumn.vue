@@ -61,7 +61,7 @@
         </div>
       </div>
 
-      <div class="mt-3 hidden md:block" v-if="props.product.status !== 2">
+      <div class="mt-3 md:block" v-if="props.product.status !== 2">
         <BuyNowButton :productId="props.product.id" :quantity="quantity" />
       </div>
 
@@ -81,12 +81,12 @@
 
     <!-- Mobile Sticky Container -->
     <div class="mobile-sticky-container md:hidden" v-if="props.product.status !== 2">
-      <div class="flex mt-2 space-x-3 items-center">
+      <div class="flex space-x-3 items-center">
         <!-- Quantity Section -->
         <div class="bg-[#F4F6F8] p-[4px] border-solid flex flex-nowrap justify-center items-center border-[1px]"
           style="border-color: #fcfcfc !important;">
           <button @click="handleQuantityChange(-1)"
-            class="md:w-[22px] md:h-[22px] w-[20px] h-[20px] rounded-sm bg-[#fff] hover:bg-green-600 group flex items-center cursor-pointer"
+            class="md:w-[22px] md:h-[22px] w-[25px] h-[25px] rounded-sm bg-[#fff] hover:bg-green-600 group flex items-center cursor-pointer"
             :disabled="quantity <= props.product.minimum_qty">
             <svg width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg"
               class="stroke-[#162F4D] group-hover:stroke-[#ffffff] m-auto">
@@ -94,10 +94,10 @@
             </svg>
           </button>
           <input type="text" v-model.number="quantity" autocomplete="off"
-            class="border-0 p-[5px] w-[40px] text-center bg-transparent focus:outline-none h-[22px]"
+            class="border-0 p-[5px] w-[40px] text-center bg-transparent focus:outline-none h-[30px]"
             @input="validateQuantity" @keydown.backspace="allowBackspace" />
           <button @click="handleQuantityChange(1)"
-            class="md:w-[22px] md:h-[22px] w-[20px] h-[20px] rounded-sm bg-[#fff] group flex items-center cursor-pointer hover:bg-green-600">
+            class="md:w-[22px] md:h-[22px] w-[25px] h-[25px] rounded-sm bg-[#fff] group flex items-center cursor-pointer hover:bg-green-600">
             <svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg"
               class="m-auto">
               <line y1="5.95449" x2="12" y2="5.95449" stroke-width="1"
@@ -117,7 +117,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useQuoteStore } from '@/stores/quote';
 import PincodeChecker from '~/components/ProductPage/PincodeChecker.vue';
 
@@ -166,6 +166,24 @@ const addToQuote = () => {
     console.error('Error adding to quote:', error);
   }
 };
+
+const addBottomPadding = () => {
+  const stickyContainer = document.querySelector('.mobile-sticky-container') as HTMLElement;
+  if (stickyContainer) {
+    const stickyHeight = stickyContainer.offsetHeight;
+    document.body.style.paddingBottom = `${stickyHeight}px`;
+  }
+};
+
+onMounted(() => {
+  addBottomPadding();
+  window.addEventListener('resize', addBottomPadding);
+});
+
+onMounted(() => {
+  addBottomPadding();
+  window.addEventListener('resize', addBottomPadding);
+});
 </script>
 
 <style scoped>
@@ -183,5 +201,11 @@ const addToQuote = () => {
     padding: 1rem;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   }
+  button.w-full.py-1\.5.bg-nxtkartsecondaryBlue.text-white.rounded-md.hover\:bg-nxtkartBlue.font-medium.text-sm {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 6px;
+  }
 }
+
 </style>
