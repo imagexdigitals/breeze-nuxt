@@ -1,21 +1,23 @@
 <template>
   <div class="bg-gray-100">
-    <div v-if="!isCartEmpty" class="mx-auto w-4/5 py-5">
+    <div v-if="!isCartEmpty" class="mx-auto w-full py-5 md:px-4 md:w-4/5">
       <CartPageCartStepper />
-      <div class="flex">
-        <h1 class="text-xl font-semibold mb-3">My Cart</h1>
+      <div class="flex flex-col md:flex-row justify-between items-center mb-3">
+        <h1 class="text-xl font-semibold">My Cart</h1>
       </div>
-      <p class="font-medium text-gray-700 mb-3">Total Items: {{ cartData.TotalItem }}</p>
-      <div class="flex gap-4">
+      <p class="font-medium text-gray-700 mb-3 px-5 md:px-0">Total Items: {{ cartData.TotalItem }}</p>
+      <div class="md:flex gap-4 flex-col md:flex-row">
         <!-- Cart Left Column -->
         <CartLeftColumn :cartData="cartData" @showRemoveModal="showRemoveModal" @incrementQuantity="incrementQuantity"
-          @decrementQuantity="decrementQuantity" @validateQuantity="validateQuantity" />
+          @decrementQuantity="decrementQuantity" @validateQuantity="validateQuantity"
+          class="w-full md:w-[70%] mb-4 md:mb-0" />
 
         <!-- Cart Right Column -->
         <CartRightColumn :cartData="cartData" :hasStatus2="hasStatus2" :isLoading="isLoading"
-          :hasBillingAddresses="hasBillingAddresses" :hasShippingAddresses="hasShippingAddresses" />
-
+          :hasBillingAddresses="hasBillingAddresses" :hasShippingAddresses="hasShippingAddresses"
+          class="w-full md:w-[30%]" />
       </div>
+
     </div>
     <div v-else>
       <EmptyCart />
@@ -24,7 +26,7 @@
     <!-- Remove Confirmation Modal -->
     <div v-if="showModal && !showStatusModal"
       class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-      <div class="bg-white p-6 rounded-md w-[480px] flex flex-col items-center text-center">
+      <div class="bg-white p-6 rounded-md w-11/12 md:w-[480px] flex flex-col items-center text-center">
         <NuxtImg src="/images/remove-cart.svg" width="150" height="150" />
         <h2 class="text-lg font-semibold my-2">Remove From Cart?</h2>
         <p>Are you sure you want to remove this item from your cart?</p>
@@ -42,7 +44,7 @@
 
     <!-- Status Message Modal -->
     <div v-if="showStatusModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-      <div class="bg-white p-6 rounded-md w-[480px] flex flex-col items-center text-center">
+      <div class="bg-white p-6 rounded-md w-11/12 md:w-[480px] flex flex-col items-center text-center">
         <NuxtImg src="/images/out_of_stoct_alert.webp" width="200" height="200" />
         <h2 class="text-lg font-semibold my-2">Item Status</h2>
         <p class="font-medium">One or more items in your cart have a status of out of stock. Please review your cart.
@@ -56,6 +58,7 @@
     </div>
   </div>
 </template>
+
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
@@ -198,7 +201,7 @@ const fetchCartData = async (useSessionId: boolean = false) => {
       // Update cartData with the fetched values
       cartData.value = {
         cart_details: response.cart_details,
-        totalSellingPrice: response.payment_summary.total_selling_price,
+        totalSellingPrice: response.payment_summary.total_selling_price_including_gst,
         gstAmount: response.payment_summary.gst,
         shippingCharges: response.payment_summary.shipping_charge || null, // Assuming this is static
         totalSaving: response.payment_summary.total_saving, // Assuming total_saving is the savings

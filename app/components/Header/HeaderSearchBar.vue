@@ -1,28 +1,18 @@
 <template>
   <div class="flex flex-col items-center justify-center flex-grow relative">
     <!-- Search Bar -->
-    <div class="relative w-full">
-      <input
-        type="text"
-        placeholder="Search for products..."
-        v-model="searchQuery"
-        @input="searchProducts"
-        @keydown.down="navigateResults('down')"
-        @keydown.up="navigateResults('up')"
-        @keydown.enter="handleEnterKey"
-        class="w-full border border-zinc-300 rounded-md py-2 px-4 pl-10 focus:outline-none focus:ring-1 focus:ring-primary bg-zinc-50"
-      />
-      <Icon name="lucide:search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
+    <div class="px-2 md:px-0 relative w-full">
+      <input type="text" placeholder="Search for products..." v-model="searchQuery" @input="searchProducts"
+        @keydown.down="navigateResults('down')" @keydown.up="navigateResults('up')" @keydown.enter="handleEnterKey"
+        class="w-full border border-zinc-300 rounded-md py-2 px-4 pl-10 focus:outline-none focus:ring-nxtkartsecondaryBlue bg-zinc-50" />
+      <Icon name="lucide:search" class="absolute left-4 md:left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
     </div>
     <!-- Search Results with Overlay -->
-    <div v-if="searchResults.length" class="search-results-overlay">
-      <ul class="border border-zinc-300 rounded-md bg-white shadow-lg">
-        <li
-          v-for="(product, index) in searchResults"
-          :key="product.id"
-          :class="['px-4 py-2 border-b border-zinc-200', { 'bg-zinc-100': index === selectedIndex }]"
-          @mouseover="selectedIndex = index"
-        >
+    <div v-if="searchResults.length" class="search-results-overlay mt-2 md:mt-0">
+      <ul class="md:border border-zinc-300 md:rounded-md bg-white shadow-lg">
+        <li v-for="(product, index) in searchResults" :key="product.id"
+          :class="['px-4 py-1 border-b border-zinc-200', { 'bg-zinc-100': index === selectedIndex }]"
+          @mouseover="selectedIndex = index">
           <NuxtLink :to="product.slug" class="block" @click.prevent="selectResult(product.slug)">
             <span class="font-semibold" v-html="highlightMatch(product.name)"></span><br />
             <span class="text-sm">SKU: </span><span class="text-sm" v-html="highlightMatch(product.sku)"></span>
@@ -30,7 +20,9 @@
         </li>
 
         <!-- See More Results -->
-        <li v-if="seeMore" class="px-4 py-2 text-center text-white bg-primary hover:bg-secondaryBlue cursor-pointer font-semibold" @click="viewMoreResults">
+        <li v-if="seeMore"
+          class="px-4 py-2 text-center text-white bg-nxtkartsecondaryBlue hover:bg-nxtkartBlue cursor-pointer font-medium"
+          @click="viewMoreResults">
           See More Results
         </li>
       </ul>
@@ -138,14 +130,19 @@ const viewMoreResults = () => {
 /* Add custom styles for the overlay effect */
 .search-results-overlay {
   position: absolute;
-  top: 100%; /* Position below the search bar */
+  top: 100%;
+  /* Position below the search bar */
   left: 0;
   right: 0;
   z-index: 10;
-  max-height: 500px; /* Adjust as needed */
+  max-height: 700px;
+  /* Adjust as needed */
   overflow-y: auto;
-  background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent background */
-  border-radius: 0 0 8px 8px; /* Rounded corners at the bottom */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow for elevation effect */
+  background-color: rgba(255, 255, 255, 0.95);
+  /* Semi-transparent background */
+  border-radius: 0 0 8px 8px;
+  /* Rounded corners at the bottom */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Shadow for elevation effect */
 }
 </style>

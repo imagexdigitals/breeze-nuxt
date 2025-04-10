@@ -92,7 +92,7 @@
       </div>
     </template>
     <div v-else-if="!isLoading">
-      No products available.
+      <ProductNotFound />
     </div>
   </div>
 </template>
@@ -102,6 +102,7 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useRuntimeConfig } from '#app';
 import ProductArchive from '@/components/ProductArchive.vue';
+import ProductNotFound from '@/components/ProductPage/ProductNotFound.vue';
 import { useMobileDetection } from '~/composables/useMobileDetection';
 
 // Use the composable to get the isMobile state

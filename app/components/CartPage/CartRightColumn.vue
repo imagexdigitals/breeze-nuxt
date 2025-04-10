@@ -1,13 +1,13 @@
 <template>
   <div class="w-[30%]">
-    <div class="bg-white p-4 rounded-md mb-4">
-      <p class="font-semibold border-b pb-2 border-dashed border-gray-300">
+    <div class="bg-white p-4 md:rounded-md border-y md:border-none mb-4">
+      <p class="font-semibold md:border-b pb-2 border-dashed border-gray-300">
         Apply Coupons
       </p>
 
       <div class="flex mt-3 space-x-2">
         <input type="text" v-model="couponCode" placeholder="Enter Coupon Code"
-          class="border border-gray-300 p-2 text-sm flex-grow rounded-md font-semibold focus:border-gray-300 focus:ring-0" />
+          class="border border-gray-300 p-2 text-sm flex-grow rounded-md font-semibold focus:outline-none focus:ring-nxtkartsecondaryBlue" />
         <button @click="applyCoupon" class="bg-red-600 text-white px-4 py-2 text-sm rounded-md hover:bg-red-600">
           Apply
         </button>
@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div class="bg-white p-4 rounded-md" :class="{ 'loading-overlay': isLoading }">
+    <div class="bg-white p-4 md:rounded-md border-y md:border-none" :class="{ 'loading-overlay': isLoading }">
       <div v-if="isLoading" class="loading-spinner">
         <!-- You can use any loading spinner component or icon here -->
         <div class="spinner"></div>
@@ -57,13 +57,13 @@
             <span class="font-semibold">₹ {{ cartData.totalSellingPrice }}</span>
           </div>
 
-          <div class="flex justify-between">
+          <!-- <div class="flex justify-between">
             <div class="flex flex-col">
               <span>GST Amount</span>
               <small class="text-xs">(*Included already, not extra added)</small>
             </div>
             <span class="font-semibold">+ ₹ {{ cartData.gstAmount }}</span>
-          </div>
+          </div> -->
 
           <div class="flex justify-between">
             <span>Shipping Charges</span>
@@ -118,12 +118,6 @@
       </div>
     </div>
 
-    <!-- Checkout Component -->
-    <div class="bg-white mt-4 text-red-600 p-4">
-      <strong>Response</strong>
-      <p>{{ responseMessage }}</p> <!-- Display the response here -->
-    </div>
-
     <div class="w-full mt-4">
       <button v-if="route.path === '/order/payment'" @click="proceedToPay" :class="{
         'cursor-not-allowed bg-gray-400 hover:bg-gray-400': isLoading,
@@ -135,7 +129,7 @@
     </div>
 
 
-    <div class="w-full mt-4">
+    <div class="w-full mt-4 px-4">
       <!-- Allow Checkout -->
       <NuxtLink
         v-if="isAuthenticated && !hasStatus2 && (route.path !== '/order/address' && route.path !== '/order/payment' || (cartData.ShippingAddressId && cartData.BillingAddressId)) && route.path !== '/order/payment'"
