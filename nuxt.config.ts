@@ -207,8 +207,8 @@ export default defineNuxtConfig({
   sanctum: {
     baseUrl: 'https://localhost:80',
     redirect: {
-      onGuestOnly: '/dashboard',
-      onLogin: '/dashboard',
+      onGuestOnly: '/',
+      onLogin: '/',
     },
   },
 

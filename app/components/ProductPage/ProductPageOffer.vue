@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-[#abe292] rounded-lg bg-[#F6FFF5] p-3 my-4">
+  <div class="border-y md:border border-[#abe292] md:rounded-lg bg-[#F6FFF5] p-3 my-0 md:my-4">
     <h3 class="font-semibold pb-1 text-gray-800">Offers and Discounts</h3>
 
     <div class="text-[#0A7205] flex space-x-3 border-b border-dashed py-3 border-b-gray-300">

@@ -1,8 +1,7 @@
-<!-- ReturnWarrantyPolicy.vue -->
 <template>
-  <div class="bg-white border border-gray-300 p-4 rounded-md mt-4">
+  <div class="bg-white border-y md:border border-gray-300 p-4 md:rounded-md md:mt-4">
     <h3 class="mb-3 font-medium">Return & Warranty Policy</h3>
-    <div class="flex flex-wrap gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
       <!-- Warranty -->
       <div v-if="warranty" class="flex items-center space-x-2">
         <div class="bg-red-100 p-1.5 rounded-md flex items-center justify-center">

@@ -22,52 +22,15 @@
 
     <!-- Specification and Description -->
     <section v-if="!isMobile" class="rounded-sm shadow-md overflow-y-auto w-full bg-white">
-      <!-- Tabs -->
-      <div class="flex border-b border-gray-300 overflow-x-auto">
-        <button
-          @click="activeTab = 'specification'"
-          :class="['flex-1 py-2 text-center cursor-pointer font-semibold', activeTab === 'specification' ? 'bg-nxtkartsecondaryBlue text-white border-b' : '']"
-        >
-          Specification
-        </button>
-        <button
-          @click="activeTab = 'description'"
-          :class="['flex-1 py-2 text-center cursor-pointer font-semibold', activeTab === 'description' ? 'bg-nxtkartsecondaryBlue text-white border-b' : '']"
-        >
-          Description
-        </button>
-        <button
-          @click="activeTab = 'q&a'"
-          :class="['flex-1 py-2 text-center cursor-pointer font-semibold', activeTab === 'q&a' ? 'bg-nxtkartsecondaryBlue text-white border-b' : '']"
-        >
-          Q & A
-        </button>
-      </div>
-
-      <!-- Tab Content with Transition -->
-      <div class="p-4">
-        <transition name="slide" mode="out-in">
-          <ProductSpecification
-            v-if="activeTab === 'specification'"
-            :specifications="product.specifications"
-            :attachments="product.attachments"
-            key="specification"
-          />
-          <ProductDescription
-            v-else-if="activeTab === 'description'"
-            :description="product.description"
-            key="description"
-          />
-          <div v-else-if="activeTab === 'q&a'" key="q&a">
-            <!-- Q & A Content -->
-            <p>Q & A details go here...</p>
-          </div>
-        </transition>
-      </div>
+      <SpecificationDescriptionDetails
+        :specifications="product.specifications"
+        :attachments="product.attachments"
+        :description="product.description"
+      />
     </section>
 
     <!-- Related Products -->
-    <ProductRelated 
+    <ProductRelated
       v-if="!isMobile && product.related_products && product.related_products.length"
       :relatedProducts="product.related_products"
     />
@@ -78,13 +41,12 @@
 import { ref } from 'vue';
 import type { Product } from '@/types/types';
 import ProductDetails from './ProductDetails.vue'; // Adjust the path as necessary
-import ProductSpecification from './ProductSpecification.vue'; // Adjust the path as necessary
-import ProductDescription from './ProductDescription.vue'; // Adjust the path as necessary
+import SpecificationDescriptionDetails from './SpecificationDescriptionDetails.vue'; // Adjust the path as necessary
 import ProductRelated from './ProductRelated.vue';
 import { useMobileDetection } from '~/composables/useMobileDetection';
+
 // Use the composable to get the isMobile state
 const { isMobile } = useMobileDetection();
-const activeTab = ref('specification'); // Default active tab
 
 interface Props {
   product: Product;
@@ -97,20 +59,6 @@ const props = defineProps<Props>();
 /* Add any additional custom styles here if needed */
 .bg-gray-200 {
   background-color: #F1F1F1;
-}
-
-/* Transition styles */
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.2s ease;
-}
-
-.slide-enter-from {
-  transform: translateX(100%);
-}
-
-.slide-leave-to {
-  transform: translateX(-100%);
 }
 
 ::-webkit-scrollbar {

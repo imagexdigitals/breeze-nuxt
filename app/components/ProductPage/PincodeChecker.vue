@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gradient-to-b from-orange-100 to-white p-5 rounded-sm shadow-md">
+  <div class="bg-gradient-to-b from-orange-100 to-white p-3 md:p-5 rounded-sm shadow-none border-y md:border-none md:shadow-md">
     <div class="flex items-center space-x-2 mb-4">
       <NuxtImg src="/images/location-96.svg" alt="Pincode Checker" class="w-7 h-7"/>
       <h3 class="text-sm font-semibold">Check Delivery Availability</h3>

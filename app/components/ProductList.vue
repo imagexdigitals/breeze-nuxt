@@ -1,36 +1,33 @@
 <template>
   <div class="bg-gray-100 relative min-h-screen">
     <div v-if="isLoading" class="flex items-center justify-center h-screen">
-      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent">
-      </div>
+      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
     </div>
 
     <template v-if="commonData && commonData.products.length">
-      <div class="mx-auto py-5 flex gap-8 items-start justify-center">
-        <div class="flex w-[90%] gap-x-3">
-          <!-- Left Column (20% width) -->
-          <div class="w-1/5">
+      <div class="mx-auto py-3 md:py-5 flex gap-8 items-start justify-center">
+        <div class="flex w-full md:w-[90%] gap-x-3 flex-col md:flex-row">
+          <!-- Left Column (20% width on desktop, hidden on mobile) -->
+          <div v-if="!isMobile" class="w-1/5 md:block hidden">
             Filters
           </div>
 
-          <!-- Right Side Column (80% width) -->
-          <div class="w-4/5">
-
+          <!-- Right Side Column (100% width on mobile, 80% width on desktop) -->
+          <div class="w-full md:w-4/5">
             <!-- Title and Sort -->
-            <div class="bg-white shadow-sm rounded-sm p-4">
+            <div class="bg-white border-y md:border-none md:shadow-sm rounded-sm p-4">
               <div>
                 <nav aria-label="breadcrumb">
                   <ol class="flex">
                     <li v-for="(crumb, index) in breadcrumbs" :key="index" class="flex items-center text-sm">
-                      <NuxtLink :to="crumb.url" class="text-gray-700 font-medium hover:text-secondaryBlue">{{
-                        crumb.name }}</NuxtLink>
+                      <NuxtLink :to="crumb.url" class="text-gray-700 font-medium hover:text-secondaryBlue">{{ crumb.name }}</NuxtLink>
                       <span v-if="index < breadcrumbs.length - 1" class="mx-1">/</span>
                     </li>
                   </ol>
                 </nav>
               </div>
 
-              <div class="flex items-center space-x-4 mt-4">
+              <div class="block md:flex items-center space-x-0 md:space-x-4 md:mt-4">
                 <h1 class="text-xl font-bold text-gray-800">
                   {{ commonData.name }}
                   <span v-if="isBrandPage">Product Online</span>
@@ -53,7 +50,7 @@
             </div>
 
             <!-- ProductArchive -->
-            <div class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-5 mt-4">
+            <div class="grid grid-cols-2 gap-2 md:grid-cols-2 lg:grid-cols-5 mt-4">
               <ProductArchive v-for="product in commonData.products" :key="product.id" :id="product.id"
                 :image="product.image" :name="product.name" :salePrice="product.sale_price"
                 :mrpPrice="product.mrp_price" :discountPercentage="product.discount_percentage"
@@ -90,7 +87,6 @@
                 {{ commonData.pagination.last_page }}
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -106,6 +102,10 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useRuntimeConfig } from '#app';
 import ProductArchive from '@/components/ProductArchive.vue';
+import { useMobileDetection } from '~/composables/useMobileDetection';
+
+// Use the composable to get the isMobile state
+const { isMobile } = useMobileDetection();
 
 interface Breadcrumb {
   name: string;
@@ -293,3 +293,29 @@ useHead({
   ],
 });
 </script>
+
+<style scoped>
+/* Add any additional custom styles here if needed */
+.bg-gray-200 {
+  background-color: #F1F1F1;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .flex-col {
+    flex-direction: column;
+  }
+
+  .w-full {
+    width: 100%;
+  }
+
+  .overflow-x-auto {
+    overflow-x: auto;
+  }
+}
+</style>

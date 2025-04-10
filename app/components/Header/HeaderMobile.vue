@@ -35,7 +35,7 @@
     </div>
 
     <!-- Bottom Search Bar -->
-    <div class="p-2 w-full">
+    <div class="px-2 pb-2 w-full">
       <!-- Search Bar -->
       <HeaderSearchBar />
     </div>

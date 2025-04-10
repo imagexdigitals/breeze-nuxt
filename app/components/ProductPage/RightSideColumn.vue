@@ -1,6 +1,6 @@
 <template>
-  <div class="sticky top-20 h-fit">
-    <div class="bg-white p-5 rounded-sm shadow-none border-y md:border-none md:shadow-md mb-4">
+  <div class="md:sticky top-20 h-fit">
+    <div class="bg-white p-3 md:p-5 rounded-sm shadow-none border-y md:border-none md:shadow-md mb-4">
       <div class="flex space-x-2 mb-2">
         <img src="/images/discount-96.svg" alt="image" width="25" height="25" preload />
         <h3 class="text-secondaryBlue font-semibold">Lowest Price</h3>

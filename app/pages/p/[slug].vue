@@ -1,7 +1,8 @@
 <template>
   <div class="bg-gray-100">
     <div v-if="isLoading" class="flex items-center justify-center h-screen">
-      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
+      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent">
+      </div>
     </div>
 
     <!-- PC Version -->
@@ -23,6 +24,20 @@
 
         <!-- Right Side Column (Non-Sticky) -->
         <RightSideColumn :product="product" class="w-full" />
+
+        <ProductPageOffer />
+
+        <!-- NxtKart Benefits -->
+        <ProductBenefits :showGstInvoice="product.condition === 1" />
+
+        <!-- Return & Warranty Policy -->
+        <ReturnWarrantyPolicy :warranty="product.warranty" />
+
+        <!-- Specification and Description -->
+        <section class="rounded-sm shadow-md overflow-y-auto w-full bg-white">
+          <SpecificationDescriptionDetails :specifications="product.specifications" :attachments="product.attachments"
+            :description="product.description" />
+        </section>
       </div>
     </div>
   </div>
@@ -37,6 +52,9 @@ import { useQuoteStore } from '@/stores/quote';
 import { usePincodeStore } from '@/stores/pincode';
 import RightSideColumn from '@/components/ProductPage/RightSideColumn.vue';
 import ProductPageOverallLeftColumn from '@/components/ProductPage/OverallLeftColumn.vue';
+import ProductBenefits from '@/components/ProductPage/ProductBenefits.vue';
+import ReturnWarrantyPolicy from '@/components/ProductPage/ReturnWarrantyPolicy.vue';
+import SpecificationDescriptionDetails from '@/components/ProductPage/SpecificationDescriptionDetails.vue';
 import { useMobileDetection } from '~/composables/useMobileDetection';
 
 // Use the composable to get the isMobile state
@@ -165,12 +183,14 @@ useHead({
 
 <style scoped>
 .flex-left-column {
-  flex: 0 0 75%; /* Flex-grow, flex-shrink, flex-basis */
+  flex: 0 0 75%;
+  /* Flex-grow, flex-shrink, flex-basis */
   max-width: 75%;
 }
 
 .flex-right-column {
-  flex: 0 0 25%; /* Flex-grow, flex-shrink, flex-basis */
+  flex: 0 0 25%;
+  /* Flex-grow, flex-shrink, flex-basis */
   max-width: 25%;
   position: sticky;
   top: 0;

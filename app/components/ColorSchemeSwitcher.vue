@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<!-- <script lang="ts" setup>
 type ColorMode = {
   icon: string
   label: string
@@ -57,4 +57,4 @@ const selectedMode = computed<ColorMode>({
   </ColorScheme>
 </template>
 
-<style scoped></style>
+<style scoped></style> -->
