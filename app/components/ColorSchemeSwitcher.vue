@@ -1,43 +1,43 @@
-<!-- <script lang="ts" setup>
-type ColorMode = {
-  icon: string
-  label: string
-  value: string
-}
+<script lang="ts" setup>
+// type ColorMode = {
+//   icon: string
+//   label: string
+//   value: string
+// }
 
-const mode = useNuxtApp().$colorMode
+// const mode = useNuxtApp().$colorMode
 
 
-const availableModes: ColorMode[] = [
-  {
-    icon: 'i-heroicons-computer-desktop',
-    label: 'System',
-    value: 'light',
-  },
-  {
-    icon: 'i-heroicons-light-bulb',
-    label: 'Light',
-    value: 'light',
-  },
-  {
-    icon: 'i-heroicons-moon',
-    label: 'Dark',
-    value: 'dark',
-  },
-]
+// const availableModes: ColorMode[] = [
+//   {
+//     icon: 'i-heroicons-computer-desktop',
+//     label: 'System',
+//     value: 'light',
+//   },
+//   {
+//     icon: 'i-heroicons-light-bulb',
+//     label: 'Light',
+//     value: 'light',
+//   },
+//   {
+//     icon: 'i-heroicons-moon',
+//     label: 'Dark',
+//     value: 'dark',
+//   },
+// ]
 
-const selectedMode = computed<ColorMode>({
-  get: () => {
-    return availableModes.find(m => m.value === mode.preference) || availableModes[0]!
-  },
-  set: (newValue: ColorMode) => {
-    mode.preference = newValue.value
-  },
-})
+// const selectedMode = computed<ColorMode>({
+//   get: () => {
+//     return availableModes.find(m => m.value === mode.preference) || availableModes[0]!
+//   },
+//   set: (newValue: ColorMode) => {
+//     mode.preference = newValue.value
+//   },
+// })
 </script>
 
 <template>
-  <ColorScheme>
+  <!-- <ColorScheme>
     <USelectMenu
       v-model="selectedMode"
       :options="availableModes"
@@ -54,7 +54,7 @@ const selectedMode = computed<ColorMode>({
         </div>
       </template>
     </USelectMenu>
-  </ColorScheme>
+  </ColorScheme> -->
 </template>
 
-<style scoped></style> -->
+<style scoped></style>
