@@ -15,7 +15,7 @@
       <p v-if="couponError" class="text-red-500 text-sm mt-2">{{ couponError }}</p>
     </div>
 
-    <div v-if="['/order/address', '/order/payment'].includes(route.path)" class="bg-white p-4 rounded-md mb-4"
+    <div v-if="['/order/address', '/order/payment'].includes(route.path)" class="bg-white p-4 md:rounded-md mb-4 border-y md:border-none"
       :class="{ 'loading-overlay': isLoading }">
       <div>
         <div v-if="isLoading" class="loading-spinner">
@@ -129,7 +129,7 @@
     </div>
 
 
-    <div class="w-full mt-4 px-4">
+    <div class="w-full mt-4 px-4 md:px-0">
       <!-- Allow Checkout -->
       <NuxtLink
         v-if="isAuthenticated && !hasStatus2 && (route.path !== '/order/address' && route.path !== '/order/payment' || (cartData.ShippingAddressId && cartData.BillingAddressId)) && route.path !== '/order/payment'"

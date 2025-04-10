@@ -1,6 +1,6 @@
 <template>
   <div class="w-full">
-    <div class="bg-white p-4 w-full h-auto">
+    <div class="bg-white p-4 w-full h-auto border-y md:border-none md:rounded-md">
       <div class="flex justify-between items-center mb-4">
         <span class="font-semibold">Shipping Address</span>
         <button class="text-blue-500 font-medium text-sm" @click="$emit('add-address')">+ Add Address</button>
@@ -29,7 +29,7 @@
           <div>GST NO.: {{ address.gst }}</div>
         </div>
         <button class="text-white w-full py-2 rounded"
-          :class="address.id === selectedAddressId ? 'bg-primary' : 'bg-green-600'"
+          :class="address.id === selectedAddressId ? 'bg-nxtkartsecondaryBlue' : 'bg-green-600'"
           @click="$emit('select-address', address.id)">
           Shipping at this Address
         </button>

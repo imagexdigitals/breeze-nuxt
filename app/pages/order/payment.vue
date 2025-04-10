@@ -1,21 +1,30 @@
 <template>
   <div class="bg-gray-100">
-    <div class="mx-auto w-4/5 py-5" v-if="!isCartEmpty">
+    <div class="mx-auto md:w-4/5 py-5" v-if="!isCartEmpty">
       <CartPageCartStepper />
-      <div class="flex gap-4 mt-8">
+      <div class="md:flex gap-4 mt-8">
         <!-- Order Left Column -->
-        <div class="w-[70%] rounded-md flex gap-4">
+        <div class="md:w-[70%] rounded-md md:flex gap-4">
           <div class="w-full">
-            <OrderPaymentMethodOffer/>
-            <div class="bg-white p-4 rounded-md mb-4">
+            <OrderPaymentMethodOffer />
+            <div class="bg-white p-4 md:rounded-md border-y md:border-none mb-4">
               <p class="font-semibold border-b pb-2 border-dashed border-gray-300">
                 Payment Methods
               </p>
-              <div class="mt-4">
-                <label class="block w-full border p-4 rounded-md mb-2">
-                  <input type="radio" name="paymentMethod" value="1" class="mr-2" v-model="selectedPaymentMethod">
-                  Credit / Debit Card / UPI
+              <div class="mt-4 md:w-96">
+                <label class="block w-full border rounded-md mb-2">
+                  <div class="flex items-center gap-2 mb-2 px-4 pt-4">
+                    <input type="radio" name="paymentMethod" value="1" class="mr-2 mt-0.5"
+                      v-model="selectedPaymentMethod">
+                    <span>Credit / Debit Card / UPI</span>
+                  </div>
+                  <div
+                    class="w-full text-sm bg-green-600 text-white font-medium text-center py-0.5 px-2 rounded-b flex items-center justify-center gap-1">
+                    <Icon name="bxs:offer" class="w-4 h-4" />
+                    <span>SAVE ₹50</span>
+                  </div>
                 </label>
+
                 <label class="block w-full border p-4 rounded-md mb-2">
                   <input type="radio" name="paymentMethod" value="3" class="mr-2" v-model="selectedPaymentMethod">
                   Partial Cash on Delivery
@@ -26,11 +35,29 @@
                 </label>
               </div>
             </div>
+            <div class="flex justify-center gap-6 flex-wrap py-2 mb-2">
+              <!-- Secure Payments -->
+              <div class="flex items-center space-x-2">
+                <div class="bg-red-100 p-1.5 rounded-md flex items-center justify-center">
+                  <Icon name="tdesign:secured" class="w-5 h-5 text-red-600" />
+                </div>
+                <span class="text-xs md:text-sm font-semibold text-gray-700">Secure Payments</span>
+              </div>
+
+              <!-- 365 Days Help Desk -->
+              <div class="flex items-center space-x-2">
+                <div class="bg-red-100 p-1.5 rounded-md flex items-center justify-center">
+                  <Icon name="ic:outline-support-agent" class="w-5 h-5 text-red-600" />
+                </div>
+                <span class="text-xs md:text-sm font-semibold text-gray-700">Great! Help Desk</span>
+              </div>
+            </div>
+
           </div>
         </div>
         <!-- Order Right Column -->
         <CartRightColumn :cartData="cartData" :isLoading="isLoading" :hasBillingAddresses="status.has_billing_addresses"
-        :hasShippingAddresses="status.has_shipping_addresses" :hasStatus2="hasStatus2" />
+          :hasShippingAddresses="status.has_shipping_addresses" :hasStatus2="hasStatus2" class="w-full md:w-[30%]" />
       </div>
     </div>
     <div v-else>

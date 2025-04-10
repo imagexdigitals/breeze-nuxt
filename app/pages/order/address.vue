@@ -1,10 +1,10 @@
 <template>
   <div class="bg-gray-100">
-    <div class="mx-auto w-4/5 py-5" v-if="!isCartEmpty">
+    <div class="mx-auto md:w-4/5 py-5" v-if="!isCartEmpty">
       <CartPageCartStepper />
-      <div class="flex gap-4 mt-8">
+      <div class="md:flex gap-4 mt-8">
         <!-- Order Left Column -->
-        <div class="w-[70%] rounded-md flex gap-4">
+        <div class="md:w-[70%] rounded-md md:flex gap-4 space-y-3 md:space-y-0 mb-3 md:mb-0">
           <!-- Billing Address Section -->
           <BillingAddressBook :addresses="billingAddresses" :isLoading="isLoading"
             :selectedAddressId="selectedBillingAddressId" :hasAddresses="status.has_billing_addresses"
@@ -17,7 +17,7 @@
         </div>
         <!-- Order Right Column -->
         <CartRightColumn :cartData="cartData" :isLoading="isLoading" :hasBillingAddresses="status.has_billing_addresses"
-          :hasShippingAddresses="status.has_shipping_addresses" :hasStatus2="hasStatus2"/>
+          :hasShippingAddresses="status.has_shipping_addresses" :hasStatus2="hasStatus2" class="w-full md:w-[30%]"/>
 
       </div>
     </div>
