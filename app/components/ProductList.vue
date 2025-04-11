@@ -5,7 +5,7 @@
       </div>
     </div>
 
-    <template v-if="commonData && commonData.products.length">
+    <template v-if="commonData && commonDataProducts.length">
       <div class="mx-auto py-3 md:py-5 flex gap-8 items-start justify-center">
         <div class="flex w-full md:w-[90%] gap-x-3 flex-col md:flex-row">
           <!-- Left Column (20% width on desktop, hidden on mobile) -->
@@ -25,7 +25,6 @@
                 <span class="text-sm text-center mt-1">{{ category.name }}</span>
               </NuxtLink>
             </div>
-
 
             <!-- Title and Sort -->
             <div class="bg-white border-y md:border-none md:shadow-sm rounded-sm p-4">
@@ -66,7 +65,7 @@
 
             <!-- ProductArchive -->
             <div class="grid grid-cols-2 gap-2 md:grid-cols-2 lg:grid-cols-5 mt-4">
-              <ProductArchive v-for="product in commonData.products" :key="product.id" :id="product.id"
+              <ProductArchive v-for="product in commonDataProducts" :key="product.id" :id="product.id"
                 :image="product.image" :name="product.name" :salePrice="product.sale_price"
                 :mrpPrice="product.mrp_price" :discountPercentage="product.discount_percentage"
                 :brand="product.brand_name" :slug="product.slug" :status="product.status"
@@ -112,7 +111,6 @@
   </div>
 </template>
 
-
 <script lang="ts" setup>
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -153,7 +151,7 @@ interface CommonData {
   status: number;
   breadcrumb: Breadcrumb[];
   child_categories: ChildCategory[];
-  products: Product[];
+  products: { [key: string]: Product };
   pagination: {
     current_page: number;
     last_page: number;
@@ -185,6 +183,7 @@ const config = useRuntimeConfig();
 const sanctumFetch = useSanctumClient();
 
 const commonData = ref<CommonData | null>(null);
+const commonDataProducts = ref<Product[]>([]);
 const breadcrumbs = ref<Breadcrumb[]>([]);
 const sortOrder = ref<string | null>(null);
 const currentPage = ref<number>(1);
@@ -205,6 +204,7 @@ const fetchCommonProducts = async (slugOrQuery: string, sort: string | null = nu
       method: 'GET',
     });
     commonData.value = response.data;
+    commonDataProducts.value = Object.values(response.data.products);
     breadcrumbs.value = response.data.breadcrumb;
     currentPage.value = page;
   } catch (error) {
@@ -294,7 +294,7 @@ useHead({
         "name": commonData.value ? commonData.value.name : 'Search Results',
         "description": commonData.value ? `Browse ${props.isBrandPage ? 'brand' : 'search results'} for ${commonData.value.name}.` : 'Browse search results.',
         "url": `${config.public.baseURL}${route.fullPath}`,
-        "mainEntity": commonData.value ? commonData.value.products.map(product => ({
+        "mainEntity": commonDataProducts.value.map(product => ({
           "@type": "Product",
           "name": product.name,
           "image": product.image,
@@ -312,7 +312,7 @@ useHead({
             "itemCondition": product.status === 1 ? "https://schema.org/NewCondition" : "https://schema.org/Refurbished",
             "availability": product.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
           }
-        })) : []
+        }))
       })),
     },
   ],
