@@ -1,7 +1,8 @@
 <template>
   <div class="bg-gray-100 relative min-h-screen">
     <div v-if="isLoading" class="flex items-center justify-center h-screen">
-      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
+      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent">
+      </div>
     </div>
 
     <template v-if="commonData && commonData.products.length">
@@ -14,13 +15,26 @@
 
           <!-- Right Side Column (100% width on mobile, 80% width on desktop) -->
           <div class="w-full md:w-4/5">
+            <!-- Display category icons -->
+            <div v-if="commonData.child_categories && commonData.child_categories.length"
+              class="grid grid-cols-3 md:grid-cols-8 gap-4 overflow-x-auto mb-4 bg-white border-y md:border-none md:shadow-sm rounded-sm px-2 py-3 md:p-4">
+              <NuxtLink v-for="category in commonData.child_categories" :key="category.id"
+                :to="`/category/${category.slug}`" class="flex flex-col items-center">
+                <img :src="category.image || 'https://placehold.co/100x100'" :alt="category.name"
+                  class="w-24 h-24 object-cover rounded-full" />
+                <span class="text-sm text-center mt-1">{{ category.name }}</span>
+              </NuxtLink>
+            </div>
+
+
             <!-- Title and Sort -->
             <div class="bg-white border-y md:border-none md:shadow-sm rounded-sm p-4">
               <div>
                 <nav aria-label="breadcrumb">
                   <ol class="flex">
                     <li v-for="(crumb, index) in breadcrumbs" :key="index" class="flex items-center text-sm">
-                      <NuxtLink :to="crumb.url" class="text-gray-700 font-medium hover:text-secondaryBlue">{{ crumb.name }}</NuxtLink>
+                      <NuxtLink :to="crumb.url" class="text-gray-700 font-medium hover:text-secondaryBlue">{{ crumb.name
+                        }}</NuxtLink>
                       <span v-if="index < breadcrumbs.length - 1" class="mx-1">/</span>
                     </li>
                   </ol>
@@ -31,8 +45,9 @@
                 <h1 class="text-xl font-bold text-gray-800">
                   {{ commonData.name }}
                   <span v-if="isBrandPage">Product Online</span>
-                  <span v-else>"{{ searchQuery }}"</span>
+                  <span v-else-if="searchQuery">"{{ searchQuery }}"</span>
                 </h1>
+
                 <p class="text-sm text-gray-600 mt-1">{{ commonData.pagination.showing }}</p>
               </div>
 
@@ -97,6 +112,7 @@
   </div>
 </template>
 
+
 <script lang="ts" setup>
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -136,6 +152,7 @@ interface CommonData {
   image: string;
   status: number;
   breadcrumb: Breadcrumb[];
+  child_categories: ChildCategory[];
   products: Product[];
   pagination: {
     current_page: number;
@@ -148,6 +165,13 @@ interface CommonData {
     prev_page_url: string | null;
     showing: string;
   };
+}
+
+interface ChildCategory {
+  id: number;
+  name: string;
+  slug: string;
+  image: string;
 }
 
 const props = defineProps<{
