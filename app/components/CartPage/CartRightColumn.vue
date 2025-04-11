@@ -127,7 +127,10 @@
         Proceed to Pay
       </button>
     </div>
-
+    <!-- Loading Spinner -->
+    <div v-if="localIsLoading" class="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
+    </div>
 
     <div class="w-full mt-4 px-4 md:px-0">
       <!-- Allow Checkout -->
@@ -211,6 +214,9 @@ const couponError = ref('');
 const route = useRoute();
 const responseMessage = ref('');
 
+// Local isLoading state
+const localIsLoading = ref(false);
+
 // Destructure updateCartCount from useCart
 const { updateCartCount } = useCart();
 
@@ -247,6 +253,9 @@ const proceedToPay = async () => {
   }
 
   const sessionId = generateSessionId();
+
+  // Set localIsLoading to true
+  localIsLoading.value = true;
 
   try {
     const response = await sanctumFetch('/api/checkout', {
@@ -293,6 +302,9 @@ const proceedToPay = async () => {
   } catch (error) {
     responseMessage.value = 'An error occurred while processing the payment.';
     console.error('Error processing payment:', error);
+  } finally {
+    // Set localIsLoading to false
+    localIsLoading.value = false;
   }
 };
 </script>
