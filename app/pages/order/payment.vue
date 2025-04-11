@@ -67,10 +67,13 @@
 </template>
 
 <script lang="ts" setup>
+definePageMeta({
+  middleware: ['sanctum:auth', 'sanctum-verified'],
+})
 import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import CartRightColumn from '~/components/CartPage/CartRightColumn.vue';
-import EmptyCart from '~/components/CartPage/EmptyCart.vue';
+import CartRightColumn from '@/components/CartPage/CartRightColumn.vue';
+import EmptyCart from '@/components/CartPage/EmptyCart.vue';
 import { toast } from 'vue3-toastify';
 
 // Define the User type

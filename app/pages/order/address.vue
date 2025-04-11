@@ -29,13 +29,16 @@
 </template>
 
 <script lang="ts" setup>
+definePageMeta({
+  middleware: ['sanctum:auth', 'sanctum-verified'],
+})
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import CartRightColumn from '~/components/CartPage/CartRightColumn.vue';
-import EmptyCart from '~/components/CartPage/EmptyCart.vue';
+import CartRightColumn from '@/components/CartPage/CartRightColumn.vue';
+import EmptyCart from '@/components/CartPage/EmptyCart.vue';
 import { toast } from 'vue3-toastify';
-import BillingAddressBook from '~/components/Order/BillingAddressBook.vue';
-import ShippingAddressBook from '~/components/Order/ShippingAddressBook.vue';
+import BillingAddressBook from '@/components/Order/BillingAddressBook.vue';
+import ShippingAddressBook from '@/components/Order/ShippingAddressBook.vue';
 
 // Define the User type
 interface User {

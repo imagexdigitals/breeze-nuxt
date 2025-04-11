@@ -1,16 +1,7 @@
 <template>
-  <div>
-    <p>Your order is pending</p>
-    <p>Your Order ID: {{ orderId }}</p>
-  </div>
+  <OrderDetailsComponent />
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from 'vue-router';
-
-const route = useRoute();
-const orderId = route.query.order_id as string;
+import OrderDetailsComponent from '@/components/Order/OrderDetailsComponent.vue'; // Adjust the path as necessary
 </script>
-
-<style scoped>
-</style>

@@ -1,20 +1,18 @@
-<script lang="ts" setup>
-definePageMeta({
-  layout: 'landing',
-  middleware: ['sanctum:guest'],
-})
-
-useSeoMeta({
-  title: 'Welcome',
-})
-</script>
-
 <template>
-  <UContainer class="flex flex-col gap-10">
-    <LandingHeroHeader />
-    <LandingHeroFeatures />
-    <LandingHeroFooter />
-  </UContainer>
+  <div class="bg-gray-100">
+    <!-- Category and Main Banner -->
+    <CategoryAndBanner />
+
+    <div>
+      <p>Product list</p>
+    </div>
+  </div>
 </template>
 
-<style scoped></style>
+<script lang="ts" setup>
+import CategoryAndBanner from '@/components/HomePage/CategoryAndBanner.vue';
+</script>
+
+<style scoped>
+/* Add any component-specific styles here */
+</style>
