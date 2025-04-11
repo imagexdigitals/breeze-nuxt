@@ -29,9 +29,10 @@
             <!-- Title and Sort -->
             <div class="bg-white border-y md:border-none md:shadow-sm rounded-sm p-4">
               <div>
-                <nav aria-label="breadcrumb">
-                  <ol class="flex">
-                    <li v-for="(crumb, index) in breadcrumbs" :key="index" class="flex items-center text-sm">
+                <!-- Scrollable Breadcrumb -->
+                <nav aria-label="breadcrumb" class="breadcrumb-container">
+                  <ol class="flex overflow-x-auto">
+                    <li v-for="(crumb, index) in breadcrumbs" :key="index" class="flex items-center text-sm shrink-0">
                       <NuxtLink :to="crumb.url" class="text-gray-700 font-medium hover:text-secondaryBlue">{{ crumb.name
                         }}</NuxtLink>
                       <span v-if="index < breadcrumbs.length - 1" class="mx-1">/</span>
