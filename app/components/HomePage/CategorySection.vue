@@ -12,8 +12,8 @@
           </NuxtLink>
         </div>
 
-        <div class="relative md:mt-4 bg-gray-200 py-4 pl-3 md:p-4 md:rounded-md">
-          <div :class="['product-grid', { 'mobile-scroll': isMobile }]">
+        <div class="relative md:mt-4 bg-gray-200 py-4 pl-3 md:p-4 md:rounded-md overflow-hidden">
+          <div :class="['product-grid', isMobile ? 'mobile-scroll' : '']">
             <ProductArchive v-for="product in category.products.slice(0, 7)" :key="product.id" :id="product.id"
               :image="product.image" :name="product.name" :salePrice="product.sale_price"
               :mrpPrice="product.mrp_price" :discountPercentage="product.discount_percentage"
@@ -27,17 +27,18 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue';
+import { defineProps, computed } from 'vue';
 import ProductArchive from '@/components/ProductArchive.vue';
-import { useMobileDetection } from '~/composables/useMobileDetection'
-
-const { isMobile } = useMobileDetection()
 
 const props = defineProps({
   category: {
     type: Object,
     required: true
   }
+});
+
+const isMobile = computed(() => {
+  return window.innerWidth <= 768; // Adjust the breakpoint as needed
 });
 </script>
 
