@@ -1,8 +1,8 @@
 <template>
-    <div class="flex justify-center">
-      <div class="w-[90%] flex flex-col">
+    <div class="flex md:justify-center">
+      <div class="md:w-[90%] w-full flex flex-col">
         <!-- Use the CategoryAndBanner component -->
-        <sectionOne />
+        <sectionOne v-if="!isMobile"/>
 
         <!-- Use the ThreeColumnBanner component -->
         <ThreeColumnBanner />
@@ -13,6 +13,8 @@
 <script lang="ts" setup>
 import sectionOne from '@/components/HomePage/sectionOne.vue';
 import ThreeColumnBanner from '@/components/HomePage/ThreeColumnBanner.vue';
+import { useMobileDetection } from '~/composables/useMobileDetection'
+const { isMobile } = useMobileDetection()
 </script>
 
 <style>

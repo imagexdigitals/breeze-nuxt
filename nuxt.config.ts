@@ -164,7 +164,23 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['@nuxt/ui', '@nuxt/eslint', 'nuxt-auth-sanctum', '@nuxt/image', '@pinia/nuxt', '@nuxtjs/google-fonts', '@nuxt/icon', 'nuxt-schema-org', 'nuxt-laravel-echo', '@nuxtjs/sitemap', '@nuxt/fonts', '@nuxtjs/robots', '@nuxtjs/seo', 'nuxt-site-config'],
+  modules: [
+    '@nuxt/ui',
+    '@nuxt/eslint',
+    'nuxt-auth-sanctum',
+    '@nuxt/image',
+    '@pinia/nuxt',
+    '@nuxtjs/google-fonts',
+    '@nuxt/icon',
+    'nuxt-schema-org',
+    'nuxt-laravel-echo',
+    '@nuxtjs/sitemap',
+    '@nuxt/fonts',
+    '@nuxtjs/robots',
+    '@nuxtjs/seo',
+    'nuxt-site-config',
+    'nuxt-swiper',
+  ],
 
   fonts: {
     defaults: {
