@@ -76,14 +76,15 @@
     </div>
 
     <!-- Trust Badges -->
-    <div class="flex justify-center gap-6 flex-wrap py-2 mb-6 w-full md:w-[90%]">
-      <div v-for="(badge, index) in trustBadges" :key="index" class="flex items-center space-x-2">
-        <div class="bg-red-100 p-1.5 rounded-md flex items-center justify-center">
-          <Icon :name="badge.icon" class="w-5 h-5 text-red-600" />
-        </div>
-        <span class="text-xs md:text-sm font-semibold text-gray-700">{{ badge.text }}</span>
-      </div>
+    <div class="grid grid-cols-2 p-4 md:flex justify-center gap-4 flex-wrap py-2 mb-6 w-full md:w-[90%]">
+  <div v-for="(badge, index) in trustBadges" :key="index" class="flex items-center space-x-2">
+    <div class="bg-red-100 p-1.5 rounded-md flex items-center justify-center">
+      <Icon :name="badge.icon" class="w-5 h-5 text-red-600" />
     </div>
+    <span class="text-xs md:text-sm font-semibold text-gray-700">{{ badge.text }}</span>
+  </div>
+</div>
+
 
     <div class="w-full bg-gray-100">
       <div class="flex flex-col md:flex-row justify-between items-center py-2 my-2 w-[90%] mx-auto">
