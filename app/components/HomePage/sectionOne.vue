@@ -1,22 +1,34 @@
-<!-- CategoryAndBanner.vue -->
 <template>
   <div class="w-full flex">
     <!-- Left Column: 20% width -->
-    <SideCategory v-if="!isMobile"/>
+    <SideCategory class="side-category" />
 
     <!-- Right Column: 80% width -->
-    <MainBanner />
-
+    <MainBanner class="main-banner" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import MainBanner from '@/components/HomePage/MainBanner.vue';
 import SideCategory from '~/components/CategoryDesktop/SideCategory.vue';
-import { useMobileDetection } from '~/composables/useMobileDetection'
-const { isMobile } = useMobileDetection()
 </script>
 
 <style scoped>
-/* Add any component-specific styles here */
+.side-category {
+  width: 20%;
+}
+
+.main-banner {
+  width: 80%;
+}
+
+@media (max-width: 767px) {
+  .side-category {
+    display: none;
+  }
+
+  .main-banner {
+    width: 100%;
+  }
+}
 </style>
