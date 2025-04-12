@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100">
+  <div class="bg-gray-100 pb-14">
     <!-- Category and Main Banner -->
     <CategoryAndBanner />
 

@@ -8,6 +8,7 @@ const { isAuthenticated } = useSanctumAuth()
     <HeaderDesktop class="header-desktop" />
     <HeaderMobile class="header-mobile" />
     <slot />
+    <FooterDesktop/>
   </div>
 </template>
 
