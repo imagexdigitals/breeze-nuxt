@@ -4,27 +4,28 @@
     <CategoryAndBanner />
 
     <!-- Category Section -->
-    <div v-for="category in categories" :key="category.id" class="flex md:justify-center">
-      <div class="md:w-[90%] w-full bg-white md:p-4 rounded-md mt-4">
-        <div class="">
-          <div class="flex justify-between items-center p-3 md:p-0">
-            <h2 class="text-xl font-bold">
-              {{ category.name }}
-            </h2>
-            <NuxtLink :to="'/category/' + category.slug"
-              class="text-red-600 bg-red-100 p-2 font-semibold rounded-md hover:bg-red-200 flex-shrink-0 ml-4">
-              View All
-            </NuxtLink>
-          </div>
+    <CategorySection v-for="category in categories" :key="category.id" :category="category" />
 
-          <div class="relative md:mt-4 bg-gray-200 py-4 pl-3 md:p-4 md:rounded-md">
-            <div :class="['product-grid', { 'mobile-scroll': isMobile }]">
-              <ProductArchive v-for="product in category.products.slice(0, 7)" :key="product.id" :id="product.id"
-                :image="product.image" :name="product.name" :salePrice="product.sale_price"
-                :mrpPrice="product.mrp_price" :discountPercentage="product.discount_percentage"
-                :brand="product.brand_name" :slug="product.slug" :status="product.status"
-                :brandSlug="product.brand_slug" :minimum_qty="product.minimum_qty" />
-            </div>
+    <!-- About NxtKart -->
+    <HomePageAboutNxtKart />
+
+    <!-- Shop by category -->
+    <div class="flex md:justify-center">
+      <div class="md:w-[90%] w-full bg-white md:p-4 md:rounded-md mt-4 p-3">
+        <h2 class="text-lg mb-3 font-bold">Popular Categories on Nxtkart</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div v-for="category in categoriesData" :key="category.name" class="border p-4 hover:bg-gray-100">
+            <NuxtLink :to="`/category/${category.slug}`" class="font-semibold hover:text-nxtkartsecondaryBlue">
+              {{ category.name }}
+            </NuxtLink>
+            <p class="text-sm">
+              <template v-for="(child, index) in category.children" :key="child.name">
+                <NuxtLink class="hover:text-nxtkartsecondaryBlue" :to="`/category/${child.slug}`">
+                  {{ child.name }}
+                </NuxtLink>
+                <span v-if="index < category.children.length - 1"> | </span>
+              </template>
+            </p>
           </div>
         </div>
       </div>
@@ -35,13 +36,12 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import CategoryAndBanner from '@/components/HomePage/CategoryAndBanner.vue';
-import ProductArchive from '@/components/ProductArchive.vue';
-import { useMobileDetection } from '~/composables/useMobileDetection'
-const { isMobile } = useMobileDetection()
+import CategorySection from '@/components/HomePage/CategorySection.vue';
 
 const sanctumFetch = useSanctumClient();
 
 const categories = ref([]);
+const categoriesData = ref([]);
 
 onMounted(async () => {
   try {
@@ -49,32 +49,13 @@ onMounted(async () => {
       method: 'GET',
     });
     categories.value = response;
+
+    const categoriesResponse = await sanctumFetch(`/api/categories`, {
+      method: 'GET',
+    });
+    categoriesData.value = categoriesResponse;
   } catch (error) {
     console.error('Error fetching categories:', error);
   }
 });
 </script>
-
-<style scoped>
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.5rem;
-}
-
-.mobile-scroll {
-  display: flex;
-  overflow-x: auto;
-  gap: 0.5rem;
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.mobile-scroll::-webkit-scrollbar {
-  display: none;  /* Safari and Chrome */
-}
-
-.mobile-scroll > * {
-  flex: 0 0 calc(50% - 0.5rem); /* Two columns with gap */
-}
-</style>
