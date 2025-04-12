@@ -1,7 +1,7 @@
 <template>
     <!-- Desktop banner -->
     <div v-if="!isMobile" class="md:w-4/5 w-full py-4 flex items-center justify-center">
-      <img src="https://placehold.co/800x323" alt="Main Banner" class="w-full h-auto max-w-full" />
+      <img src="https://placehold.co/800x348" alt="Main Banner" class="w-full h-auto max-w-full" />
     </div>
 
     <!-- Mobile banner -->

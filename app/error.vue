@@ -10,42 +10,108 @@ const appConfig = useAppConfig()
 
 useHead({
   title: `Error | ${appConfig.siteTitle}`,
-  bodyAttrs: {
-    class: 'bg-gray-100 dark:bg-transparent',
-  },
 })
+
+definePageMeta({
+  layout: 'default',
+});
 </script>
 
 <template>
-  <UContainer class="flex flex-col justify-center items-center pt-20 pb-10 gap-5">
-    <AppLogo />
+  <HeaderDesktop class="header-desktop" />
+  <HeaderMobile class="header-mobile" />
+  <div class="flex flex-col justify-center items-center pb-10 gap-5 h-screen">
+    <section class="page_404">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12 ">
+            <div class="col-sm-10 col-sm-offset-1  text-center">
+              <div class="four_zero_four_bg">
+                <h1 class="text-center ">404</h1>
+              </div>
 
-    <UCard class="min-w-96 max-w-xl">
-      <template #header>
-        <h1 class="text-lg font-semibold">
-          Oops! An error occurred.
-        </h1>
-      </template>
-
-      <template #default>
-        <p>
-          <strong>Error details:</strong>
-        </p>
-        <p>
-          {{ props.error.message }}
-        </p>
-      </template>
-
-      <template #footer>
-        <div class="flex">
-          <UButton
-            color="primary"
-            label="Go to homepage"
-            to="/"
-            class="mx-auto"
-          />
+              <div class="contant_box_404">
+              </div>
+            </div>
+          </div>
         </div>
-      </template>
-    </UCard>
-  </UContainer>
+      </div>
+    </section>
+    <div class="min-w-96 max-w-xl text-center -mt-24">
+      <h1 class="text-lg font-semibold">
+        Oops! An error occurred.
+      </h1>
+      <p>
+        <strong>Error details:</strong>
+      </p>
+      <p>
+        {{ props.error.message }}
+      </p>
+      <div class="flex justify-center mt-4">
+        <NuxtLink to="/" class="bg-nxtkartsecondaryBlue text-white px-4 py-2 rounded">
+          Go to homepage
+        </NuxtLink>
+      </div>
+    </div>
+  </div>
+  <FooterDesktop />
 </template>
+
+<style scoped>
+.header-desktop {
+  display: none;
+}
+
+.header-mobile {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .header-desktop {
+    display: block;
+  }
+
+  .header-mobile {
+    display: none;
+  }
+}
+
+
+.page_404 {
+  padding: 40px 0;
+  background: #fff;
+  font-family: 'Arvo', serif;
+}
+
+.page_404 img {
+  width: 100%;
+}
+
+.four_zero_four_bg {
+  background-image: url(/images/404.gif);
+  height: 500px;
+  width: 700px;
+  background-position: center;
+}
+
+
+.four_zero_four_bg h1 {
+  font-size: 80px;
+}
+
+.four_zero_four_bg h3 {
+  font-size: 80px;
+}
+
+.link_404 {
+  color: #fff !important;
+  padding: 10px 20px;
+  background: #39ac31;
+  margin: 20px 0;
+  display: inline-block;
+}
+
+.contant_box_404 {
+  margin-top: -50px;
+}
+</style>

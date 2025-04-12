@@ -32,14 +32,14 @@
             <div class="flex justify-center md:justify-start items-center space-x-2">
               <a href="mailto:care@nxtkart.com" aria-label="Email" class="flex items-center space-x-2">
                 <Icon name="fluent-emoji-flat:e-mail" class="w-6 h-6 text-gray-700" />
-                <span class="text-sm font-medium text-nxtkartsecondaryBlue">care@nxtkart.com</span>
+                <span class="font-medium text-nxtkartsecondaryBlue">care@nxtkart.com</span>
               </a>
             </div>
             <!-- WhatsApp Icon -->
             <div class="flex justify-center md:justify-start items-center space-x-2">
               <a href="https://wa.me/919487929592" aria-label="WhatsApp" target="_blank" class="flex items-center space-x-2">
                 <Icon name="logos:whatsapp-icon" class="w-6 h-6 text-gray-700" />
-                <span class="text-sm font-medium">+91 9487929592 (10am to 6pm)</span>
+                <span class="font-medium">+91 9487929592 (10am to 6pm)</span>
               </a>
             </div>
           </div>
@@ -103,6 +103,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+const sanctumFetch = useSanctumClient();
 
 // Get the current year
 const currentYear = ref(new Date().getFullYear());
@@ -149,11 +152,49 @@ const trustBadges = [
 const email = ref('');
 
 // Function to handle newsletter subscription
-const subscribeToNewsletter = () => {
-  // Handle the subscription logic here
-  console.log('Subscribing email:', email.value);
+const subscribeToNewsletter = async () => {
+  const payload = {
+    email: email.value
+  };
+
+  try {
+    const response = await sanctumFetch(`/api/subscribe`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Log the response for debugging
+    console.log('Response:', response);
+
+    // Check if the response is an object with a message property
+    if (response && response.message) {
+      toast.success(response.message || 'Subscribed Success!', {
+        position: toast.POSITION.TOP_CENTER
+      });
+      // Reset the email input field
+      email.value = '';
+    } else {
+      console.error('Unexpected response structure:', response);
+      toast.error('An unexpected error occurred. Please try again.', {
+        position: toast.POSITION.TOP_CENTER
+      });
+    }
+  } catch (error) {
+    console.error('Fetch Error:', error);
+    toast.error('An error occurred. Please try again.', {
+      position: toast.POSITION.TOP_CENTER
+    });
+  }
 };
 </script>
+
+
+
+
+
 
 <style>
 /* Your styles here */

@@ -1,17 +1,17 @@
 <template>
   <div class="w-1/5 py-4 mr-4 relative">
     <!-- Parent Block -->
-    <div class="space-y-3 bg-white p-4">
+    <div class="bg-white">
       <div
         v-for="category in categories"
         :key="category.name"
         class="relative"
       >
-        <NuxtLink :to="`/category/${category.slug}`" class="flex items-center">
+        <NuxtLink :to="`/category/${category.slug}`" class="flex items-center hover:bg-nxtkartsecondaryBlue hover:text-white px-4 py-2">
           <img
             :src="category.image || 'https://placehold.co/75'"
             alt="Category Icon"
-            class="w-8 h-8 mr-2"
+            class="w-8 h-8 mr-2 rounded-sm"
           />
           <p>{{ category.name }}</p>
         </NuxtLink>
