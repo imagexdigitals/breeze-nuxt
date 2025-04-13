@@ -37,7 +37,8 @@
             </div>
             <!-- WhatsApp Icon -->
             <div class="flex justify-center md:justify-start items-center space-x-2">
-              <a href="https://wa.me/919487929592" aria-label="WhatsApp" target="_blank" class="flex items-center space-x-2">
+              <a href="https://wa.me/919487929592" aria-label="WhatsApp" target="_blank"
+                class="flex items-center space-x-2">
                 <Icon name="logos:whatsapp-icon" class="w-6 h-6 text-gray-700" />
                 <span class="font-medium">+91 9487929592 (10am to 6pm)</span>
               </a>
@@ -62,12 +63,15 @@
           </div>
         </div>
         <!-- Newsletter Section -->
-        <div class="w-full md:w-[35%] p-4 border-t-8 md:border-t-0 md:border-l-8 border-red-600 bg-gray-100 flex flex-col justify-center">
+        <div
+          class="w-full md:w-[35%] p-4 border-t-8 md:border-t-0 md:border-l-8 border-red-600 bg-gray-100 flex flex-col justify-center">
           <h3 class="font-bold text-lg mb-2">RECEIVE THE HOTTEST NEWS AND PROMOTIONS.</h3>
           <p class="mb-4">Directly to your email</p>
           <form @submit.prevent="subscribeToNewsletter" class="flex flex-col space-y-2 w-full">
-            <input type="email" placeholder="Enter your email" class="p-2 border border-gray-300 rounded-md focus:outline-none w-full" v-model="email" required />
-            <button type="submit" class="bg-nxtkartsecondaryBlue text-white p-2 rounded-md hover:bg-nxtkartBlue focus:outline-none mt-2 w-full">
+            <input type="email" placeholder="Enter your email"
+              class="p-2 border border-gray-300 rounded-md focus:outline-none w-full" v-model="email" required />
+            <button type="submit"
+              class="bg-nxtkartsecondaryBlue text-white p-2 rounded-md hover:bg-nxtkartBlue focus:outline-none mt-2 w-full">
               Subscribe
             </button>
           </form>
@@ -77,13 +81,13 @@
 
     <!-- Trust Badges -->
     <div class="grid grid-cols-2 p-4 md:flex justify-center gap-4 flex-wrap py-2 mb-6 w-full md:w-[90%]">
-  <div v-for="(badge, index) in trustBadges" :key="index" class="flex items-center space-x-2">
-    <div class="bg-red-100 p-1.5 rounded-md flex items-center justify-center">
-      <Icon :name="badge.icon" class="w-5 h-5 text-red-600" />
+      <div v-for="(badge, index) in trustBadges" :key="index" class="flex items-center space-x-2">
+        <div class="bg-red-100 p-1.5 rounded-md flex items-center justify-center">
+          <Icon :name="badge.icon" class="w-5 h-5 text-red-600" />
+        </div>
+        <span class="text-xs md:text-sm font-semibold text-gray-700">{{ badge.text }}</span>
+      </div>
     </div>
-    <span class="text-xs md:text-sm font-semibold text-gray-700">{{ badge.text }}</span>
-  </div>
-</div>
 
 
     <div class="w-full bg-gray-100">
