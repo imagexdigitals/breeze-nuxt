@@ -7,7 +7,7 @@
           <Icon name="ic:baseline-menu" class="w-8 h-8" />
         </button>
         <!-- Logo -->
-        <NuxtLink to="/">
+        <NuxtLink to="/" @click="toggleMenu">
           <NuxtImg src="/images/NxtKart_Logo.svg" alt="NxtKart Logo" width="150" height="97" />
         </NuxtLink>
       </div>
@@ -15,7 +15,7 @@
       <!-- Right Side Components -->
       <div class="flex items-center space-x-2">
         <!-- My Account Icon -->
-        <NuxtLink to="/login"
+        <NuxtLink to="/login" @click="toggleMenu"
           class="font-medium text-gray-700 flex space-x-2 items-center cursor-pointer hover:bg-zinc-100 p-1.5 border-white border hover:border-dashed hover:border-nxtkartsecondaryBlue hover:border hover:rounded-md hover:text-nxtkartsecondaryBlue">
           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" class="mr-1">
             <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
@@ -46,18 +46,24 @@
           <button v-else @click="toggleMenu" class="text-gray-700 focus:outline-none">
             <Icon name="ic:baseline-close" class="w-8 h-8" />
           </button>
-          <h2 class="text-lg font-semibold flex-1 text-center">{{ currentMenu.name }}</h2>
+          <h2 class="text-lg font-semibold flex-1 text-center">{{ currentMenu.name || 'All Categories' }}</h2>
         </div>
         <div class="flex-1 overflow-y-auto">
           <ul>
             <li v-for="(item, index) in currentMenu.children" :key="index" class="px-4 py-2 border-b hover:bg-gray-100">
-              <div @click="openSubMenu(item)" class="flex items-center justify-between cursor-pointer hover:text-nxtkartsecondaryBlue">
+              <div v-if="item.children && item.children.length > 0" @click="openSubMenu(item)" class="flex items-center justify-between cursor-pointer hover:text-nxtkartsecondaryBlue">
                 <div class="flex items-center space-x-3">
-                  <img v-if="item.image" :src="item.image" alt="Menu Icon" class="w-12 h-12 object-cover" />
+                  <NuxtImg v-if="item.image" :src="item.image" :alt="item.name" class="w-12 h-12 object-cover" />
                   <span>{{ item.name }}</span>
                 </div>
-                <Icon v-if="item.children" name="ic:baseline-chevron-right" class="w-5 h-5" />
+                <Icon name="ic:baseline-chevron-right" class="w-5 h-5" />
               </div>
+              <NuxtLink v-else :to="`/category/${item.slug}`" @click="toggleMenu" class="flex items-center justify-between hover:text-nxtkartsecondaryBlue">
+                <div class="flex items-center space-x-3">
+                  <NuxtImg v-if="item.image" :src="item.image" :alt="item.name" class="w-12 h-12 object-cover" />
+                  <span>{{ item.name }}</span>
+                </div>
+              </NuxtLink>
             </li>
           </ul>
         </div>
@@ -67,84 +73,54 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed } from 'vue';
-
+import { NuxtImg } from '#components';
+import { ref, reactive, computed, onMounted } from 'vue';
+const sanctumFetch = useSanctumClient();
 const isMenuOpen = ref(false);
 const menuStack = ref<any[]>([]);
+const categories = ref<any[]>([]);
+
+// Fetch categories from API
+const fetchCategories = async () => {
+  try {
+    const response = await sanctumFetch(`/api/categories`, {
+      method: 'GET',
+    });
+    categories.value = response;
+    
+    // Initialize menu structure with API data
+    menuStructure.children = categories.value;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  }
+};
+
+onMounted(() => {
+  fetchCategories();
+});
 
 const toggleMenu = () => {
   if (isMenuOpen.value) {
     menuStack.value = []; // Reset menu stack when closing
   } else {
-    menuStack.value.push(menuStructure); // Initialize with the main menu
+    // Initialize with the main menu structure
+    menuStack.value.push(menuStructure);
   }
   isMenuOpen.value = !isMenuOpen.value;
 };
 
+// Main menu structure that will be populated with API data
 const menuStructure = reactive({
-  name: 'All Category',
-  children: [
-    {
-      name: 'Laptops',
-      image: 'https://placehold.co/75',
-      children: [
-        { name: 'Gaming Laptops' },
-        { name: 'Business Laptops' },
-        {
-          name: '2-in-1 Laptops',
-          children: [
-            { name: 'Convertible Laptops' },
-            { name: 'Detachable Laptops' }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Desktops',
-      image: 'https://placehold.co/75',
-      children: [
-        { name: 'Gaming Desktops' },
-        { name: 'All-in-One Desktops' },
-        { name: 'Workstations' }
-      ]
-    },
-    {
-      name: 'Accessories',
-      image: 'https://placehold.co/75',
-      children: [
-        { name: 'Keyboards' },
-        { name: 'Mice' },
-        { name: 'Monitors' },
-        { name: 'Speakers' }
-      ]
-    },
-    {
-      name: 'Networking',
-      image: 'https://placehold.co/75',
-      children: [
-        { name: 'Routers' },
-        { name: 'Modems' },
-        { name: 'Switches' }
-      ]
-    },
-    {
-      name: 'Software',
-      image: 'https://placehold.co/75',
-      children: [
-        { name: 'Operating Systems' },
-        { name: 'Productivity Software' },
-        { name: 'Antivirus' }
-      ]
-    }
-  ]
+  name: 'All Categories',
+  children: [] as any[]
 });
 
 const currentMenu = computed(() => {
-  return menuStack.value[menuStack.value.length - 1];
+  return menuStack.value[menuStack.value.length - 1] || menuStructure;
 });
 
 const openSubMenu = (item: any) => {
-  if (item.children) {
+  if (item.children && item.children.length > 0) {
     menuStack.value.push(item);
   }
 };
@@ -157,7 +133,6 @@ const goBack = () => {
 </script>
 
 <style scoped>
-/* Add any additional styles here */
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.3s ease;

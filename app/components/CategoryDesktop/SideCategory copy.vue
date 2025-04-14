@@ -19,10 +19,9 @@
           />
           <p>{{ category.name }}</p>
         </NuxtLink>
-        
 
         <!-- Subcategories Dropdown -->
-        <!-- <div
+        <div
           v-if="category.children && category.children.length > 0"
           class="absolute top-0 left-full w-56 bg-white border shadow-lg hidden group-hover:block"
         >
@@ -38,7 +37,7 @@
               {{ subCategory.name }}
             </NuxtLink>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -67,21 +66,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Dropdown alignment: child starts from the top */
-.group:hover > div {
+/* Ensure the dropdown is aligned to the top start of the parent category */
+.group:hover .group-hover\\:block {
   display: block;
 }
 
-.group > div {
-  top: 0; /* Aligns subcategories list to the top of the parent */
-  left: 100%; /* Positions the dropdown to the right of the parent */
-}
-
-.hidden {
-  display: none;
-}
-
-.block {
-  display: block;
-}
+/* Add custom styles if needed */
 </style>
