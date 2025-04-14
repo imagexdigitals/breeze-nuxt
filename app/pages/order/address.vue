@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100">
+  <div class="bg-gray-100 md:py-8">
     <div class="mx-auto md:w-4/5 py-5" v-if="!isCartEmpty">
       <CartPageCartStepper />
       <div class="md:flex gap-4 mt-8">
@@ -31,7 +31,8 @@
 <script lang="ts" setup>
 definePageMeta({
   middleware: ['sanctum:auth', 'sanctum-verified'],
-})
+});
+
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import CartRightColumn from '@/components/CartPage/CartRightColumn.vue';
@@ -131,6 +132,8 @@ const sessionId = ref<string | null>(null);
 const status = ref({
   has_billing_addresses: false,
   has_shipping_addresses: false,
+  no_address_found: false,
+  redirect: false,
 });
 
 const fetchAddresses = async () => {
@@ -256,7 +259,6 @@ const fetchCartData = async () => {
         ShippingAddressId: response.shipping_address_id,
         BillingAddressId: response.billing_address_id,
       };
-      
 
       // Check if any item has a status of 2
       const hasStatus2 = cartData.value.cart_details.some(item => item.status === 2);
@@ -291,17 +293,25 @@ const generateSessionId = () => {
   return sessionId;
 };
 
-onMounted(() => {
+onMounted(async () => {
   cartStore.loadFromLocalStorage();
   if (user.value) {
     userId.value = (user.value as User).id;
+    await fetchAddresses(); // Fetch addresses first
+
+    // Check if redirect is true after fetching addresses
+    if (status.value.redirect) {
+      router.push('/my-account/add-address?order_address_add=true&address_store_type=new'); // Redirect to the add address page
+      return; // Stop further execution
+    }
+
     fetchCartData(); // Use user_id
   } else {
     console.error('User is not authenticated');
   }
-  fetchAddresses();
 });
 </script>
+
 
 
 <style scoped>

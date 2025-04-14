@@ -45,25 +45,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-const sanctumFetch = useSanctumClient();
+import { useCategories } from '@/composables/useCategories'; // Adjust the import path as needed
 
-const categories = ref([]);
-
-const fetchCategories = async () => {
-  try {
-    const response = await sanctumFetch(`/api/categories`, {
-      method: 'GET',
-    });
-    categories.value = response;
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-  }
-};
-
-onMounted(() => {
-  fetchCategories();
-});
+const { categories } = useCategories();
 </script>
 
 <style scoped>

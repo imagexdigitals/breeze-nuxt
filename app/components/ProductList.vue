@@ -54,11 +54,11 @@
               <div class="flex items-center space-x-2 mt-4">
                 <p class="font-semibold text-gray-600">Sort by:</p>
                 <button @click="sortProducts('low')"
-                  :class="['border', 'px-4', 'py-1', 'rounded-3xl', 'font-medium', 'text-sm', sortOrder === 'low' ? 'border-blue-500 text-blue-500' : 'border-gray-300']">
+                  :class="['border', 'px-4', 'py-1', 'rounded-3xl', 'font-medium', 'text-sm', sortOrder === 'low' ? 'border-nxtkartsecondaryBlue text-nxtborder-nxtkartsecondaryBlue' : 'border-gray-300']">
                   Low to High
                 </button>
                 <button @click="sortProducts('high')"
-                  :class="['border', 'px-4', 'py-1', 'rounded-3xl', 'font-medium', 'text-sm', sortOrder === 'high' ? 'border-blue-500 text-blue-500' : 'border-gray-300']">
+                  :class="['border', 'px-4', 'py-1', 'rounded-3xl', 'font-medium', 'text-sm', sortOrder === 'high' ? 'border-nxtkartsecondaryBlue text-nxtborder-nxtkartsecondaryBlue' : 'border-gray-300']">
                   High to Low
                 </button>
               </div>
@@ -83,7 +83,7 @@
                 'flex',
                 'items-center',
                 'justify-center',
-                currentPage === page ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'
+                currentPage === page ? 'bg-nxtkartsecondaryBlue text-white' : 'bg-white text-nxtbg-nxtkartsecondaryBlue'
               ]">
                 {{ page }}
               </button>
@@ -97,7 +97,7 @@
                   'flex',
                   'items-center',
                   'justify-center',
-                  currentPage === commonData.pagination.last_page ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'
+                  currentPage === commonData.pagination.last_page ? 'bg-nxtkartsecondaryBlue text-white' : 'bg-white text-nxtbg-nxtkartsecondaryBlue'
                 ]">
                 {{ commonData.pagination.last_page }}
               </button>

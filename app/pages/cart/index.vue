@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100">
+  <div class="bg-gray-100 md:py-8">
     <div v-if="!isCartEmpty" class="mx-auto w-full py-5 md:px-4 md:w-4/5">
       <CartPageCartStepper />
       <div class="flex flex-col md:flex-row justify-between items-center mb-3">
