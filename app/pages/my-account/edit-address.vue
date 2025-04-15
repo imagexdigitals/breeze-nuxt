@@ -1,17 +1,154 @@
 <template>
   <div class="bg-gray-100 md:py-8">
     <div class="mx-auto md:w-3/5 py-5">
+      <form @submit.prevent="submitForm" class="bg-white p-6 rounded shadow-md grid grid-cols-1 md:grid-cols-2 gap-x-5">
+        <h2 class="text-2xl font-bold mb-4 col-span-full">{{ formTitle }}</h2>
+        <!-- <p class="text-sm text-gray-500 mb-4 col-span-full">User ID: {{ userId }}</p> -->
+        <!-- Name -->
+        <div class="mb-4">
+          <label for="name" class="block text-gray-700">Name <span class="text-red-500">*</span></label>
+          <input type="text" id="name" v-model="formData.name"
+            class="w-full px-4 py-2 border rounded focus:outline-none focus:border-nxtkartsecondaryBlue"
+            :class="{ 'border-red-500': errors.name }">
+          <span class="text-red-500 text-sm" v-if="errors.name">{{ errors.name }}</span>
+        </div>
 
+        <!-- Email -->
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700">Email <span class="text-red-500">*</span></label>
+          <input type="email" id="email" v-model="formData.email"
+            class="w-full px-4 py-2 border rounded focus:outline-none focus:border-nxtkartsecondaryBlue"
+            :class="{ 'border-red-500': errors.email }">
+          <span class="text-red-500 text-sm" v-if="errors.email">{{ errors.email }}</span>
+        </div>
+
+        <!-- Mobile No. -->
+        <div class="mb-4">
+          <label for="mobile" class="block text-gray-700">Mobile No. <span class="text-red-500">*</span></label>
+          <input type="text" id="mobile" v-model="formData.mobile" maxlength="10"
+            class="w-full px-4 py-2 border rounded focus:outline-none focus:border-nxtkartsecondaryBlue"
+            :class="{ 'border-red-500': errors.mobile }">
+          <span class="text-red-500 text-sm" v-if="errors.mobile">{{ errors.mobile }}</span>
+        </div>
+
+        <!-- Business Name -->
+        <div class="mb-4">
+          <label for="business_name" class="block text-gray-700">Business Name</label>
+          <input type="text" id="business_name" v-model="formData.business_name"
+            class="w-full px-4 py-2 border rounded focus:outline-none focus:border-nxtkartsecondaryBlue">
+        </div>
+
+        <!-- GST -->
+        <div class="mb-4">
+          <label for="gst" class="block text-gray-700">GST</label>
+          <input type="text" id="gst" v-model="formData.gst"
+            class="w-full px-4 py-2 border rounded focus:outline-none focus:border-nxtkartsecondaryBlue">
+        </div>
+
+        <!-- Alternative Mobile -->
+        <div class="mb-4">
+          <label for="alternative_mobile" class="block text-gray-700">Alternative Mobile</label>
+          <input type="text" id="alternative_mobile" v-model="formData.alternative_mobile" maxlength="10"
+            class="w-full px-4 py-2 border rounded focus:outline-none focus:border-nxtkartsecondaryBlue"
+            :class="{ 'border-red-500': errors.alternative_mobile }">
+          <span class="text-red-500 text-sm" v-if="errors.alternative_mobile">{{ errors.alternative_mobile }}</span>
+        </div>
+
+        <!-- Flat or House or Building -->
+        <div class="mb-4">
+          <label for="address1" class="block text-gray-700">Flat, House no., Building, Company, Apartment <span class="text-red-500">*</span></label>
+          <input type="text" id="address1" v-model="formData.address1"
+            class="w-full px-4 py-2 border rounded focus:outline-none focus:border-nxtkartsecondaryBlue"
+            :class="{ 'border-red-500': errors.address1 }">
+          <span class="text-red-500 text-sm" v-if="errors.address1">{{ errors.address1 }}</span>
+        </div>
+
+        <!-- Area or Street -->
+        <div class="mb-4">
+          <label for="address2" class="block text-gray-700">Area, Street, Sector, Village <span class="text-red-500">*</span></label>
+          <input type="text" id="address2" v-model="formData.address2"
+            class="w-full px-4 py-2 border rounded focus:outline-none focus:border-nxtkartsecondaryBlue"
+            :class="{ 'border-red-500': errors.address2 }">
+          <span class="text-red-500 text-sm" v-if="errors.address2">{{ errors.address2 }}</span>
+        </div>
+
+        <!-- Pincode -->
+        <div class="mb-4">
+          <label for="pincode" class="block text-gray-700">Pincode <span class="text-red-500">*</span></label>
+          <input type="text" id="pincode" v-model="formData.pincode" maxlength="6"
+            class="w-full px-4 py-2 border rounded focus:outline-none focus:border-nxtkartsecondaryBlue"
+            :class="{ 'border-red-500': errors.pincode }"
+            @input="handlePincodeInput">
+          <span class="text-red-500 text-sm" v-if="errors.pincode">{{ errors.pincode }}</span>
+        </div>
+
+        <!-- Landmark -->
+        <div class="mb-4">
+          <label for="landmark" class="block text-gray-700">Landmark</label>
+          <input type="text" id="landmark" v-model="formData.landmark"
+            class="w-full px-4 py-2 border rounded focus:outline-none focus:border-nxtkartsecondaryBlue">
+        </div>
+
+        <!-- City -->
+        <div class="mb-4">
+          <label for="city" class="block text-gray-700">City <span class="text-red-500">*</span></label>
+          <input type="text" id="city" v-model="formData.city"
+            class="w-full px-4 py-2 border rounded focus:outline-none focus:border-nxtkartsecondaryBlue" disabled
+            :placeholder="isLoadingCityState ? 'Loading...' : ''"
+            :class="{ 'border-red-500': errors.city }">
+          <span class="text-red-500 text-sm" v-if="errors.city">{{ errors.city }}</span>
+        </div>
+
+        <!-- State -->
+        <div class="mb-4">
+          <label for="state" class="block text-gray-700">State <span class="text-red-500">*</span></label>
+          <input type="text" id="state" v-model="formData.state"
+            class="w-full px-4 py-2 border rounded focus:outline-none focus:border-nxtkartsecondaryBlue" disabled
+            :placeholder="isLoadingCityState ? 'Loading...' : ''"
+            :class="{ 'border-red-500': errors.state }">
+          <span class="text-red-500 text-sm" v-if="errors.state">{{ errors.state }}</span>
+        </div>
+
+        <div class="mb-4 flex items-center">
+          <!-- Make Primary Address -->
+          <div class="flex items-center mr-6">
+            <input type="checkbox" id="is_primary" v-model="formData.is_primary" class="mr-2" :checked="formData.is_primary">
+            <label for="is_primary" class="text-gray-700">Make Primary Address</label>
+          </div>
+        </div>
+
+        <!-- Type -->
+        <div class="mb-4 col-span-full">
+          <label class="block text-gray-700 mb-2"> Type</label>
+          <div class="flex space-x-4">
+            <button type="button" @click="setType('1')" class="px-4 py-2 border rounded focus:outline-none"
+              :class="{ 'bg-nxtkartsecondaryBlue text-white': formData.type === '1' }">Home</button>
+            <button type="button" @click="setType('2')" class="px-4 py-2 border rounded focus:outline-none"
+              :class="{ 'bg-nxtkartsecondaryBlue text-white': formData.type === '2' }">Office</button>
+            <button type="button" @click="setType('3')" class="px-4 py-2 border rounded focus:outline-none"
+              :class="{ 'bg-nxtkartsecondaryBlue text-white': formData.type === '3' }">Other</button>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-6 col-span-full flex justify-center">
+          <button type="submit"
+            class="w-[30%] bg-nxtkartsecondaryBlue font-semibold text-white py-2 rounded hover:bg-nxtkartBlue focus:outline-none">
+            Update Address
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
+
 
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
 import * as yup from 'yup';
-import type { User } from '~~/models/user';
+
 
 // Define the type for form data
 interface FormData {
@@ -78,9 +215,11 @@ const router = useRouter();
 // Initialize userId
 const userId = ref<number | null>(null);
 
-// Assuming user is a reactive object containing user data
-const user = ref({ id: 1 }); // Example user object with an ID
-userId.value = (user.value as User).id;
+// Get the authenticated user
+const { isAuthenticated, user } = useSanctumAuth();
+if (isAuthenticated.value && user.value) {
+  userId.value = (user.value as any).id; // Adjust according to your user object structure
+}
 
 const formData = ref<FormData>({
   name: '',
@@ -121,7 +260,7 @@ const schema = yup.object().shape({
     .max(10, 'Mobile number cannot exceed 10 digits')
     .required('Mobile number is required'),
   alternative_mobile: yup.string()
-    .test('is-ten-digits', 'Alternative mobile number must be 10 digits', function(value) {
+    .test('is-ten-digits', 'Alternative mobile number must be 10 digits', function (value) {
       if (!value) return true; // Skip validation if value is not provided
       return /^[0-9]{10}$/.test(value);
     })
@@ -287,6 +426,7 @@ useSeoMeta({
   robots: 'noindex, nofollow', // Add this line to set the robots meta tag
 });
 </script>
+
 
 <style>
 /* Add any custom styles here */

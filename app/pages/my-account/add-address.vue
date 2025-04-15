@@ -3,6 +3,7 @@
     <div class="mx-auto md:w-3/5 py-5">
       <form @submit.prevent="submitForm" class="bg-white p-6 rounded shadow-md grid grid-cols-1 md:grid-cols-2 gap-x-5">
         <h2 class="text-xl font-bold mb-4 col-span-full">{{ formTitle }}</h2>
+        <!-- <p class="text-sm text-gray-500 mb-4 col-span-full">User ID: {{ userId }}</p> -->
 
         <!-- Name -->
         <div class="mb-4">
@@ -153,7 +154,7 @@ import { ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
 import * as yup from 'yup';
-import type { User } from '~~/models/user';
+
 
 // Define the type for form data
 interface FormData {
@@ -221,9 +222,11 @@ const router = useRouter();
 // Initialize userId
 const userId = ref<number | null>(null);
 
-// Assuming user is a reactive object containing user data
-const user = ref({ id: 1 }); // Example user object with an ID
-userId.value = (user.value as User).id;
+// Get the authenticated user
+const { isAuthenticated, user } = useSanctumAuth();
+if (isAuthenticated.value && user.value) {
+  userId.value = (user.value as any).id; // Adjust according to your user object structure
+}
 
 const formData = ref<FormData>({
   name: '',
@@ -439,6 +442,7 @@ useSeoMeta({
   robots: 'noindex, nofollow', // Add this line to set the robots meta tag
 });
 </script>
+
 
 <style>
 /* Add any custom styles here */

@@ -6,19 +6,34 @@
         <!-- Order Left Column -->
         <div class="md:w-[70%] rounded-md md:flex gap-4 space-y-3 md:space-y-0 mb-3 md:mb-0">
           <!-- Billing Address Section -->
-          <BillingAddressBook :addresses="billingAddresses" :isLoading="isLoading"
-            :selectedAddressId="selectedBillingAddressId" :hasAddresses="status.has_billing_addresses"
-            @add-address="addBillingAddress" @select-address="selectBillingAddress" />
+          <BillingAddressBook
+            :addresses="billingAddresses"
+            :isLoading="isLoading"
+            :selectedAddressId="selectedBillingAddressId"
+            :hasAddresses="status.has_billing_addresses"
+            @add-address="addBillingAddress"
+            @select-address="selectBillingAddress"
+          />
 
           <!-- Shipping Address Section -->
-          <ShippingAddressBook :addresses="shippingAddresses" :isLoading="isLoading"
-            :selectedAddressId="selectedShippingAddressId" :hasAddresses="status.has_shipping_addresses"
-            @add-address="addShippingAddress" @select-address="selectShippingAddress" />
+          <ShippingAddressBook
+            :addresses="shippingAddresses"
+            :isLoading="isLoading"
+            :selectedAddressId="selectedShippingAddressId"
+            :hasAddresses="status.has_shipping_addresses"
+            @add-address="addShippingAddress"
+            @select-address="selectShippingAddress"
+          />
         </div>
         <!-- Order Right Column -->
-        <CartRightColumn :cartData="cartData" :isLoading="isLoading" :hasBillingAddresses="status.has_billing_addresses"
-          :hasShippingAddresses="status.has_shipping_addresses" :hasStatus2="hasStatus2" class="w-full md:w-[30%]"/>
-
+        <CartRightColumn
+          :cartData="cartData"
+          :isLoading="isLoading"
+          :hasBillingAddresses="status.has_billing_addresses"
+          :hasShippingAddresses="status.has_shipping_addresses"
+          :hasStatus2="hasStatus2"
+          class="w-full md:w-[30%]"
+        />
       </div>
     </div>
 
@@ -144,8 +159,17 @@ const fetchAddresses = async () => {
 
   isLoading.value = true;
   try {
+    const payload = {
+      user_id: userId.value,
+      source: 'nuxt_nxtkart', // Add the source parameter here
+    };
+
     const response = await sanctumFetch(`/api/user/${userId.value}/addresses`, {
-      method: 'GET',
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     if (response) {
@@ -193,6 +217,7 @@ const storeAddressIds = async () => {
       billing_address_id: selectedBillingAddressId.value,
       shipping_address_id: selectedShippingAddressId.value,
       session_id: sessionId.value, // Include session ID in the payload
+      source: 'nuxt_nxtkart', // Add the source parameter here
     };
 
     const response = await sanctumFetch(`/api/store-address-ids`, {
@@ -219,21 +244,18 @@ const fetchCartData = async () => {
   try {
     const sessionId = generateSessionId(); // Ensure sessionId is generated or retrieved
 
-    // Construct the query parameters based on authentication status
-    const queryParams = new URLSearchParams();
-    if (isAuthenticated.value && userId.value) {
-      queryParams.append('user_id', userId.value.toString());
-    }
+    const payload = {
+      user_id: userId.value,
+      session_id: sessionId,
+      source: 'nuxt_nxtkart', // Add the source parameter here
+    };
 
-    // Append session_id only if it is available
-    if (sessionId) {
-      queryParams.append('session_id', sessionId);
-    } else {
-      queryParams.append('session_id', 'null');
-    }
-
-    const response = await sanctumFetch(`/api/cart?${queryParams.toString()}`, {
-      method: 'GET',
+    const response = await sanctumFetch(`/api/cart`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     if (response.status === 'empty') {
@@ -290,6 +312,16 @@ const generateSessionId = () => {
 
   const now = new Date();
 
+  // If no session ID exists or it has expired, generate a new one
+  if (!sessionId || !expirationDate || now >= new Date(expirationDate)) {
+    sessionId = 'session-' + Math.random().toString(36).substr(2, 9);
+    const newExpirationDate = new Date();
+    newExpirationDate.setDate(now.getDate() + 30); // Set expiration to 30 days from now
+
+    localStorage.setItem('sessionId', sessionId);
+    localStorage.setItem('sessionExpiration', newExpirationDate.toISOString());
+  }
+
   return sessionId;
 };
 
@@ -319,8 +351,6 @@ useSeoMeta({
   robots: 'noindex, nofollow', // Add this line to set the robots meta tag
 });
 </script>
-
-
 
 <style scoped>
 /* Add any additional custom styles here if needed */

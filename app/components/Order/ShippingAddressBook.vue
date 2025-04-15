@@ -3,10 +3,8 @@
     <div class="bg-white p-4 w-full h-auto border-y md:border-none md:rounded-md">
       <div class="flex justify-between items-center mb-4">
         <span class="font-semibold">Shipping Address</span>
-        <NuxtLink
-          to="/my-account/add-address?order_address_add=true&address_store_type=shipping_new"
-          class="text-blue-500 font-medium text-sm"
-        >
+        <NuxtLink to="/my-account/add-address?order_address_add=true&address_store_type=shipping_new"
+          class="text-blue-500 font-medium text-sm">
           + Add Address
         </NuxtLink>
       </div>
@@ -18,10 +16,8 @@
       <div v-else v-for="address in addresses" :key="address.id"
         class="border p-4 rounded-md bg-[#F1FFF4] relative mb-4">
         <div class="absolute top-2 right-2 flex space-x-2">
-          <NuxtLink
-            :to="getEditAddressUrl(address.id)"
-            class="text-red-600 flex items-center space-x-1 hover:text-red-700"
-          >
+          <NuxtLink :to="getEditAddressUrl(address.id)"
+            class="text-red-600 flex items-center space-x-1 hover:text-red-700">
             <Icon name="uil:edit" class="w-4 h-4" />
             <span class="text-sm">Edit</span>
           </NuxtLink>
@@ -32,10 +28,13 @@
         <div class="mb-4 space-y-1">
           <div class="font-semibold">{{ address.name }} ({{ addressType(address.type) }})</div>
           <div>Mobile: {{ address.mobile }}</div>
-          <div>{{ address.address1 }}, {{ address.address2 }}, {{ address.city }}, {{ address.state }} - {{
-            address.pincode }}</div>
-          <div>GST NO.: {{ address.gst }}</div>
+          <div>
+            {{ address.address1 }}, {{ address.address2 }}, {{ address.city }}, {{ address.state }} - {{ address.pincode
+            }}
+          </div>
+          <div v-if="address.gst">GST NO.: {{ address.gst }}</div>
         </div>
+
         <button class="text-white w-full py-2 rounded"
           :class="address.id === selectedAddressId ? 'bg-nxtkartsecondaryBlue' : 'bg-green-600'"
           @click="$emit('select-address', address.id)">
@@ -130,7 +129,7 @@ const deleteAddress = async () => {
   }
 };
 const getEditAddressUrl = (addressId: number) => {
-  return `/my-account/edit-address?address_store_type=shipping_edit&address_id=${addressId}`;
+  return `/my-account/edit-address?order_address_add=true&address_store_type=shipping_edit&address_id=${addressId}`;
 };
 
 const addressType = (type: number) => {
@@ -144,4 +143,3 @@ const addressType = (type: number) => {
   }
 };
 </script>
-

@@ -59,7 +59,6 @@
   </div>
 </template>
 
-
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import EmptyCart from '~/components/CartPage/EmptyCart.vue';
@@ -148,16 +147,21 @@ const cancelRemove = () => {
 const removeFromCart = async (productId: number) => {
   isLoading.value = true;
   try {
+    const payload = {
+      product_id: productId,
+      source: 'nuxt_nxtkart', // Add the source parameter here
+    };
+
     await sanctumFetch('/api/cart/remove', {
-      method: 'DELETE',
-      body: JSON.stringify({ product_id: productId }),
+      method: 'POST',
+      body: JSON.stringify(payload),
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
     // Refetch cart data after removing the item
-    fetchCartData(isAuthenticated.value ? false : true);
+    fetchCartData();
     isLoading.value = false;
   } catch (error) {
     console.error('Error removing item from cart:', error);
@@ -172,26 +176,23 @@ const confirmRemove = () => {
   }
 };
 
-const fetchCartData = async (useSessionId: boolean = false) => {
+const fetchCartData = async () => {
   try {
     const sessionId = generateSessionId(); // Ensure sessionId is generated or retrieved
 
-    // Construct the query parameters based on authentication status
-    const queryParams = new URLSearchParams();
-    if (isAuthenticated.value) {
-      const userId = (user.value as User).id;
-      queryParams.append('user_id', userId.toString());
-    }
+    const payload = {
+      user_id: isAuthenticated.value ? (user.value as User).id : null,
+      session_id: isAuthenticated.value ? null : sessionId,
+      source: 'nuxt_nxtkart', // Add the source parameter here
+    };
 
-    // Append session_id only if it is available
-    if (sessionId) {
-      queryParams.append('session_id', sessionId);
-    } else {
-      queryParams.append('session_id', 'null');
-    }
     isLoading.value = true;
-    const response = await sanctumFetch(`/api/cart?${queryParams.toString()}`, {
-      method: 'GET',
+    const response = await sanctumFetch('/api/cart', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     if (response.status === 'empty') {
@@ -251,8 +252,9 @@ const updateQuantity = async (productId: number, quantity: number) => {
     const payload = {
       product_id: productId,
       quantity: quantity,
-      user_id: isAuthenticated.value ? (user.value as any).id : null,
+      user_id: isAuthenticated.value ? (user.value as User).id : null,
       session_id: isAuthenticated.value ? null : generateSessionId(),
+      source: 'nuxt_nxtkart', // Add the source parameter here
     };
 
     await sanctumFetch('/api/cart/update-quantity', {
@@ -264,7 +266,7 @@ const updateQuantity = async (productId: number, quantity: number) => {
     });
 
     // Refetch cart data after updating quantity
-    fetchCartData(isAuthenticated.value ? false : true);
+    fetchCartData();
     isLoading.value = false;
   } catch (error) {
     console.error('Error updating quantity:', error);
@@ -317,11 +319,7 @@ const generateSessionId = () => {
 
 onMounted(() => {
   cartStore.loadFromLocalStorage();
-  if (user.value) {
-    fetchCartData(false); // Use user_id
-  } else {
-    fetchCartData(true); // Use session_id
-  }
+  fetchCartData();
 });
 
 useHead({
@@ -330,7 +328,6 @@ useHead({
   ]
 });
 </script>
-
 
 <style scoped>
 /* Add any additional custom styles here if needed */

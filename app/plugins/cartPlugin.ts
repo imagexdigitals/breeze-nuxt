@@ -9,11 +9,19 @@ export const useCart = () => {
       const sessionId = localStorage.getItem('sessionId');
       const userId = isAuthenticated.value ? (user.value as any).id : null;
 
-      const queryParams = userId
-        ? `user_id=${userId}`
-        : `session_id=${sessionId}`;
+      const payload = {
+        user_id: userId,
+        session_id: sessionId,
+        source: 'nuxt_nxtkart', // Add the source parameter here
+      };
 
-      const response = await sanctumFetch(`/api/cart-count?${queryParams}`);
+      const response = await sanctumFetch('/api/cart-count', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
       if (response.status === 'success') {
         cartCount.value = response.cart_count;

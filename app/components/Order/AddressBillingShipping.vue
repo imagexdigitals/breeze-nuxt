@@ -1,14 +1,20 @@
 <template>
   <div class="w-[70%] rounded-md flex gap-4">
-
     <!-- Shipping Address Section -->
-    <AddressSection title="Shipping Address" :addresses="shippingAddresses"
-      :selectedAddressId="selectedShippingAddressId" @select-address="selectShippingAddress" />
+    <AddressSection
+      title="Shipping Address"
+      :addresses="shippingAddresses"
+      :selectedAddressId="selectedShippingAddressId"
+      @select-address="selectShippingAddress"
+    />
 
-      
     <!-- Billing Address Section -->
-    <AddressSection title="Billing Address" :addresses="billingAddresses" :selectedAddressId="selectedBillingAddressId"
-      @select-address="selectBillingAddress" />
+    <AddressSection
+      title="Billing Address"
+      :addresses="billingAddresses"
+      :selectedAddressId="selectedBillingAddressId"
+      @select-address="selectBillingAddress"
+    />
   </div>
 </template>
 
@@ -65,8 +71,17 @@ const fetchAddresses = async () => {
   isLoading.value = true;
   try {
     const userId = (user.value as User).id;
+    const payload = {
+      user_id: userId,
+      source: 'nuxt_nxtkart', // Add the source parameter here
+    };
+
     const response = await sanctumFetch(`/api/user/${userId}/addresses`, {
-      method: 'GET',
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     if (response) {
@@ -113,6 +128,7 @@ const storeAddressIds = async () => {
     const payload = {
       billing_address_id: selectedBillingAddressId.value,
       shipping_address_id: selectedShippingAddressId.value,
+      source: 'nuxt_nxtkart', // Add the source parameter here
     };
 
     const response = await sanctumFetch(`/api/store-address-ids`, {

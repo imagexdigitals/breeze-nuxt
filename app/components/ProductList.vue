@@ -1,8 +1,7 @@
 <template>
   <div class="bg-gray-100 relative min-h-screen">
     <div v-if="isLoading" class="flex items-center justify-center h-screen">
-      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent">
-      </div>
+      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
     </div>
 
     <template v-if="commonData && commonDataProducts.length">
@@ -54,11 +53,11 @@
               <div class="flex items-center space-x-2 mt-4">
                 <p class="font-semibold text-gray-600">Sort by:</p>
                 <button @click="sortProducts('low')"
-                  :class="['border', 'px-4', 'py-1', 'rounded-3xl', 'font-medium', 'text-sm', sortOrder === 'low' ? 'border-nxtkartsecondaryBlue text-nxtborder-nxtkartsecondaryBlue' : 'border-gray-300']">
+                  :class="['border', 'px-4', 'py-1', 'rounded-3xl', 'font-medium', 'text-sm', sortOrder === 'low' ? 'border-nxtkartsecondaryBlue text-nxtkartsecondaryBlue' : 'border-gray-300']">
                   Low to High
                 </button>
                 <button @click="sortProducts('high')"
-                  :class="['border', 'px-4', 'py-1', 'rounded-3xl', 'font-medium', 'text-sm', sortOrder === 'high' ? 'border-nxtkartsecondaryBlue text-nxtborder-nxtkartsecondaryBlue' : 'border-gray-300']">
+                  :class="['border', 'px-4', 'py-1', 'rounded-3xl', 'font-medium', 'text-sm', sortOrder === 'high' ? 'border-nxtkartsecondaryBlue text-nxtkartsecondaryBlue' : 'border-gray-300']">
                   High to Low
                 </button>
               </div>
@@ -83,7 +82,7 @@
                 'flex',
                 'items-center',
                 'justify-center',
-                currentPage === page ? 'bg-nxtkartsecondaryBlue text-white' : 'bg-white text-nxtbg-nxtkartsecondaryBlue'
+                currentPage === page ? 'bg-nxtkartsecondaryBlue text-white' : 'bg-white text-nxtkartsecondaryBlue'
               ]">
                 {{ page }}
               </button>
@@ -97,7 +96,7 @@
                   'flex',
                   'items-center',
                   'justify-center',
-                  currentPage === commonData.pagination.last_page ? 'bg-nxtkartsecondaryBlue text-white' : 'bg-white text-nxtbg-nxtkartsecondaryBlue'
+                  currentPage === commonData.pagination.last_page ? 'bg-nxtkartsecondaryBlue text-white' : 'bg-white text-nxtkartsecondaryBlue'
                 ]">
                 {{ commonData.pagination.last_page }}
               </button>
@@ -194,16 +193,26 @@ const searchQuery = ref<string>('');
 const fetchCommonProducts = async (slugOrQuery: string, sort: string | null = null, page: number = 1) => {
   isLoading.value = true;
   try {
+    const payload = {
+      slugOrQuery: slugOrQuery,
+      sort: sort,
+      page: page,
+      source: 'nuxt_nxtkart', // Add the source parameter here
+    };
+
     let url = `${props.apiEndpoint}`;
     if (props.isBrandPage || route.name === 'category-slug') {
-      url += `/${slugOrQuery}?page=${page}${sort ? `&sort_price=${sort}` : ''}`;
-    } else {
-      url += `?query=${slugOrQuery}&page=${page}${sort ? `&sort_price=${sort}` : ''}`;
-      searchQuery.value = slugOrQuery;
+      url += `/${slugOrQuery}`;
     }
+
     const response = await sanctumFetch(url, {
-      method: 'GET',
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
+
     commonData.value = response.data;
     commonDataProducts.value = Object.values(response.data.products);
     breadcrumbs.value = response.data.breadcrumb;

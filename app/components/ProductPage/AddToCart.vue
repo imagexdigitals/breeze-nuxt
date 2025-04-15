@@ -33,6 +33,7 @@ const addToCart = async () => {
       quantity: props.quantity,
       user_id: isAuthenticated.value ? (user.value as any).id : null,
       session_id: isAuthenticated.value ? null : generateSessionId(),
+      source: 'nuxt_nxtkart', // Add the source parameter here
     };
 
     console.log('Payload:', payload);
@@ -84,9 +85,6 @@ const generateSessionId = () => {
 };
 </script>
 
-
-
 <style scoped>
 /* Add any additional custom styles here if needed */
-
 </style>

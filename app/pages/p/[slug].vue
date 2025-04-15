@@ -1,8 +1,7 @@
 <template>
   <div class="bg-gray-100">
     <div v-if="isLoading" class="flex items-center justify-center h-screen">
-      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent">
-      </div>
+      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
     </div>
 
     <!-- PC Version -->
@@ -125,8 +124,17 @@ const pincodeStore = usePincodeStore();
 
 const fetchProductDetails = async (slug: string) => {
   try {
+    const payload = {
+      slug: slug,
+      source: 'nuxt_nxtkart', // Add the source parameter here
+    };
+
     const response = await sanctumFetch(`/api/product/${slug}`, {
-      method: 'GET',
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     product.value = response;
@@ -201,8 +209,4 @@ useHead({
   top: 0;
   align-self: flex-start;
 }
-
-
-
-
 </style>

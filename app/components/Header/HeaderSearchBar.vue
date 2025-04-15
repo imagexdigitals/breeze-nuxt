@@ -63,8 +63,17 @@ const searchProducts = async () => {
   }
 
   try {
-    const data = await sanctumFetch(`/api/search-products?query=${searchQuery.value}`, {
-      method: 'GET',
+    const payload = {
+      query: searchQuery.value,
+      source: 'nuxt_nxtkart'
+    };
+
+    const data = await sanctumFetch('/api/search-products', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     // Directly use the data since it's already in JSON format
@@ -125,6 +134,7 @@ const viewMoreResults = () => {
   resetSearch();
 };
 </script>
+
 
 <style scoped>
 /* Add custom styles for the overlay effect */

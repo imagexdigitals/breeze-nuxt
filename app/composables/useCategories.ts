@@ -10,8 +10,13 @@ export function useCategories() {
   const fetchCategories = async () => {
     try {
       const sanctumFetch = useSanctumClient();
-      const response = await sanctumFetch(`/api/categories`, {
-        method: 'GET',
+      const payload = { source: 'nuxt_nxtkart' };
+      const response = await sanctumFetch('/api/categories', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
       categories.value = response;
 

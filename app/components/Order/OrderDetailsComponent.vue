@@ -199,8 +199,17 @@ const checkPermissions = () => {
 
 onMounted(async () => {
   try {
-    const response = await sanctumFetch(`/api/order/details?order_id=${orderId}`, {
-      method: 'GET',
+    const payload = {
+      order_id: orderId,
+      source: 'nuxt_nxtkart', // Add the source parameter here
+    };
+
+    const response = await sanctumFetch('/api/order/details', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     if (response.error) {

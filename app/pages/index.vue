@@ -19,14 +19,21 @@ import { ref, onMounted } from 'vue';
 import CategoryAndBanner from '@/components/HomePage/CategoryAndBanner.vue';
 import CategorySection from '@/components/HomePage/CategorySection.vue';
 
-
 const sanctumFetch = useSanctumClient();
 const categories = ref([]);
 
 onMounted(async () => {
   try {
-    const response = await sanctumFetch(`/api/homepage-categories`, {
-      method: 'GET',
+    const payload = {
+      source: 'nuxt_nxtkart', // Add the source parameter here
+    };
+
+    const response = await sanctumFetch('/api/homepage-categories', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
     categories.value = response;
   } catch (error) {
