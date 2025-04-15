@@ -198,6 +198,7 @@ const fetchCommonProducts = async (slugOrQuery: string, sort: string | null = nu
       sort: sort,
       page: page,
       source: 'nuxt_nxtkart', // Add the source parameter here
+      query: slugOrQuery
     };
 
     let url = `${props.apiEndpoint}`;
