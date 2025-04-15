@@ -180,7 +180,12 @@ export default defineNuxtConfig({
     '@nuxtjs/seo',
     'nuxt-site-config',
     'nuxt-swiper',
+    'nuxt-gtag',
   ],
+
+  gtag: {
+    id: 'G-F00GNE6W1B'
+  },
 
   fonts: {
     defaults: {
@@ -255,11 +260,15 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '512x512', href: '/assets/android-chrome-512x512.png' }
       ],
       meta: [
-        { name: 'theme-color', content: '#007AE2' }
+        { name: 'theme-color', content: '#007AE2' },
+        { property: 'og:image', content: '/images/NxtKart-og-image.jpg' },
+        { property: 'og:image:width', content: '500' },
+        { property: 'og:image:height', content: '500' }
       ],
       titleTemplate: '%s',
     },
   },
+  
   
 
   future: {

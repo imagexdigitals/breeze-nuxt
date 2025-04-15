@@ -75,6 +75,9 @@ importers:
       nuxt-auth-sanctum:
         specifier: ^0.6.1
         version: 0.6.1
+      nuxt-gtag:
+        specifier: ^3.0.2
+        version: 3.0.2(magicast@0.3.5)
       nuxt-swiper:
         specifier: ^2.0.0
         version: 2.0.0(magicast@0.3.5)
@@ -3360,6 +3363,9 @@ packages:
 
   nuxt-auth-sanctum@0.6.1:
     resolution: {integrity: sha512-P81t7ClPJmT3ZMHeRpQfxaEk1MY+hUBAFF/uwk8Rg3yg9vIZrRtbrQlHNk+gKy4ql5zQ5N2Gnp0pXdQaPIP4hw==}
+
+  nuxt-gtag@3.0.2:
+    resolution: {integrity: sha512-0Spu/rffPxW7REebkjE22qQOuVZIQuyIuvd61InDdJU+d+gRIqWhrUuKBWdk43N/J1elj+cTK2kEdk5FQX7vdQ==}
 
   nuxt-laravel-echo@0.2.3:
     resolution: {integrity: sha512-qNDSosFxndG/0rCvSt0ktLPdKcEpBPhH4fv3clOdRhS9ebS8/H6rLvqufs6Y2hJaJqpPtMFiVrh03AH6e5FdxQ==}
@@ -8672,6 +8678,15 @@ snapshots:
       defu: 6.1.4
       ofetch: 1.4.1
       pathe: 1.1.2
+
+  nuxt-gtag@3.0.2(magicast@0.3.5):
+    dependencies:
+      '@nuxt/kit': 3.16.2(magicast@0.3.5)
+      defu: 6.1.4
+      pathe: 1.1.2
+      ufo: 1.6.1
+    transitivePeerDependencies:
+      - magicast
 
   nuxt-laravel-echo@0.2.3:
     dependencies:

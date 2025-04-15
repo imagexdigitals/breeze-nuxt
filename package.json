@@ -46,6 +46,7 @@
     "eslint": "^9.23.0",
     "nuxt": "^3.16.2",
     "nuxt-auth-sanctum": "^0.6.1",
+    "nuxt-gtag": "^3.0.2",
     "nuxt-laravel-echo": "^0.2.3",
     "nuxt-swiper": "^2.0.0",
     "typescript": "^5.8.2",
