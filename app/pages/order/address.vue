@@ -243,7 +243,7 @@ const fetchCartData = async () => {
       // Update cartData with the fetched values
       cartData.value = {
         cart_details: response.cart_details,
-        totalSellingPrice: response.payment_summary.total_selling_price,
+        totalSellingPrice: response.payment_summary.total_selling_price_including_gst,
         gstAmount: response.payment_summary.gst,
         shippingCharges: response.payment_summary.shipping_charge || null, // Assuming this is static
         totalSaving: response.payment_summary.total_saving, // Assuming total_saving is the savings
@@ -309,6 +309,14 @@ onMounted(async () => {
   } else {
     console.error('User is not authenticated');
   }
+});
+
+definePageMeta({
+  middleware: ['sanctum:auth', 'sanctum-verified'],
+});
+
+useSeoMeta({
+  robots: 'noindex, nofollow', // Add this line to set the robots meta tag
 });
 </script>
 

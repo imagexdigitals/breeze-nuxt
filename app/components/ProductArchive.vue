@@ -3,9 +3,11 @@
     <div class="w-full h-48 flex items-center justify-center">
       <NuxtImg :src="image" :alt="name" class="max-w-full max-h-full object-cover" />
     </div>
-    <NuxtLink :to="productLink" class="font-medium mt-2 line-clamp-2 block hover:text-nxtkartsecondaryBlue text-sm">
-      {{ name }}
-    </NuxtLink>
+    <h3 class="text-base font-semibold">
+      <NuxtLink :to="productLink" class="font-medium mt-2 line-clamp-2 block hover:text-nxtkartsecondaryBlue text-sm">
+        {{ name }}
+      </NuxtLink>
+    </h3>
     <NuxtLink :to="brandLink"
       class="font-medium mt-2 text-[12px] text-nxtkartsecondaryBlue block hover:text-nxtkartsecondaryBlue">
       {{ brand }}
@@ -27,8 +29,7 @@
       <AddToCart :productId="id" :quantity="minimum_qty" class="mt-2.5" />
     </div>
     <div v-else-if="status === 2">
-      <button
-        class="w-full mt-2.5 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium text-sm">
+      <button class="w-full mt-2.5 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium text-sm">
         Out of Stock
       </button>
     </div>
@@ -68,6 +69,7 @@ const brandLink = props.brandSlug || '#';
   /* Standard property */
   overflow: hidden;
   text-overflow: ellipsis;
-  min-height: 2.5em; /* Adjust this value as needed */
+  min-height: 2.5em;
+  /* Adjust this value as needed */
 }
 </style>

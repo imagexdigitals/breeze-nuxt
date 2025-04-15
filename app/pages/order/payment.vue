@@ -276,6 +276,14 @@ onMounted(() => {
 watch(selectedPaymentMethod, () => {
   storePaymentMethod();
 });
+
+definePageMeta({
+  middleware: ['sanctum:auth', 'sanctum-verified'],
+});
+
+useSeoMeta({
+  robots: 'noindex, nofollow', // Add this line to set the robots meta tag
+});
 </script>
 
 <style scoped>

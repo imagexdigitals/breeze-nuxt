@@ -7,6 +7,8 @@ definePageMeta({
 useSeoMeta({
   title: 'Register',
 })
+
+
 </script>
 
 <template>

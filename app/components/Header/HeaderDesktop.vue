@@ -33,7 +33,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import MobileDesktopMenu from '@/components/Header/MobileDesktopMenu .vue'; // Adjust the import path as needed
+import MobileDesktopMenu from '~/components/Header/MobileDesktopMenu.vue'; // Adjust the import path as needed
 
 const mobileMenu = ref(null);
 

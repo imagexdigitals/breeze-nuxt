@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 definePageMeta({
   middleware: ['sanctum:auth', 'sanctum-verified'],
-})
+});
 
 useSeoMeta({
   title: 'Dashboard',
-})
+  robots: 'noindex, nofollow', // Add this line to set the robots meta tag
+});
 </script>
+
 
 <template>
   <UAlert

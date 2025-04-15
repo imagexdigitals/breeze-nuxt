@@ -223,8 +223,8 @@ export default defineNuxtConfig({
   sanctum: {
     baseUrl: 'https://localhost:80',
     redirect: {
-      onGuestOnly: '/dashboard',
-      onLogin: '/dashboard',
+      onGuestOnly: '/',
+      onLogin: '/',
     },
   },
 
@@ -236,7 +236,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       charset: 'utf-8',
-      viewport: 'width=device-width, initial-scale=1',
+      viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
       htmlAttrs: {
         lang: 'en',
         class: 'scroll-smooth',
@@ -258,6 +258,7 @@ export default defineNuxtConfig({
           href: '/favicon.ico',
         },
       ],
+      titleTemplate: '%s',
     },
   },
 

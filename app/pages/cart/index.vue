@@ -323,6 +323,12 @@ onMounted(() => {
     fetchCartData(true); // Use session_id
   }
 });
+
+useHead({
+  meta: [
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
+});
 </script>
 
 

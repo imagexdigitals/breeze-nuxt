@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100">
+  <div class="bg-gray-100 py-6">
     <div class="mx-auto md:w-4/5 py-5">
       <CartPageCartStepper v-if="!isLoading && orderId" />
 
@@ -226,6 +226,12 @@ watch(orderDetails, () => {
 const retryPayment = () => {
   router.push('/order/payment');
 };
+
+useHead({
+  meta: [
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
+});
 </script>
 
 <style scoped>

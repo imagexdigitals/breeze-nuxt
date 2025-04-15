@@ -33,4 +33,11 @@ onMounted(async () => {
     console.error('Error fetching categories:', error);
   }
 });
+
+useSeoMeta({
+  title: 'NxtKart - Your Electronics & Maker Supplies Store',
+  description: 'Shop 3D Printers, DIY Kits, Electronic Components, IoT Devices, and more. Find all your project needs in India.',
+  robots: 'index, follow', // Ensure the robots meta tag is set to index, follow
+  titleTemplate: '%s', // Ensure the title is used as-is
+});
 </script>

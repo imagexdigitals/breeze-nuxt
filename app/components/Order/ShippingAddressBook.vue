@@ -18,10 +18,13 @@
       <div v-else v-for="address in addresses" :key="address.id"
         class="border p-4 rounded-md bg-[#F1FFF4] relative mb-4">
         <div class="absolute top-2 right-2 flex space-x-2">
-          <button class="text-red-600 flex items-center space-x-1 hover:text-red-700">
+          <NuxtLink
+            :to="getEditAddressUrl(address.id)"
+            class="text-red-600 flex items-center space-x-1 hover:text-red-700"
+          >
             <Icon name="uil:edit" class="w-4 h-4" />
             <span class="text-sm">Edit</span>
-          </button>
+          </NuxtLink>
           <button class="text-red-600 flex items-center hover:text-red-700" @click="openDeleteModal(address)">
             <Icon name="fluent:delete-20-filled" class="w-5 h-5" />
           </button>
@@ -125,6 +128,9 @@ const deleteAddress = async () => {
       alert('Failed to delete address');
     }
   }
+};
+const getEditAddressUrl = (addressId: number) => {
+  return `/my-account/edit-address?address_store_type=shipping_edit&address_id=${addressId}`;
 };
 
 const addressType = (type: number) => {

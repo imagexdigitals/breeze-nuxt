@@ -2,7 +2,7 @@
   <div class="bg-gray-100 md:py-8">
     <div class="mx-auto md:w-3/5 py-5">
       <form @submit.prevent="submitForm" class="bg-white p-6 rounded shadow-md grid grid-cols-1 md:grid-cols-2 gap-x-5">
-        <h2 class="text-2xl font-bold mb-4 col-span-full">Address Form</h2>
+        <h2 class="text-2xl font-bold mb-4 col-span-full">{{ formTitle }}</h2>
 
         <!-- Name -->
         <div class="mb-4">
@@ -141,7 +141,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
 import * as yup from 'yup';
@@ -235,6 +235,17 @@ const formData = ref<FormData>({
 
 const errors = ref<Errors>({});
 const isLoadingCityState = ref(false);
+
+const formTitle = computed(() => {
+  const addressStoreType = route.query.address_store_type;
+  if (addressStoreType === 'shipping_edit') {
+    return 'Edit Shipping Address';
+  } else if (addressStoreType === 'billing_edit') {
+    return 'Edit Billing Address';
+  } else {
+    return 'Edit Address';
+  }
+});
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -401,8 +412,15 @@ const submitForm = async () => {
 onMounted(() => {
   prefillForm();
 });
-</script>
 
+definePageMeta({
+  middleware: ['sanctum:auth', 'sanctum-verified'],
+});
+
+useSeoMeta({
+  robots: 'noindex, nofollow', // Add this line to set the robots meta tag
+});
+</script>
 
 <style>
 /* Add any custom styles here */

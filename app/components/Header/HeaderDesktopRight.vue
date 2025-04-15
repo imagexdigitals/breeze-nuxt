@@ -15,7 +15,7 @@
       Track Order
     </NuxtLink>
     <!-- My Account -->
-    <NuxtLink to="/login"
+    <NuxtLink :to="accountLink"
       class="font-medium text-gray-700 flex space-x-2 items-center cursor-pointer hover:bg-zinc-100 p-1.5 border-white border hover:border-dashed hover:border-nxtkartsecondaryBlue hover:border hover:rounded-md hover:text-nxtkartsecondaryBlue">
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" class="mr-1">
         <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
@@ -24,10 +24,11 @@
           <circle cx="12" cy="12" r="10" />
         </g>
       </svg>
-      <div class="flex flex-col leading-tight"><span class="text-xs -mb-1 text-gray-500">Welcome</span><span
-          class="text-base">My Account</span></div>
+      <div class="flex flex-col leading-tight">
+        <span class="text-xs -mb-1 text-gray-500">{{ accountWelcomeText }}</span>
+        <span class="text-base">My Account</span>
+      </div>
     </NuxtLink>
-
 
     <!-- Cart Icon -->
     <HeaderCart />
@@ -35,7 +36,20 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
 
+
+const { isAuthenticated } = useSanctumAuth();
+
+const accountLink = computed(() => {
+  return isAuthenticated.value ? '/my-account' : '/login';
+});
+
+const accountWelcomeText = computed(() => {
+  return isAuthenticated.value ? 'Welcome Back' : 'Welcome';
+});
 </script>
 
-<style></style>
+<style scoped>
+/* Add any additional custom styles here if needed */
+</style>
