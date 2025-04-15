@@ -68,7 +68,7 @@
 
 <script lang="ts" setup>
 definePageMeta({
-  middleware: ['sanctum:auth', 'sanctum-verified'],
+  middleware: ['sanctum:auth'],
 })
 import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
@@ -278,7 +278,7 @@ watch(selectedPaymentMethod, () => {
 });
 
 definePageMeta({
-  middleware: ['sanctum:auth', 'sanctum-verified'],
+  middleware: ['sanctum:auth'],
 });
 
 useSeoMeta({

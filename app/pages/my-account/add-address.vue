@@ -432,7 +432,7 @@ const submitForm = async () => {
 };
 
 definePageMeta({
-  middleware: ['sanctum:auth', 'sanctum-verified'],
+  middleware: ['sanctum:auth'],
 });
 
 useSeoMeta({

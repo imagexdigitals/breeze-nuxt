@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 definePageMeta({
-  layout: 'minimal',
+  layout: 'default',
   middleware: ['sanctum:guest'],
-})
+});
 
 useSeoMeta({
   title: 'Register',

@@ -30,7 +30,7 @@
 
 <script lang="ts" setup>
 definePageMeta({
-  middleware: ['sanctum:auth', 'sanctum-verified'],
+  middleware: ['sanctum:auth'],
 });
 
 import { ref, onMounted } from 'vue';
@@ -312,7 +312,7 @@ onMounted(async () => {
 });
 
 definePageMeta({
-  middleware: ['sanctum:auth', 'sanctum-verified'],
+  middleware: ['sanctum:auth'],
 });
 
 useSeoMeta({

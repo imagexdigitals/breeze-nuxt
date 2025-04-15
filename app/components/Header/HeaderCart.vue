@@ -7,7 +7,7 @@
       </g>
     </svg>
     <span
-      class="absolute -top-2 -right-0 bg-nxtkartsecondaryBlue text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+      class="absolute -top-2 -right-0 md:-right-2 bg-nxtkartsecondaryBlue text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
       {{ cartCount }}
     </span>
   </NuxtLink>

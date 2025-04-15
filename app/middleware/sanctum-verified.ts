@@ -17,9 +17,9 @@ export default defineNuxtRouteMiddleware(() => {
     return navigateTo(sanctumConfig.redirect.onAuthOnly)
   }
 
-  if (user.value?.email_verified_at !== null) {
-    return
-  }
+  // if (user.value?.email_verified_at !== null) {
+  //   return
+  // }
 
   return navigateTo('/verify-email')
 })
