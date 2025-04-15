@@ -5,21 +5,21 @@ export default defineNuxtRouteMiddleware(() => {
 
   const { isAuthenticated, user } = useSanctumAuth<User>()
 
-  if (!isAuthenticated.value) {
-    if (sanctumConfig.redirect.onAuthOnly === false) {
-      return createError({
-        statusCode: 409,
-        message: 'You must verify your email to access this page',
-        fatal: true,
-      })
-    }
+  // if (!isAuthenticated.value) {
+  //   if (sanctumConfig.redirect.onAuthOnly === false) {
+  //     return createError({
+  //       statusCode: 409,
+  //       message: 'You must verify your email to access this page',
+  //       fatal: true,
+  //     })
+  //   }
 
-    return navigateTo(sanctumConfig.redirect.onAuthOnly)
-  }
+  //   return navigateTo(sanctumConfig.redirect.onAuthOnly)
+  // }
 
-  // if (user.value?.email_verified_at !== null) {
+  // if (user.value?.email_verified_at === null) {
   //   return
   // }
 
-  return navigateTo('/verify-email')
+  return navigateTo('/')
 })
