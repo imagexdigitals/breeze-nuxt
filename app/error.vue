@@ -20,7 +20,7 @@ definePageMeta({
 <template>
   <HeaderDesktop class="header-desktop" />
   <HeaderMobile class="header-mobile" />
-  <div class="flex flex-col justify-center items-center pb-10 gap-5 h-screen">
+  <div class="flex flex-col justify-center items-center pb-10 gap-5 h-screen my-10 md:my-0">
     <section class="page_404">
       <div class="container">
         <div class="row">
@@ -74,8 +74,17 @@ definePageMeta({
   .header-mobile {
     display: none;
   }
+
+  .four_zero_four_bg {
+    width: 700px; /* Width for desktop */
+  }
 }
 
+@media (max-width: 767px) {
+  .four_zero_four_bg {
+    width: 370px; /* Width for mobile */
+  }
+}
 
 .page_404 {
   padding: 40px 0;
@@ -90,10 +99,8 @@ definePageMeta({
 .four_zero_four_bg {
   background-image: url(/images/404.gif);
   height: 500px;
-  width: 700px;
   background-position: center;
 }
-
 
 .four_zero_four_bg h1 {
   font-size: 80px;
@@ -115,3 +122,4 @@ definePageMeta({
   margin-top: -50px;
 }
 </style>
+

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full">
+  <div class="w-full relative">
     <div class="bg-white p-4 border-y md:border-none md:rounded-md">
       <div class="flex justify-between items-center mb-4">
         <span class="font-semibold">Billing Address</span>
@@ -36,7 +36,7 @@
 
         <button class="text-white w-full py-2 rounded"
           :class="address.id === selectedAddressId ? 'bg-nxtkartsecondaryBlue' : 'bg-green-600'"
-          @click="$emit('select-address', address.id)">
+          @click="handleSelectAddress(address.id)">
           Billing at this Address
         </button>
       </div>
@@ -53,9 +53,13 @@
         </div>
       </div>
     </div>
+
+    <!-- Overlay Loading -->
+    <div v-if="isSelecting" class="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center">
+      <div class="w-10 h-10 rounded-full animate-spin border-4 border-solid border-green-600 border-t-transparent"></div>
+    </div>
   </div>
 </template>
-
 
 <script lang="ts" setup>
 import { ref, defineProps, defineEmits } from 'vue';
@@ -78,6 +82,7 @@ const props = defineProps<{
   addresses: Address[];
   isLoading: boolean;
   selectedAddressId: number | null;
+  isSelecting: boolean; // Add this prop
 }>();
 
 const emit = defineEmits<{
@@ -144,4 +149,8 @@ const getEditAddressUrl = (addressId: number) => {
 };
 
 const addAddressUrl = '/my-account/add-address?order_address_add=true&address_store_type=billing_new';
+
+const handleSelectAddress = (id: number) => {
+  emit('select-address', id);
+};
 </script>

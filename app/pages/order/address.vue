@@ -13,6 +13,7 @@
             :hasAddresses="status.has_billing_addresses"
             @add-address="addBillingAddress"
             @select-address="selectBillingAddress"
+            :isSelecting="isSelectingBillingAddress"
           />
 
           <!-- Shipping Address Section -->
@@ -23,6 +24,7 @@
             :hasAddresses="status.has_shipping_addresses"
             @add-address="addShippingAddress"
             @select-address="selectShippingAddress"
+            :isSelecting="isSelectingShippingAddress"
           />
         </div>
         <!-- Order Right Column -->
@@ -151,6 +153,9 @@ const status = ref({
   redirect: false,
 });
 
+const isSelectingBillingAddress = ref(false); // Add loading state for billing address selection
+const isSelectingShippingAddress = ref(false); // Add loading state for shipping address selection
+
 const fetchAddresses = async () => {
   if (!userId.value) {
     console.error('User ID is not available');
@@ -187,15 +192,19 @@ const fetchAddresses = async () => {
 };
 
 const selectBillingAddress = async (id: number) => {
+  isSelectingBillingAddress.value = true; // Set loading state to true
   selectedBillingAddressId.value = id;
   await storeAddressIds();
   await fetchCartData(); // Refetch cart data after updating the billing address
+  isSelectingBillingAddress.value = false; // Set loading state to false
 };
 
 const selectShippingAddress = async (id: number) => {
+  isSelectingShippingAddress.value = true; // Set loading state to true
   selectedShippingAddressId.value = id;
   await storeAddressIds();
   await fetchCartData(); // Refetch cart data after updating the shipping address
+  isSelectingShippingAddress.value = false; // Set loading state to false
 };
 
 const addBillingAddress = () => {

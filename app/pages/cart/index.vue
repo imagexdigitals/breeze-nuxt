@@ -64,6 +64,7 @@ import { ref, onMounted } from 'vue';
 import EmptyCart from '~/components/CartPage/EmptyCart.vue';
 import CartLeftColumn from '~/components/CartPage/CartLeftColumn.vue';
 import CartRightColumn from '~/components/CartPage/CartRightColumn.vue';
+import { useCart } from '~/plugins/cartPlugin'; // Import the useCart function
 
 // Define the User type
 interface User {
@@ -134,6 +135,8 @@ const hasStatus2 = ref(false);
 const hasBillingAddresses = ref(false); // Add this line
 const hasShippingAddresses = ref(false); // Add this line
 
+const { updateCartCount } = useCart(); // Destructure updateCartCount from useCart
+
 const showRemoveModal = (productId: number) => {
   itemToRemove.value = productId;
   showModal.value = true;
@@ -153,7 +156,7 @@ const removeFromCart = async (productId: number) => {
     };
 
     await sanctumFetch('/api/cart/remove', {
-      method: 'POST',
+      method: 'DELETE',
       body: JSON.stringify(payload),
       headers: {
         'Content-Type': 'application/json',
@@ -162,6 +165,7 @@ const removeFromCart = async (productId: number) => {
 
     // Refetch cart data after removing the item
     fetchCartData();
+    updateCartCount(); // Update the cart count
     isLoading.value = false;
   } catch (error) {
     console.error('Error removing item from cart:', error);
@@ -182,7 +186,7 @@ const fetchCartData = async () => {
 
     const payload = {
       user_id: isAuthenticated.value ? (user.value as User).id : null,
-      session_id: isAuthenticated.value ? null : sessionId,
+      session_id: sessionId, // Always include the sessionId
       source: 'nuxt_nxtkart', // Add the source parameter here
     };
 
@@ -253,7 +257,7 @@ const updateQuantity = async (productId: number, quantity: number) => {
       product_id: productId,
       quantity: quantity,
       user_id: isAuthenticated.value ? (user.value as User).id : null,
-      session_id: isAuthenticated.value ? null : generateSessionId(),
+      session_id: generateSessionId(), // Always include the sessionId
       source: 'nuxt_nxtkart', // Add the source parameter here
     };
 
@@ -328,6 +332,7 @@ useHead({
   ]
 });
 </script>
+
 
 <style scoped>
 /* Add any additional custom styles here if needed */

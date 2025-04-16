@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full">
+  <div class="w-full relative">
     <div class="bg-white p-4 w-full h-auto border-y md:border-none md:rounded-md">
       <div class="flex justify-between items-center mb-4">
         <span class="font-semibold">Shipping Address</span>
@@ -37,7 +37,7 @@
 
         <button class="text-white w-full py-2 rounded"
           :class="address.id === selectedAddressId ? 'bg-nxtkartsecondaryBlue' : 'bg-green-600'"
-          @click="$emit('select-address', address.id)">
+          @click="handleSelectAddress(address.id)">
           Shipping at this Address
         </button>
       </div>
@@ -53,6 +53,11 @@
           <button class="text-red-600" @click="deleteAddress">Delete</button>
         </div>
       </div>
+    </div>
+
+    <!-- Overlay Loading -->
+    <div v-if="isSelecting" class="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center">
+      <div class="w-10 h-10 rounded-full animate-spin border-4 border-solid border-green-600 border-t-transparent"></div>
     </div>
   </div>
 </template>
@@ -78,12 +83,12 @@ const props = defineProps<{
   addresses: Address[];
   isLoading: boolean;
   selectedAddressId: number | null;
+  isSelecting: boolean; // Add this prop
 }>();
 
 const emit = defineEmits<{
   (e: 'add-address'): void;
   (e: 'select-address', id: number): void;
-  (e: 'refresh-addresses'): void; // Ensure this line is included
 }>();
 
 const showDeleteModal = ref(false);
@@ -128,9 +133,6 @@ const deleteAddress = async () => {
     }
   }
 };
-const getEditAddressUrl = (addressId: number) => {
-  return `/my-account/edit-address?order_address_add=true&address_store_type=shipping_edit&address_id=${addressId}`;
-};
 
 const addressType = (type: number) => {
   switch (type) {
@@ -141,5 +143,13 @@ const addressType = (type: number) => {
     default:
       return 'Other';
   }
+};
+
+const getEditAddressUrl = (addressId: number) => {
+  return `/my-account/edit-address?order_address_add=true&address_store_type=shipping_edit&address_id=${addressId}`;
+};
+
+const handleSelectAddress = (id: number) => {
+  emit('select-address', id);
 };
 </script>

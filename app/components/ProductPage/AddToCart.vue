@@ -1,11 +1,20 @@
 <template>
-  <button class="w-full py-1.5 bg-nxtkartsecondaryBlue text-white rounded-md hover:bg-nxtkartBlue font-medium text-sm"
-    @click="addToCart">
-    ADD TO CART
-  </button>
+  <div class="relative">
+    <button
+      class="w-full py-1.5 bg-nxtkartsecondaryBlue text-white rounded-md hover:bg-nxtkartBlue font-medium text-sm"
+      @click="addToCart"
+      :disabled="isLoading"
+    >
+      <span v-if="!isLoading">ADD TO CART</span>
+      <div v-else class="flex items-center justify-center">
+        <div class="w-5 h-5 rounded-full animate-spin border-2 border-solid border-white border-t-transparent"></div>
+      </div>
+    </button>
+  </div>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { toast } from 'vue3-toastify';
 import { useCart } from '~/plugins/cartPlugin';
 
@@ -18,8 +27,10 @@ const props = defineProps<Props>();
 const { isAuthenticated, user } = useSanctumAuth();
 const sanctumFetch = useSanctumClient();
 const { updateCartCount } = useCart();
+const isLoading = ref(false); // Add a loading state
 
 const addToCart = async () => {
+  isLoading.value = true; // Set loading to true when the operation starts
   try {
     console.log('Add to Cart button clicked');
     const productIdAsNumber = Number(props.productId);
@@ -28,11 +39,13 @@ const addToCart = async () => {
     console.log('Is Authenticated:', isAuthenticated.value);
     console.log('User:', user.value);
 
+    const sessionId = generateSessionId(); // Always generate or retrieve the session ID
+
     const payload = {
       product_id: productIdAsNumber,
       quantity: props.quantity,
       user_id: isAuthenticated.value ? (user.value as any).id : null,
-      session_id: isAuthenticated.value ? null : generateSessionId(),
+      session_id: sessionId, // Always include the session ID
       source: 'nuxt_nxtkart', // Add the source parameter here
     };
 
@@ -61,6 +74,8 @@ const addToCart = async () => {
   } catch (error) {
     console.error('Error adding to cart:', error);
     toast.error('An error occurred while adding to cart.');
+  } finally {
+    isLoading.value = false; // Set loading to false when the operation ends
   }
 };
 
