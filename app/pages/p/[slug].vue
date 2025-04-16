@@ -92,7 +92,7 @@ interface Product {
   country_of_origin: string;
   attachments: Array<{ label: string; url: string }>;
   warranty: string;
-  image: string;
+  image: string; // Use this field for the OG image
   gallery: string[];
   breadcrumb: Array<{ name: string; url: string }>;
   specifications: Array<{ label: string; value: string }>;
@@ -165,6 +165,12 @@ useHead({
   meta: [
     { name: 'description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
     { name: 'keywords', content: computed(() => product.value ? `${product.value.name}, ${product.value.brand}, product details` : 'product details') },
+    // Open Graph meta tags
+    { property: 'og:title', content: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details') },
+    { property: 'og:description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
+    { property: 'og:image', content: computed(() => product.value ? product.value.image : '') },
+    { property: 'og:url', content: computed(() => product.value ? `${backendUrl}/product/${product.value.slug}` : '') },
+    { property: 'og:type', content: 'product' },
   ],
   script: [
     {
@@ -193,6 +199,7 @@ useHead({
   ],
 });
 </script>
+
 
 <style scoped>
 .flex-left-column {

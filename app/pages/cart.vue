@@ -66,6 +66,7 @@ import CartLeftColumn from '~/components/CartPage/CartLeftColumn.vue';
 import CartRightColumn from '~/components/CartPage/CartRightColumn.vue';
 import { useCart } from '~/plugins/cartPlugin'; // Import the useCart function
 
+
 // Define the User type
 interface User {
   id: number;
@@ -331,6 +332,8 @@ useHead({
     { name: 'robots', content: 'noindex, nofollow' }
   ]
 });
+
+
 </script>
 
 

@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center space-x-3">
     <!-- Request Quote -->
-    <HeaderQuote />
+    <!-- <HeaderQuote /> -->
     <!-- Track Order -->
     <NuxtLink to="/track"
       class="font-medium text-gray-700 flex space-x-2 items-center cursor-pointer hover:bg-zinc-100 p-2 border-white border hover:border-dashed hover:border-nxtkartsecondaryBlue hover:border hover:rounded-md hover:text-nxtkartsecondaryBlue">

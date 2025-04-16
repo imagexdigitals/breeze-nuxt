@@ -1,7 +1,8 @@
 <template>
   <div class="bg-gray-100 relative min-h-screen">
     <div v-if="isLoading" class="flex items-center justify-center h-screen">
-      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
+      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent">
+      </div>
     </div>
 
     <template v-if="commonData && commonDataProducts.length">
@@ -9,8 +10,11 @@
         <div class="flex w-full md:w-[90%] gap-x-3 flex-col md:flex-row">
           <!-- Left Column (20% width on desktop, hidden on mobile) -->
           <div v-if="!isMobile" class="w-1/5 md:block hidden">
-            Filters
+            <div class="bg-white py-8 flex items-center justify-center">
+              <span class="text-center font-semibold">No Filters Available</span>
+            </div>
           </div>
+
 
           <!-- Right Side Column (100% width on mobile, 80% width on desktop) -->
           <div class="w-full md:w-4/5">
@@ -33,7 +37,7 @@
                   <ol class="flex overflow-x-auto">
                     <li v-for="(crumb, index) in breadcrumbs" :key="index" class="flex items-center text-sm shrink-0">
                       <NuxtLink :to="crumb.url" class="text-gray-700 font-medium hover:text-secondaryBlue">{{ crumb.name
-                        }}</NuxtLink>
+                      }}</NuxtLink>
                       <span v-if="index < breadcrumbs.length - 1" class="mx-1">/</span>
                     </li>
                   </ol>
@@ -323,12 +327,22 @@ useHead({
             "itemCondition": product.status === 1 ? "https://schema.org/NewCondition" : "https://schema.org/Refurbished",
             "availability": product.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
           }
-        }))
+        })),
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": breadcrumbs.value.map((crumb, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "name": crumb.name,
+            "item": config.public.baseURL + crumb.url
+          }))
+        }
       })),
     },
   ],
 });
 </script>
+
 
 <style scoped>
 /* Add any additional custom styles here if needed */

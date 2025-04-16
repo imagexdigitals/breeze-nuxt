@@ -42,6 +42,7 @@ const addToCart = async () => {
       quantity: props.quantity,
       user_id: isAuthenticated.value ? (user.value as any).id : null,
       session_id: isAuthenticated.value ? null : generateSessionId(),
+      source: 'nuxt_nxtkart',
     };
 
     console.log('Payload:', payload);

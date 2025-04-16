@@ -1,102 +1,103 @@
-import { defineOrganization } from 'nuxt-schema-org/schema'
+import { defineOrganization } from 'nuxt-schema-org/schema';
 export default defineNuxtConfig({
-
-
   schemaOrg: {
     identity: defineOrganization({
       '@type': ['Organization', 'Store', 'OnlineStore'],
 
       // Basic Information
-      'name': 'NxtKart',
-      'alternateName': 'Nxtkart Tech Store',
-      'description': 'NxtKart is a one-stop tech store offering robotics kits, electronic components, custom PCs, laptops, and smart home devices. Explore innovative technology with fast delivery and expert support across India.',
-      'url': 'https://www.nxtkart.com',
-      'logo': '/images/NxtKart_Logo.svg',
+      name: 'NxtKart',
+      alternateName: 'Nxtkart Tech Store',
+      description:
+        'NxtKart is a one-stop tech store offering robotics kits, electronic components, custom PCs, laptops, and smart home devices. Explore innovative technology with fast delivery and expert support across India.',
+      url: 'https://www.nxtkart.com',
+      logo: '/images/NxtKart_Logo.svg',
 
       // Contact Information, if applicable
-      'email': 'care@nxtkart.com',
-      'telephone': '+91-948-792-9592',
-      'contactPoint': [
+      email: 'care@nxtkart.com',
+      telephone: '+91-948-792-9592',
+      contactPoint: [
         {
           '@type': 'ContactPoint',
-          'contactType': 'customer service',
-          'telephone': '+91-948-792-9592',
-          'email': 'care@nxtkart.com',
-          'availableLanguage': ['English'],
+          contactType: 'customer service',
+          telephone: '+91-948-792-9592',
+          email: 'care@nxtkart.com',
+          availableLanguage: ['English'],
         },
         {
           '@type': 'ContactPoint',
-          'contactType': 'sales',
-          'telephone': '+91-948-792-9592',
-          'email': 'sales@nxtkart.com'
-        }
+          contactType: 'sales',
+          telephone: '+91-948-792-9592',
+          email: 'sales@nxtkart.com',
+        },
       ],
 
       // Business Address (headquarters/returns), if applicable
-      'address': {
+      address: {
         '@type': 'PostalAddress',
-        'streetAddress': '59, Krishna Street, Gandhi Nagar, Perumathunallur, Guduvanchery',
-        'addressLocality': 'Chennai',
-        'addressRegion': 'TN',
-        'postalCode': '603202',
-        'addressCountry': 'IN'
+        streetAddress:
+          '59, Krishna Street, Gandhi Nagar, Perumathunallur, Guduvanchery',
+        addressLocality: 'Chennai',
+        addressRegion: 'TN',
+        postalCode: '603202',
+        addressCountry: 'IN',
       },
 
       // Return Policy, if applicable
-      'hasMerchantReturnPolicy': {
+      hasMerchantReturnPolicy: {
         '@type': 'MerchantReturnPolicy',
-        'name': 'Standard Return Policy',
-        'inStoreReturnsOffered': false,
-        'merchantReturnDays': '7',
-        'returnPolicyCategory': 'https://schema.org/MerchantReturnFiniteReturnWindow',
-        'returnMethod': ['ReturnByMail'],
-        'returnFees': 'https://schema.org/FreeReturn',
-        'returnPolicyCountry': {
+        name: 'Standard Return Policy',
+        inStoreReturnsOffered: false,
+        merchantReturnDays: '7',
+        returnPolicyCategory:
+          'https://schema.org/MerchantReturnFiniteReturnWindow',
+        returnMethod: ['ReturnByMail'],
+        returnFees: 'https://schema.org/FreeReturn',
+        returnPolicyCountry: {
           '@type': 'Country',
-          'name': ['IN']
-        }
+          name: ['IN'],
+        },
       },
 
       // Shipping Policy, if applicable
-      'shippingDetails': {
+      shippingDetails: {
         '@type': 'OfferShippingDetails',
-        'shippingRate': {
+        shippingRate: {
           '@type': 'MonetaryAmount',
-          'value': '0',
-          'currency': 'INR'
+          value: '0',
+          currency: 'INR',
         },
-        'shippingDestination': {
+        shippingDestination: {
           '@type': 'DefinedRegion',
-          'addressCountry': ['IN']
+          addressCountry: ['IN'],
         },
-        'deliveryTime': {
+        deliveryTime: {
           '@type': 'ShippingDeliveryTime',
-          'handlingTime': {
+          handlingTime: {
             '@type': 'QuantitativeValue',
-            'minValue': 1,
-            'maxValue': 5,
-            'unitCode': 'DAY'
+            minValue: 1,
+            maxValue: 5,
+            unitCode: 'DAY',
           },
-          'transitTime': {
+          transitTime: {
             '@type': 'QuantitativeValue',
-            'minValue': 2,
-            'maxValue': 7,
-            'unitCode': 'DAY'
-          }
-        }
+            minValue: 2,
+            maxValue: 7,
+            unitCode: 'DAY',
+          },
+        },
       },
 
       // Payment Methods, if applicable
-      'paymentAccepted': [
+      paymentAccepted: [
         'Credit Card',
         'Debit Card',
         'UPI',
         'Net Banking',
         'Paytm',
         'PhonePe',
-        'Google Pay'
+        'Google Pay',
       ],
-      'currenciesAccepted': ['INR'],
+      currenciesAccepted: ['INR'],
 
       // Social Media & External Links, if applicable
       // 'sameAs': [
@@ -137,26 +138,35 @@ export default defineNuxtConfig({
       // },
 
       // Additional Business Properties, if applicable
-      'slogan': 'The Tech Store',
+      slogan: 'The Tech Store',
 
       // Business Hours (Customer Service), if applicable
-      'openingHoursSpecification': [
+      openingHoursSpecification: [
         {
           '@type': 'OpeningHoursSpecification',
-          'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-          'opens': '10:00:00',
-          'closes': '18:00:00'
-        }
-      ]
+          dayOfWeek: [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday',
+          ],
+          opens: '10:00:00',
+          closes: '18:00:00',
+        },
+      ],
     }),
   },
   site: {
     title: 'NxtKart',
-    description: 'NxtKart is a one-stop tech store offering robotics kits, electronic components, custom PCs, laptops, and smart home devices. Explore innovative technology with fast delivery and expert support across India.',
+    description:
+      'NxtKart is a one-stop tech store offering robotics kits, electronic components, custom PCs, laptops, and smart home devices. Explore innovative technology with fast delivery and expert support across India.',
     url: 'https://www.nxtkart.com',
   },
   ui: {
-    colorMode: false
+    colorMode: false,
   },
   runtimeConfig: {
     public: {
@@ -183,8 +193,42 @@ export default defineNuxtConfig({
     'nuxt-gtag',
   ],
 
+  // sitemap: {
+  //   exclude: [
+  //     '/cart/**',
+  //     '/dashboard/**',
+  //     '/maintenance/**',
+  //     '/verify-email/**',
+  //     '/my-account/**',
+  //     '/order/**',
+  //     '/search/**',
+  //   ],
+  //   sources: [
+  //     '/api/__sitemap__/urls',
+  //   ],
+  //   sitemaps: {
+  //     main: {
+  //       urls() {
+  //         return ['/', '/about', '/contact'];
+  //       },
+  //     },
+  //     products: {
+  //       sources: [
+  //         '/api/products-sitemap-urls'
+  //       ],
+  //     },
+  //     categories: {
+  //       sources: [
+  //         '/api/categories-sitemap-urls'
+  //       ]
+  //     },
+  //   },
+  //   // Set the chunk size to 1000 URLs per sitemap file
+  //   defaultSitemapsChunkSize: 1000,
+  // },
+
   gtag: {
-    id: 'G-F00GNE6W1B'
+    id: 'G-F00GNE6W1B',
   },
 
   fonts: {
@@ -192,9 +236,7 @@ export default defineNuxtConfig({
       weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
       styles: ['normal', 'italic'],
     },
-    families: [
-      { name: 'Figtree', provider: 'google' },
-    ],
+    families: [{ name: 'Figtree', provider: 'google' }],
   },
 
   postcss: {
@@ -241,7 +283,8 @@ export default defineNuxtConfig({
   app: {
     head: {
       charset: 'utf-8',
-      viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+      viewport:
+        'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
       htmlAttrs: {
         lang: 'en',
         class: 'scroll-smooth',
@@ -252,24 +295,46 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/assets/favicon.ico' },
         { rel: 'shortcut icon', href: '/assets/favicon.ico' },
-        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/assets/favicon-32x32.png' },
-        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/assets/favicon-16x16.png' },
-        { rel: 'apple-touch-icon', sizes: '180x180', href: '/assets/apple-touch-icon.png' },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '32x32',
+          href: '/assets/favicon-32x32.png',
+        },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '16x16',
+          href: '/assets/favicon-16x16.png',
+        },
+        {
+          rel: 'apple-touch-icon',
+          sizes: '180x180',
+          href: '/assets/apple-touch-icon.png',
+        },
         { rel: 'manifest', href: '/assets/site.webmanifest' },
-        { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/assets/android-chrome-192x192.png' },
-        { rel: 'icon', type: 'image/png', sizes: '512x512', href: '/assets/android-chrome-512x512.png' }
+        {
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '192x192',
+          href: '/assets/android-chrome-192x192.png',
+        },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '512x512',
+          href: '/assets/android-chrome-512x512.png',
+        },
       ],
       meta: [
         { name: 'theme-color', content: '#007AE2' },
         { property: 'og:image', content: '/images/NxtKart-og-image.jpg' },
         { property: 'og:image:width', content: '500' },
-        { property: 'og:image:height', content: '500' }
+        { property: 'og:image:height', content: '500' },
       ],
       titleTemplate: '%s',
     },
   },
-  
-  
 
   future: {
     compatibilityVersion: 4,

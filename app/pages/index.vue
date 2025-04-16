@@ -47,4 +47,5 @@ useSeoMeta({
   robots: 'index, follow', // Ensure the robots meta tag is set to index, follow
   titleTemplate: '%s', // Ensure the title is used as-is
 });
+
 </script>
