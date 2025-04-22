@@ -67,9 +67,6 @@
 </template>
 
 <script lang="ts" setup>
-definePageMeta({
-  middleware: ['sanctum:auth'],
-})
 import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import CartRightColumn from '@/components/CartPage/CartRightColumn.vue';
@@ -149,7 +146,7 @@ const isLoading = ref(false);
 const selectedBillingAddressId = ref<number | null>(null);
 const selectedShippingAddressId = ref<number | null>(null);
 const userId = ref<number | null>(null);
-const selectedPaymentMethod = ref<number | null>(null);
+const selectedPaymentMethod = ref<number>(1); // Set default value to 1 for "Credit / Debit Card / UPI"
 
 const fetchCartData = async () => {
   loading.value = true; // Set loading to true before fetching data
@@ -294,6 +291,7 @@ useSeoMeta({
   robots: 'noindex, nofollow', // Add this line to set the robots meta tag
 });
 </script>
+
 
 <style scoped>
 /* Add any additional custom styles here if needed */

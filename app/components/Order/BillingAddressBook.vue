@@ -93,6 +93,7 @@ const emit = defineEmits<{
 const showDeleteModal = ref(false);
 const addressToDelete = ref<Address | null>(null);
 
+
 const openDeleteModal = (address: Address) => {
   addressToDelete.value = address;
   showDeleteModal.value = true;
@@ -102,6 +103,7 @@ const closeDeleteModal = () => {
   addressToDelete.value = null;
   showDeleteModal.value = false;
 };
+
 
 const deleteAddress = async () => {
   if (addressToDelete.value) {

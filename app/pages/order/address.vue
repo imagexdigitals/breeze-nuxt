@@ -6,36 +6,20 @@
         <!-- Order Left Column -->
         <div class="md:w-[70%] rounded-md md:flex gap-4 space-y-3 md:space-y-0 mb-3 md:mb-0">
           <!-- Billing Address Section -->
-          <BillingAddressBook
-            :addresses="billingAddresses"
-            :isLoading="isLoading"
-            :selectedAddressId="selectedBillingAddressId"
-            :hasAddresses="status.has_billing_addresses"
-            @add-address="addBillingAddress"
-            @select-address="selectBillingAddress"
-            :isSelecting="isSelectingBillingAddress"
-          />
+          <BillingAddressBook :addresses="billingAddresses" :isLoading="isLoading"
+            :selectedAddressId="selectedBillingAddressId" :hasAddresses="status.has_billing_addresses"
+            @add-address="addBillingAddress" @select-address="selectBillingAddress"
+            :isSelecting="isSelectingBillingAddress" />
 
           <!-- Shipping Address Section -->
-          <ShippingAddressBook
-            :addresses="shippingAddresses"
-            :isLoading="isLoading"
-            :selectedAddressId="selectedShippingAddressId"
-            :hasAddresses="status.has_shipping_addresses"
-            @add-address="addShippingAddress"
-            @select-address="selectShippingAddress"
-            :isSelecting="isSelectingShippingAddress"
-          />
+          <ShippingAddressBook :addresses="shippingAddresses" :isLoading="isLoading"
+            :selectedAddressId="selectedShippingAddressId" :hasAddresses="status.has_shipping_addresses"
+            @add-address="addShippingAddress" @select-address="selectShippingAddress"
+            :isSelecting="isSelectingShippingAddress" />
         </div>
         <!-- Order Right Column -->
-        <CartRightColumn
-          :cartData="cartData"
-          :isLoading="isLoading"
-          :hasBillingAddresses="status.has_billing_addresses"
-          :hasShippingAddresses="status.has_shipping_addresses"
-          :hasStatus2="hasStatus2"
-          class="w-full md:w-[30%]"
-        />
+        <CartRightColumn :cartData="cartData" :isLoading="isLoading" :hasBillingAddresses="status.has_billing_addresses"
+          :hasShippingAddresses="status.has_shipping_addresses" :hasStatus2="hasStatus2" class="w-full md:w-[30%]" />
       </div>
     </div>
 
@@ -191,20 +175,27 @@ const fetchAddresses = async () => {
   }
 };
 
-const selectBillingAddress = async (id: number) => {
+const selectAddresses = async (billingAddressId: number | null, shippingAddressId: number | null) => {
   isSelectingBillingAddress.value = true; // Set loading state to true
-  selectedBillingAddressId.value = id;
+  isSelectingShippingAddress.value = true; // Set loading state to true
+
+  selectedBillingAddressId.value = billingAddressId;
+  selectedShippingAddressId.value = shippingAddressId;
+
   await storeAddressIds();
-  await fetchCartData(); // Refetch cart data after updating the billing address
+  await fetchCartData(); // Refetch cart data after updating the addresses
+
   isSelectingBillingAddress.value = false; // Set loading state to false
+  isSelectingShippingAddress.value = false; // Set loading state to false
+};
+
+
+const selectBillingAddress = async (id: number) => {
+  await selectAddresses(id, selectedShippingAddressId.value);
 };
 
 const selectShippingAddress = async (id: number) => {
-  isSelectingShippingAddress.value = true; // Set loading state to true
-  selectedShippingAddressId.value = id;
-  await storeAddressIds();
-  await fetchCartData(); // Refetch cart data after updating the shipping address
-  isSelectingShippingAddress.value = false; // Set loading state to false
+  await selectAddresses(selectedBillingAddressId.value, id);
 };
 
 const addBillingAddress = () => {

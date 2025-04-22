@@ -18,16 +18,23 @@
 
           <!-- Right Side Column (100% width on mobile, 80% width on desktop) -->
           <div class="w-full md:w-4/5">
-            <!-- Display category icons -->
-            <div v-if="commonData.child_categories && commonData.child_categories.length"
-              class="grid grid-cols-3 md:grid-cols-8 gap-4 overflow-x-auto mb-4 bg-white border-y md:border-none md:shadow-sm rounded-sm px-2 py-3 md:p-4">
-              <NuxtLink v-for="category in commonData.child_categories" :key="category.id"
-                :to="`/category/${category.slug}`" class="flex flex-col items-center">
-                <img :src="category.image || 'https://placehold.co/100x100'" :alt="category.name"
-                  class="w-24 h-24 object-cover rounded-full" />
-                <span class="text-sm text-center mt-1">{{ category.name }}</span>
-              </NuxtLink>
-            </div>
+<!-- Display category icons -->
+<div v-if="commonData.child_categories && commonData.child_categories.length"
+  class="grid grid-cols-3 md:grid-cols-8 gap-4 overflow-x-auto mb-4 bg-white border-y md:border-none md:shadow-sm rounded-sm px-2 py-3 md:p-4">
+  
+  <NuxtLink v-for="category in commonData.child_categories" :key="category.id"
+    :to="`/category/${category.slug}`" class="flex flex-col items-center">
+    
+    <div class="w-24 h-24 rounded-full flex items-center justify-center"
+      :style="`background: linear-gradient(135deg, #43C6AC, #F8FFAE);`">
+      <img :src="category.image || 'https://placehold.co/100x100'" :alt="category.name"
+        class="w-20 h-20 object-cover rounded-full border-2 border-white p-1" />
+    </div>
+    
+    <span class="text-sm text-center mt-1">{{ category.name }}</span>
+  </NuxtLink>
+</div>
+
 
             <!-- Title and Sort -->
             <div class="bg-white border-y md:border-none md:shadow-sm rounded-sm p-4">

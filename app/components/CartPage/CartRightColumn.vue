@@ -284,7 +284,7 @@ const proceedToPay = async () => {
       } else {
         // Initialize Cashfree SDK
         const cashfree = await load({
-          mode: "sandbox" // Change to "production" for live environment
+          mode: "production" // Change to "production" for live environment
         });
 
         // Open Cashfree Checkout

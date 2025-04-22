@@ -104,6 +104,7 @@ const closeDeleteModal = () => {
   showDeleteModal.value = false;
 };
 
+
 const deleteAddress = async () => {
   if (addressToDelete.value) {
     const payload = {
