@@ -328,7 +328,7 @@ export default defineNuxtConfig({
       ],
       meta: [
         { name: 'theme-color', content: '#007AE2' },
-        // { property: 'og:image', content: '/images/NxtKart-og-image.jpg' },
+        { property: 'og:image', content: '/images/NxtKart-og-image.jpg' },
         { property: 'og:image:width', content: '500' },
         { property: 'og:image:height', content: '500' },
       ],
