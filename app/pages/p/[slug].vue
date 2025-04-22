@@ -159,45 +159,65 @@ const stripHtmlTags = (html: string): string => {
   const doc = new DOMParser().parseFromString(html, 'text/html');
   return doc.body.textContent || '';
 };
+const projName = ref('my project name'); // your projName Ref
 
-useHead({
-  title: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details'),
-  meta: [
-    { name: 'description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
-    { name: 'keywords', content: computed(() => product.value ? `${product.value.name}, ${product.value.brand}, product details` : 'product details') },
-    // Open Graph meta tags
-    { property: 'og:title', content: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details') },
-    { property: 'og:description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
-    { property: 'og:image', content: computed(() => product.value ? product.value.image : '') },
-    { property: 'og:url', content: computed(() => product.value ? `${backendUrl}/product/${product.value.slug}` : '') },
-    { property: 'og:type', content: 'product' },
-  ],
-  script: [
-    {
-      type: 'application/ld+json',
-      innerHTML: computed(() => JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "name": product.value?.name || '',
-        "image": product.value?.image || '',
-        "description": product.value ? stripHtmlTags(product.value.description) : '',
-        "sku": product.value?.sku || '',
-        "brand": {
-          "@type": "Brand",
-          "name": product.value?.brand || 'Unknown'
-        },
-        "offers": {
-          "@type": "Offer",
-          "url": `${backendUrl}/product/${product.value?.slug}`,
-          "priceCurrency": "INR",
-          "price": product.value?.sale_price || '',
-          "itemCondition": product.value?.condition === 1 ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
-          "availability": product.value?.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
-        },
-      })),
-    },
-  ],
+const computedPageMeta = computed(() => {
+    return {
+        title: projName.value,
+        meta: [
+            { hid: 'og-title', property: 'og:title', content: projName.value },
+            { hid: 'description', name: 'description', content: 'This is a static description.' }, // Static meta tag
+            { hid: 'keywords', name: 'keywords', content: 'static, keywords, example' } // Static meta tag
+        ]
+    };
 });
+
+useHead(computedPageMeta);
+
+// useHead({
+//   title: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details'),
+//   meta: [
+//     { name: 'description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
+//     { name: 'keywords', content: computed(() => product.value ? `${product.value.name}, ${product.value.brand}, product details` : 'product details') },
+//     // Open Graph meta tags
+//     // { property: 'og:title', content: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details') },
+//     // { property: 'og:description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
+//     // { property: 'og:image', content: computed(() => product.value ? product.value.image : '') },
+//     // { property: 'og:url', content: computed(() => product.value ? `${backendUrl}/product/${product.value.slug}` : '') },
+//     // { property: 'og:type', content: 'product' },
+//   ],
+//   script: [
+//     {
+//       type: 'application/ld+json',
+//       innerHTML: computed(() => JSON.stringify({
+//         "@context": "https://schema.org",
+//         "@type": "Product",
+//         "name": product.value?.name || '',
+//         "image": product.value?.image || '',
+//         "description": product.value ? stripHtmlTags(product.value.description) : '',
+//         "sku": product.value?.sku || '',
+//         "brand": {
+//           "@type": "Brand",
+//           "name": product.value?.brand || 'Unknown'
+//         },
+//         "offers": {
+//           "@type": "Offer",
+//           "url": `${backendUrl}/product/${product.value?.slug}`,
+//           "priceCurrency": "INR",
+//           "price": product.value?.sale_price || '',
+//           "itemCondition": product.value?.condition === 1 ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
+//           "availability": product.value?.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+//         },
+//       })),
+//     },
+//   ],
+// });
+
+// defineOgImageComponent('ProductPage', {
+//   title: 'Welcome to Nuxt OG Image',
+// });
+
+
 </script>
 
 
