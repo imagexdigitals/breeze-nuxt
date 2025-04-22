@@ -167,45 +167,50 @@ const stripHtmlTags = (html: string): string => {
   const doc = new DOMParser().parseFromString(html, 'text/html');
   return doc.body.textContent || '';
 };
-
-useHead({
-  title: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details'),
-  meta: [
-    { name: 'description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
-    { name: 'keywords', content: computed(() => product.value ? `${product.value.name}, ${product.value.brand}, product details` : 'product details') },
-    // Open Graph meta tags
-    { property: 'og:title', content: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details') },
-    { property: 'og:description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
-    { property: 'og:image', content: computed(() => product.value ? product.value.image : '') },
-    { property: 'og:url', content: computed(() => product.value ? `${backendUrl}/product/${product.value.slug}` : '') },
-    { property: 'og:type', content: 'product' },
-  ],
-  script: [
-    {
-      type: 'application/ld+json',
-      innerHTML: computed(() => JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "name": product.value?.name || '',
-        "image": product.value?.image || '',
-        "description": product.value ? stripHtmlTags(product.value.description) : '',
-        "sku": product.value?.sku || '',
-        "brand": {
-          "@type": "Brand",
-          "name": product.value?.brand || 'Unknown'
-        },
-        "offers": {
-          "@type": "Offer",
-          "url": `${backendUrl}/product/${product.value?.slug}`,
-          "priceCurrency": "INR",
-          "price": product.value?.sale_price || '',
-          "itemCondition": product.value?.condition === 1 ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
-          "availability": product.value?.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
-        },
-      })),
-    },
-  ],
-});
+useSeoMeta({
+  ogTitle: 'Hey! Open graph images are important, check them out.',
+  ogDescription: 'But who reads the description anyway?',
+  ogImage: 'https://cdn.nxtkart.com/images/gallery/2024/12/cy8ckitpsoc024lp-psoc-family-processor-modules-with-lcd-display-development-kit-38901-nxtkart.webp', // must be absolute URL
+  ogUrl: 'https://mysite.com/products/item' // this is your canonical url
+})
+// useHead({
+//   title: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details'),
+//   meta: [
+//     { name: 'description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
+//     { name: 'keywords', content: computed(() => product.value ? `${product.value.name}, ${product.value.brand}, product details` : 'product details') },
+//     // Open Graph meta tags
+//     { property: 'og:title', content: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details') },
+//     { property: 'og:description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
+//     { property: 'og:image', content: computed(() => product.value ? product.value.image : '') },
+//     { property: 'og:url', content: computed(() => product.value ? `${backendUrl}/product/${product.value.slug}` : '') },
+//     { property: 'og:type', content: 'product' },
+//   ],
+//   script: [
+//     {
+//       type: 'application/ld+json',
+//       innerHTML: computed(() => JSON.stringify({
+//         "@context": "https://schema.org",
+//         "@type": "Product",
+//         "name": product.value?.name || '',
+//         "image": product.value?.image || '',
+//         "description": product.value ? stripHtmlTags(product.value.description) : '',
+//         "sku": product.value?.sku || '',
+//         "brand": {
+//           "@type": "Brand",
+//           "name": product.value?.brand || 'Unknown'
+//         },
+//         "offers": {
+//           "@type": "Offer",
+//           "url": `${backendUrl}/product/${product.value?.slug}`,
+//           "priceCurrency": "INR",
+//           "price": product.value?.sale_price || '',
+//           "itemCondition": product.value?.condition === 1 ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
+//           "availability": product.value?.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+//         },
+//       })),
+//     },
+//   ],
+// });
 </script>
 
 
