@@ -195,7 +195,6 @@ watch(product, (newVal) => {
   }
 });
 
-
 </script>
 
 
