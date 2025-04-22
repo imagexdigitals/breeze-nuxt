@@ -61,7 +61,6 @@ import ReturnWarrantyPolicy from '@/components/ProductPage/ReturnWarrantyPolicy.
 import SpecificationDescriptionDetails from '@/components/ProductPage/SpecificationDescriptionDetails.vue';
 import ProductRelated from '@/components/ProductPage/ProductRelated.vue';
 import { useMobileDetection } from '~/composables/useMobileDetection';
-import { useSeoMeta } from '#app'; // Ensure you have the correct import for useSeoMeta
 
 // Use the composable to get the isMobile state
 const { isMobile } = useMobileDetection();
@@ -170,32 +169,34 @@ const stripHtmlTags = (html: string): string => {
   return doc.body.textContent || '';
 };
 
-// Computed properties for OG meta tags
-const ogTitle = computed(() => product.value?.name || 'Default Title');
-const ogDescription = computed(() => stripHtmlTags(product.value?.description || 'Default Description'));
-const ogImage = computed(() => product.value?.image || ''); // Ensure this is an absolute URL
-const ogUrl = computed(() => `${config.public.baseURL}/products/${product.value?.slug}`);
+// Computed properties for meta tags
+const metaTitle = computed(() => product.value?.name || 'Default Title');
+const metaDescription = computed(() => stripHtmlTags(product.value?.description || 'Default Description'));
 
-// Watch for changes in the product and update meta tags
+// Watch for changes in the product and update meta tags using useHead
 watch(product, (newVal) => {
   if (newVal) {
-    useSeoMeta({
-      ogTitle: ogTitle.value,
-      ogDescription: ogDescription.value,
-      ogImage: ogImage.value,
-      ogUrl: ogUrl.value,
-      ogLocale: 'en_US',
-      ogType: 'website',
-      twitterCard: 'summary_large_image',
-      twitterTitle: ogTitle.value,
-      twitterDescription: ogDescription.value,
-      twitterImage: ogImage.value,
-      twitterSite: '@nxtkart', // Replace with your Twitter handle
+    useHead({
+      title: metaTitle.value,
+      meta: [
+        { name: 'description', content: metaDescription.value },
+        { property: 'og:title', content: metaTitle.value },
+        { property: 'og:description', content: metaDescription.value },
+        { property: 'og:image', content: newVal.image },
+        { property: 'og:url', content: `${config.public.baseURL}/products/${newVal.slug}` },
+        { property: 'og:locale', content: 'en_US' },
+        { property: 'og:type', content: 'website' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: metaTitle.value },
+        { name: 'twitter:description', content: metaDescription.value },
+        { name: 'twitter:image', content: newVal.image },
+        { name: 'twitter:site', content: '@nxtkart' }, // Replace with your Twitter handle
+      ],
     });
   }
 });
-
 </script>
+
 
 
 
