@@ -182,14 +182,14 @@ watch(product, (newVal) => {
         { name: 'description', content: metaDescription.value },
         { property: 'og:title', content: metaTitle.value },
         { property: 'og:description', content: metaDescription.value },
-        { property: 'og:image', content: newVal.image },
+        { property: 'og:image', content: 'https://masteringnuxt.com/.netlify/images?url=%2Fimages%2Fblog%2Fsetting-up-nuxt-for-social-cards-and-meta-tags-to-improve-seo%2Fsetting-up-nuxt-for-social-cards-and-meta-tags-to-improve-seo-2.png' },
         { property: 'og:url', content: `${config.public.baseURL}/products/${newVal.slug}` },
         { property: 'og:locale', content: 'en_US' },
         { property: 'og:type', content: 'website' },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: metaTitle.value },
         { name: 'twitter:description', content: metaDescription.value },
-        { name: 'twitter:image', content: newVal.image },
+        { name: 'twitter:image', content: 'https://masteringnuxt.com/.netlify/images?url=%2Fimages%2Fblog%2Fsetting-up-nuxt-for-social-cards-and-meta-tags-to-improve-seo%2Fsetting-up-nuxt-for-social-cards-and-meta-tags-to-improve-seo-2.png' },
         { name: 'twitter:site', content: '@nxtkart' }, // Replace with your Twitter handle
       ],
     });
