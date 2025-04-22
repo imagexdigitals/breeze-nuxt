@@ -1,7 +1,8 @@
 <template>
   <div class="bg-gray-100">
     <div v-if="isLoading" class="flex items-center justify-center h-screen">
-      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
+      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent">
+      </div>
     </div>
 
     <!-- PC Version -->
@@ -47,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRuntimeConfig } from '#app';
 import { useCartStore } from '@/stores/cart';
@@ -60,6 +61,7 @@ import ReturnWarrantyPolicy from '@/components/ProductPage/ReturnWarrantyPolicy.
 import SpecificationDescriptionDetails from '@/components/ProductPage/SpecificationDescriptionDetails.vue';
 import ProductRelated from '@/components/ProductPage/ProductRelated.vue';
 import { useMobileDetection } from '~/composables/useMobileDetection';
+import { useSeoMeta } from '#app'; // Ensure you have the correct import for useSeoMeta
 
 // Use the composable to get the isMobile state
 const { isMobile } = useMobileDetection();
@@ -167,51 +169,35 @@ const stripHtmlTags = (html: string): string => {
   const doc = new DOMParser().parseFromString(html, 'text/html');
   return doc.body.textContent || '';
 };
-useSeoMeta({
-  ogTitle: 'Hey! Open graph images are important, check them out.',
-  ogDescription: 'But who reads the description anyway?',
-  ogImage: 'https://cdn.nxtkart.com/images/gallery/2024/12/cy8ckitpsoc024lp-psoc-family-processor-modules-with-lcd-display-development-kit-38901-nxtkart.webp', // must be absolute URL
-  ogUrl: 'https://mysite.com/products/item' // this is your canonical url
-})
-// useHead({
-//   title: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details'),
-//   meta: [
-//     { name: 'description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
-//     { name: 'keywords', content: computed(() => product.value ? `${product.value.name}, ${product.value.brand}, product details` : 'product details') },
-//     // Open Graph meta tags
-//     { property: 'og:title', content: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details') },
-//     { property: 'og:description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
-//     { property: 'og:image', content: computed(() => product.value ? product.value.image : '') },
-//     { property: 'og:url', content: computed(() => product.value ? `${backendUrl}/product/${product.value.slug}` : '') },
-//     { property: 'og:type', content: 'product' },
-//   ],
-//   script: [
-//     {
-//       type: 'application/ld+json',
-//       innerHTML: computed(() => JSON.stringify({
-//         "@context": "https://schema.org",
-//         "@type": "Product",
-//         "name": product.value?.name || '',
-//         "image": product.value?.image || '',
-//         "description": product.value ? stripHtmlTags(product.value.description) : '',
-//         "sku": product.value?.sku || '',
-//         "brand": {
-//           "@type": "Brand",
-//           "name": product.value?.brand || 'Unknown'
-//         },
-//         "offers": {
-//           "@type": "Offer",
-//           "url": `${backendUrl}/product/${product.value?.slug}`,
-//           "priceCurrency": "INR",
-//           "price": product.value?.sale_price || '',
-//           "itemCondition": product.value?.condition === 1 ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
-//           "availability": product.value?.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
-//         },
-//       })),
-//     },
-//   ],
-// });
+
+// Computed properties for OG meta tags
+const ogTitle = computed(() => product.value?.name || 'Default Title');
+const ogDescription = computed(() => stripHtmlTags(product.value?.description || 'Default Description'));
+const ogImage = computed(() => product.value?.image || ''); // Ensure this is an absolute URL
+const ogUrl = computed(() => `${config.public.baseURL}/products/${product.value?.slug}`);
+
+// Watch for changes in the product and update meta tags
+watch(product, (newVal) => {
+  if (newVal) {
+    useSeoMeta({
+      ogTitle: ogTitle.value,
+      ogDescription: ogDescription.value,
+      ogImage: ogImage.value,
+      ogUrl: ogUrl.value,
+      ogLocale: 'en_US',
+      ogType: 'website',
+      twitterCard: 'summary_large_image',
+      twitterTitle: ogTitle.value,
+      twitterDescription: ogDescription.value,
+      twitterImage: ogImage.value,
+      twitterSite: '@nxtkart', // Replace with your Twitter handle
+    });
+  }
+});
+
+
 </script>
+
 
 
 

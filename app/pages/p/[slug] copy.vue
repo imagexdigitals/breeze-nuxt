@@ -191,7 +191,31 @@ useHead({
     { property: 'og:url', content: computed(() => product.value ? `${backendUrl}/product/${product.value.slug}` : '') },
     { property: 'og:type', content: 'product' },
   ],
-
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: computed(() => JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": product.value?.name || '',
+        "image": product.value?.image || '',
+        "description": product.value ? stripHtmlTags(product.value.description) : '',
+        "sku": product.value?.sku || '',
+        "brand": {
+          "@type": "Brand",
+          "name": product.value?.brand || 'Unknown'
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": `${backendUrl}/product/${product.value?.slug}`,
+          "priceCurrency": "INR",
+          "price": product.value?.sale_price || '',
+          "itemCondition": product.value?.condition === 1 ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
+          "availability": product.value?.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+        },
+      })),
+    },
+  ],
 });
 
 
