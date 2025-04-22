@@ -160,41 +160,45 @@ const stripHtmlTags = (html: string): string => {
   const doc = new DOMParser().parseFromString(html, 'text/html');
   return doc.body.textContent || '';
 };
-
 const projName = ref('my project name'); // your projName Ref
 
 const computedPageMeta = computed(() => {
-  if (!product.value) {
-    return {
-      title: projName.value,
-      meta: [
-        { hid: 'og-title', property: 'og:title', content: 'Product Name' },
-        { hid: 'description', name: 'description', content: 'This is a static description.' },
-        { hid: 'keywords', name: 'keywords', content: 'static, keywords, example' },
-        { hid: 'og-image', property: 'og:image', content: 'https://cdn.nxtkart.com/images/products/main/2025/1/component-kit-for-3d-printer--beginner-57845-nxtkart.webp' },
-        { hid: 'og-url', property: 'og:url', content: `${config.public.baseURL}${route.fullPath}` },
-        { hid: 'og-type', property: 'og:type', content: 'product' },
-        { hid: 'og-description', property: 'og:description', content: projName.value },
-      ]
-    };
-  }
-
   return {
-    title: product.value.name || projName.value,
+    title: projName.value,
     meta: [
-      { hid: 'og-title', property: 'og:title', content: product.value.name || 'Product Name' },
-      { hid: 'description', name: 'description', content: stripHtmlTags(product.value.description) },
-      { hid: 'keywords', name: 'keywords', content: `${product.value.category}, ${product.value.brand}, product` },
-      { hid: 'og-image', property: 'og:image', content: product.value.image },
-      { hid: 'og-url', property: 'og:url', content: `${config.public.baseURL}${route.fullPath}` },
-      { hid: 'og-type', property: 'og:type', content: 'product' },
-      { hid: 'og-description', property: 'og:description', content: stripHtmlTags(product.value.description) },
+      { hid: 'og-title', property: 'og:title', content: projName.value },
+      { hid: 'description', name: 'description', content: 'This is a static description.' }, // Static meta tag
+      { hid: 'keywords', name: 'keywords', content: 'static, keywords, example' }, // Static meta tag
+      { hid: 'og-image', property: 'og:image', content: 'https://cdn.nxtkart.com/images/products/main/2025/1/component-kit-for-3d-printer--beginner-57845-nxtkart.webp'},
+      { hid: 'og-url', property: 'og:url', content: 'https://example.com' }, // Static meta tag
+      { hid: 'og-type', property: 'og:type', content: 'website' }, // Static meta tag
+      { hid: 'og-description', property: 'og:description', content: projName.value },
     ]
   };
 });
 
 useHead(computedPageMeta);
+
+useHead({
+  title: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details'),
+  meta: [
+    { name: 'description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
+    { name: 'keywords', content: computed(() => product.value ? `${product.value.name}, ${product.value.brand}, product details` : 'product details') },
+    // Open Graph meta tags
+    { property: 'og:title', content: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details') },
+    { property: 'og:description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
+    { property: 'og:image', content: computed(() => product.value ? product.value.image : '') },
+    { property: 'og:url', content: computed(() => product.value ? `${backendUrl}/product/${product.value.slug}` : '') },
+    { property: 'og:type', content: 'product' },
+  ],
+
+});
+
+
+
+
 </script>
+
 
 <style scoped>
 .flex-left-column {
@@ -212,6 +216,3 @@ useHead(computedPageMeta);
   align-self: flex-start;
 }
 </style>
-
-
-
