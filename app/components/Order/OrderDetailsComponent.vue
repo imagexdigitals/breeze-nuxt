@@ -56,7 +56,7 @@
             <div class="space-y-2 text-gray-700">
               <div class="flex justify-between">
                 <span>Items ({{ orderDetails.order_details.total_items }})</span>
-                <span>₹{{ orderDetails.order_details.total }}</span>
+                <span>₹{{ orderDetails.order_details.total_selling_price_without_gst }}</span>
               </div>
               <div class="flex justify-between">
                 <span>Coupon</span>

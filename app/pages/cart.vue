@@ -89,7 +89,7 @@ interface CartItem {
 // Define the CartData type
 interface CartData {
   cart_details: CartItem[];
-  totalSellingPrice: number;
+  totalSellingPricewithGST: number;
   gstAmount: number;
   shippingCharges: string;
   totalSaving: number;
@@ -115,7 +115,7 @@ const showStatusModal = ref(false);
 const itemToRemove = ref<number | null>(null);
 const cartData = ref<CartData>({
   cart_details: [],
-  totalSellingPrice: 0,
+  totalSellingPricewithGST: 0,
   gstAmount: 0,
   shippingCharges: 'Calculate at Checkout',
   totalSaving: 0,
@@ -207,7 +207,7 @@ const fetchCartData = async () => {
       // Update cartData with the fetched values
       cartData.value = {
         cart_details: response.cart_details,
-        totalSellingPrice: response.payment_summary.total_selling_price_including_gst,
+        totalSellingPricewithGST: response.payment_summary.total_selling_price_including_gst,
         gstAmount: response.payment_summary.gst,
         shippingCharges: response.payment_summary.shipping_charge || null, // Assuming this is static
         totalSaving: response.payment_summary.total_saving, // Assuming total_saving is the savings
@@ -234,7 +234,7 @@ const fetchCartData = async () => {
       }
 
       // Log the price to the console
-      console.log('Total Selling Price:', cartData.value.totalSellingPrice);
+      console.log('Total Selling Price:', cartData.value.totalSellingPricewithGST);
       console.log('GST Amount:', cartData.value.gstAmount);
       console.log('Total Saving:', cartData.value.totalSaving);
 

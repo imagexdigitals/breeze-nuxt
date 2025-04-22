@@ -54,7 +54,7 @@
         <div class="mt-2 space-y-2">
           <div class="flex justify-between">
             <span>Total Selling Price</span>
-            <span class="font-semibold">₹ {{ cartData.totalSellingPrice }}</span>
+            <span class="font-semibold">₹ {{ cartData.totalSellingPricewithGST }}</span>
           </div>
 
           <!-- <div class="flex justify-between">
@@ -184,7 +184,7 @@ interface User {
 interface Props {
   cartData: {
     TotalItem: number;
-    totalSellingPrice: number;
+    totalSellingPricewithGST: number;
     gstAmount: number;
     shippingCharges: string | null;
     totalSaving: number;
@@ -284,7 +284,7 @@ const proceedToPay = async () => {
       } else {
         // Initialize Cashfree SDK
         const cashfree = await load({
-          mode: "production" // Change to "production" for live environment
+          mode: "sandbox" // Change to "production" for live environment
         });
 
         // Open Cashfree Checkout
