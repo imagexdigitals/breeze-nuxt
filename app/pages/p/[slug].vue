@@ -1,8 +1,7 @@
 <template>
   <div class="bg-gray-100">
     <div v-if="isLoading" class="flex items-center justify-center h-screen">
-      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent">
-      </div>
+      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
     </div>
 
     <!-- PC Version -->
@@ -146,6 +145,14 @@ const fetchProductDetails = async (slug: string) => {
   }
 };
 
+// Fetch product details on the server side
+if (process.server) {
+  const slug = Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug;
+  if (slug) {
+    await fetchProductDetails(slug);
+  }
+}
+
 onMounted(() => {
   const slug = Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug;
   if (slug) {
@@ -161,30 +168,47 @@ const stripHtmlTags = (html: string): string => {
   return doc.body.textContent || '';
 };
 
-const twitterHandle = '@yourTwitterHandle'; // Replace with your Twitter handle
-
-const computedPageMeta = computed(() => {
-  return {
-    title: product.value?.name || 'Product Name',
-    meta: [
-      { hid: 'og-title', property: 'og:title', content: product.value?.name || 'Product Name' },
-      { hid: 'description', name: 'description', content: stripHtmlTags(product.value?.description || '') },
-      { hid: 'keywords', name: 'keywords', content: `${product.value?.category}, ${product.value?.brand}, product` },
-      { hid: 'og-image', property: 'og:image', content: product.value?.image || 'https://cdn.nxtkart.com/images/products/main/2025/1/component-kit-for-3d-printer--beginner-57845-nxtkart.webp' },
-      { hid: 'og-url', property: 'og:url', content: `${config.public.baseURL}${route.fullPath}` },
-      { hid: 'og-type', property: 'og:type', content: 'product' },
-      { hid: 'og-description', property: 'og:description', content: stripHtmlTags(product.value?.description || '') },
-      { hid: 'twitter:card', name: 'twitter:card', content: 'summary_large_image' },
-      { hid: 'twitter:site', name: 'twitter:site', content: twitterHandle },
-      { hid: 'twitter:description', name: 'twitter:description', content: stripHtmlTags(product.value?.description || '') },
-      { hid: 'twitter:title', name: 'twitter:title', content: product.value?.name || 'Product Name' },
-      { hid: 'twitter:image', name: 'twitter:image', content: product.value?.image || 'https://cdn.nxtkart.com/images/products/main/2025/1/component-kit-for-3d-printer--beginner-57845-nxtkart.webp' },
-    ]
-  };
+useHead({
+  title: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details'),
+  meta: [
+    { name: 'description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
+    { name: 'keywords', content: computed(() => product.value ? `${product.value.name}, ${product.value.brand}, product details` : 'product details') },
+    // Open Graph meta tags
+    { property: 'og:title', content: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details') },
+    { property: 'og:description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
+    { property: 'og:image', content: computed(() => product.value ? product.value.image : '') },
+    { property: 'og:url', content: computed(() => product.value ? `${backendUrl}/product/${product.value.slug}` : '') },
+    { property: 'og:type', content: 'product' },
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: computed(() => JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": product.value?.name || '',
+        "image": product.value?.image || '',
+        "description": product.value ? stripHtmlTags(product.value.description) : '',
+        "sku": product.value?.sku || '',
+        "brand": {
+          "@type": "Brand",
+          "name": product.value?.brand || 'Unknown'
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": `${backendUrl}/product/${product.value?.slug}`,
+          "priceCurrency": "INR",
+          "price": product.value?.sale_price || '',
+          "itemCondition": product.value?.condition === 1 ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
+          "availability": product.value?.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+        },
+      })),
+    },
+  ],
 });
-
-useHead(computedPageMeta);
 </script>
+
+
 
 <style scoped>
 .flex-left-column {
@@ -202,5 +226,3 @@ useHead(computedPageMeta);
   align-self: flex-start;
 }
 </style>
-
-
