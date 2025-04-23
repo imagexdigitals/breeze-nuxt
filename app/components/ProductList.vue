@@ -44,7 +44,7 @@
                   <ol class="flex overflow-x-auto">
                     <li v-for="(crumb, index) in breadcrumbs" :key="index" class="flex items-center text-sm shrink-0">
                       <NuxtLink :to="crumb.url" class="text-gray-700 font-medium hover:text-secondaryBlue">{{ crumb.name
-                        }}</NuxtLink>
+                      }}</NuxtLink>
                       <span v-if="index < breadcrumbs.length - 1" class="mx-1">/</span>
                     </li>
                   </ol>

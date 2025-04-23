@@ -100,12 +100,12 @@ export default defineNuxtConfig({
       currenciesAccepted: ['INR'],
 
       // Social Media & External Links, if applicable
-      // 'sameAs': [
-      //   'https://facebook.com/modernhome',
-      //   'https://instagram.com/modernhome',
-      //   'https://pinterest.com/modernhome',
-      //   'https://twitter.com/modernhome'
-      // ],
+      'sameAs': [
+        // 'https://facebook.com/modernhome',
+        // 'https://instagram.com/modernhome',
+        // 'https://pinterest.com/modernhome',
+        'https://twitter.com/nxtkart'
+      ],
 
       // Trust Indicators, if applicable
       // 'hasCredential': [
@@ -174,6 +174,34 @@ export default defineNuxtConfig({
     },
   },
 
+
+  sitemap: {
+    sitemaps: {
+      'main-sitemap': {
+        sources: [
+          '/api/__sitemap__/urls',
+        ]
+      },
+      'product-sitemap': {
+        sources: [
+          '/api/__sitemap__/products',
+        ]
+      },
+      'category-sitemap': {
+        sources: [
+          '/api/__sitemap__/categories',
+        ]
+      },
+      'brand-sitemap': {
+        sources: [
+          '/api/__sitemap__/brands',
+        ]
+      }
+    },
+    xsl: false,
+  },
+  
+
   modules: [
     '@nuxt/ui',
     '@nuxt/eslint',
@@ -193,39 +221,6 @@ export default defineNuxtConfig({
     'nuxt-gtag',
   ],
 
-  // sitemap: {
-  //   exclude: [
-  //     '/cart/**',
-  //     '/dashboard/**',
-  //     '/maintenance/**',
-  //     '/verify-email/**',
-  //     '/my-account/**',
-  //     '/order/**',
-  //     '/search/**',
-  //   ],
-  //   sources: [
-  //     '/api/__sitemap__/urls',
-  //   ],
-  //   sitemaps: {
-  //     main: {
-  //       urls() {
-  //         return ['/', '/about', '/contact'];
-  //       },
-  //     },
-  //     products: {
-  //       sources: [
-  //         '/api/products-sitemap-urls'
-  //       ],
-  //     },
-  //     categories: {
-  //       sources: [
-  //         '/api/categories-sitemap-urls'
-  //       ]
-  //     },
-  //   },
-  //   // Set the chunk size to 1000 URLs per sitemap file
-  //   defaultSitemapsChunkSize: 1000,
-  // },
 
   gtag: {
     id: 'G-F00GNE6W1B',
