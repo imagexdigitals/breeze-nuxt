@@ -62,6 +62,7 @@ import SpecificationDescriptionDetails from '@/components/ProductPage/Specificat
 import ProductRelated from '@/components/ProductPage/ProductRelated.vue';
 import { useMobileDetection } from '~/composables/useMobileDetection';
 
+
 // Use the composable to get the isMobile state
 const { isMobile } = useMobileDetection();
 const sanctumFetch = useSanctumClient();
@@ -192,14 +193,35 @@ watch(product, (newVal) => {
         { name: 'twitter:image', content: newVal.image },
         { name: 'twitter:site', content: '@nxtkart' }, // Replace with your Twitter handle
       ],
+      script: [
+        {
+          type: 'application/ld+json',
+          innerHTML: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": newVal.name || '',
+            "image": newVal.image || '',
+            "description": stripHtmlTags(newVal.description),
+            "sku": newVal.sku || '',
+            "brand": {
+              "@type": "Brand",
+              "name": newVal.brand || 'Unknown'
+            },
+            "offers": {
+              "@type": "Offer",
+              "url": `${backendUrl}/product/${newVal.slug}`,
+              "priceCurrency": "INR",
+              "price": newVal.sale_price || '',
+              "itemCondition": newVal.condition === 1 ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
+              "availability": newVal.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+            },
+          }),
+        },
+      ],
     });
   }
 });
 </script>
-
-
-
-
 
 <style scoped>
 .flex-left-column {
