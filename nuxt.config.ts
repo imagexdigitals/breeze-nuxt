@@ -174,6 +174,13 @@ export default defineNuxtConfig({
     },
   },
 
+  scripts: {
+    registry: {
+      clarity: {
+        id: 'r8e5fqjvm7'
+      }
+    }
+  },
 
   sitemap: {
     sitemaps: {
@@ -219,6 +226,7 @@ export default defineNuxtConfig({
     'nuxt-site-config',
     'nuxt-swiper',
     'nuxt-gtag',
+    '@nuxt/scripts',
   ],
 
 
