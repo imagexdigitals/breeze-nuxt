@@ -4,7 +4,7 @@
     <div class="px-2 md:px-0 relative w-full">
       <input
         type="text"
-        placeholder="Search for products..."
+        placeholder="Search for products and categories..."
         v-model="searchQuery"
         @input="searchProducts"
         @keydown.down="navigateResults('down')"
@@ -15,23 +15,42 @@
       <Icon name="lucide:search" class="absolute left-4 md:left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
     </div>
     <!-- Search Results with Overlay -->
-    <div v-if="searchQuery.trim().length > 0 && searchResults.length" class="search-results-overlay mt-2 md:mt-0">
+    <div v-if="searchQuery.trim().length > 0 && (searchResults.length || searchCategories.length)" class="search-results-overlay mt-2 md:mt-0">
       <ul class="md:border border-zinc-300 md:rounded-md bg-white shadow-lg">
-        <li
-          v-for="(product, index) in searchResults"
-          :key="product.id"
-          :class="['px-4 py-1 border-b border-zinc-200', { 'bg-zinc-100': index === selectedIndex }]"
-          @mouseover="selectedIndex = index"
-        >
-          <NuxtLink :to="product.slug" class="block" @click.prevent="selectResult(product.slug)">
-            <span class="font-semibold" v-html="highlightMatch(product.name)"></span><br />
-            <span class="text-sm">SKU: </span><span class="text-sm" v-html="highlightMatch(product.sku)"></span>
-          </NuxtLink>
-        </li>
+        <!-- Categories Section -->
+        <div v-if="searchCategories.length">
+          <h3 class="px-4 py-2 font-semibold text-nxtkartsecondaryBlue">Categories</h3>
+          <li
+            v-for="(category, index) in searchCategories"
+            :key="category.id"
+            :class="['px-4 py-1 border-b border-zinc-200', { 'bg-zinc-100': index === selectedIndex }]"
+            @mouseover="selectedIndex = index"
+          >
+            <NuxtLink :to="category.slug" class="block" @click.prevent="selectResult(category.slug)">
+              <span class="font-semibold" v-html="highlightMatch(category.name)"></span>
+            </NuxtLink>
+          </li>
+        </div>
+
+        <!-- Products Section -->
+        <div v-if="searchResults.length">
+          <h3 class="px-4 py-2 font-semibold text-nxtkartsecondaryBlue">Products</h3>
+          <li
+            v-for="(product, index) in searchResults"
+            :key="product.id"
+            :class="['px-4 py-1 border-b border-zinc-200', { 'bg-zinc-100': index + searchCategories.length === selectedIndex }]"
+            @mouseover="selectedIndex = index + searchCategories.length"
+          >
+            <NuxtLink :to="product.slug" class="block" @click.prevent="selectResult(product.slug)">
+              <span class="font-semibold" v-html="highlightMatch(product.name)"></span><br />
+              <span class="text-sm">SKU: </span><span class="text-sm" v-html="highlightMatch(product.sku)"></span>
+            </NuxtLink>
+          </li>
+        </div>
 
         <!-- See More Results -->
         <li
-          v-if="seeMore"
+          v-if="seeMoreProducts || seeMoreCategories"
           class="px-4 py-2 text-center text-white bg-nxtkartsecondaryBlue hover:bg-nxtkartBlue cursor-pointer font-medium"
           @click="viewMoreResults"
         >
@@ -42,13 +61,12 @@
   </div>
 </template>
 
-
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useRuntimeConfig, useRouter } from '#app';
 const sanctumFetch = useSanctumClient();
 
-// Define the Product interface
+// Define the Product and Category interfaces
 interface Product {
   id: number;
   name: string;
@@ -58,19 +76,29 @@ interface Product {
   slug: string;
 }
 
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+}
+
 const config = useRuntimeConfig();
 const backendUrl = config.public.BACKEND_URL;
 const router = useRouter();
 
 const searchQuery = ref('');
 const searchResults = ref<Product[]>([]); // Type the searchResults array
-const seeMore = ref(false); // Flag to indicate if there are more results
+const searchCategories = ref<Category[]>([]); // Type the searchCategories array
+const seeMoreProducts = ref(false); // Flag to indicate if there are more product results
+const seeMoreCategories = ref(false); // Flag to indicate if there are more category results
 const selectedIndex = ref<number | null>(null); // Index of the selected result
 
 const searchProducts = async () => {
   if (searchQuery.value.trim().length < 3) {
     searchResults.value = [];
-    seeMore.value = false;
+    searchCategories.value = [];
+    seeMoreProducts.value = false;
+    seeMoreCategories.value = false;
     selectedIndex.value = null;
     return;
   }
@@ -92,9 +120,12 @@ const searchProducts = async () => {
     // Directly use the data since it's already in JSON format
     console.log('Fetched data:', data); // Debugging line
     searchResults.value = data.products;
-    seeMore.value = data.seeMore;
+    searchCategories.value = data.categories;
+    seeMoreProducts.value = data.seeMoreProducts;
+    seeMoreCategories.value = data.seeMoreCategories;
     selectedIndex.value = 0; // Set the first result as selected
     console.log('Search Results:', searchResults.value); // Debugging line
+    console.log('Search Categories:', searchCategories.value); // Debugging line
   } catch (error) {
     console.error('Error fetching search results:', error);
   }
@@ -109,10 +140,11 @@ const highlightMatch = (text: string): string => {
 };
 
 const navigateResults = (direction: 'up' | 'down') => {
-  if (searchResults.value.length === 0) return;
+  const totalResults = searchResults.value.length + searchCategories.value.length;
+  if (totalResults === 0) return;
 
   if (direction === 'down') {
-    if (selectedIndex.value === null || selectedIndex.value < searchResults.value.length - 1) {
+    if (selectedIndex.value === null || selectedIndex.value < totalResults - 1) {
       selectedIndex.value = (selectedIndex.value ?? -1) + 1;
     }
   } else if (direction === 'up') {
@@ -131,14 +163,19 @@ const handleEnterKey = (event: KeyboardEvent) => {
 };
 
 const selectResult = (slug: string) => {
-  router.push(slug);
+  // Remove the base URL from the slug if it exists
+  const baseUrl = 'http://localhost:3000';
+  const cleanedSlug = slug.startsWith(baseUrl) ? slug.slice(baseUrl.length) : slug;
+  router.push(cleanedSlug);
   resetSearch();
 };
 
 const resetSearch = () => {
   searchQuery.value = '';
   searchResults.value = [];
-  seeMore.value = false;
+  searchCategories.value = [];
+  seeMoreProducts.value = false;
+  seeMoreCategories.value = false;
   selectedIndex.value = null;
 };
 
@@ -147,6 +184,7 @@ const viewMoreResults = () => {
   resetSearch();
 };
 </script>
+
 
 
 <style scoped>
