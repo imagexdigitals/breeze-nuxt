@@ -25,13 +25,18 @@
               <NuxtLink v-for="category in commonData.child_categories" :key="category.id"
                 :to="`/category/${category.slug}`" class="flex flex-col items-center">
 
-                <div class="w-24 h-24 rounded-full flex items-center justify-center"
+                <div class="w-24 h-24 rounded-full flex items-center justify-center">
+                  <img :src="category.image || 'https://placehold.co/100x100'" :alt="category.name"
+                    class="w-34 h-34 object-cover rounded-full border-2 border-white p-1" />
+                </div>
+
+                <!-- <div class="w-24 h-24 rounded-full flex items-center justify-center"
                   :style="`background: linear-gradient(135deg, #43C6AC, #F8FFAE);`">
                   <img :src="category.image || 'https://placehold.co/100x100'" :alt="category.name"
                     class="w-20 h-20 object-cover rounded-full border-2 border-white p-1" />
-                </div>
+                </div> -->
 
-                <span class="text-sm text-center mt-1">{{ category.name }}</span>
+                <span class="text-sm text-center mt-1 hover:text-nxtkartsecondaryBlue">{{ category.name }}</span>
               </NuxtLink>
             </div>
 

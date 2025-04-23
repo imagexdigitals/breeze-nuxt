@@ -1,8 +1,8 @@
 <template>
   <div class="p-4 rounded-sm shadow-sm bg-white">
-    <div class="w-full h-48 flex items-center justify-center">
+    <NuxtLink :to="productLink" class="block w-full h-48 flex items-center justify-center">
       <NuxtImg :src="image" :alt="name" class="max-w-full max-h-full object-cover" />
-    </div>
+    </NuxtLink>
     <h3 class="text-base font-semibold">
       <NuxtLink :to="productLink" class="font-medium mt-2 line-clamp-2 block hover:text-nxtkartsecondaryBlue text-sm">
         {{ name }}
