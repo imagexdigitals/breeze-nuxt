@@ -65,7 +65,7 @@
         <BuyNowButton :productId="props.product.id" :quantity="quantity" />
       </div>
 
-      <div class="grid gap-3 text-sm mt-3">
+      <!-- <div class="grid gap-3 text-sm mt-3">
         <button @click="addToQuote"
           class="relative w-full font-medium flex items-center justify-center bg-white px-6 py-2 rounded-md hover:border-[#f06c00] transition-colors border-2 border-gray-300">
           ADD TO QUOTE
@@ -73,7 +73,7 @@
             class="ml-2 relative flex items-center justify-center px-1.5 py-0 text-white text-[10px] font-bold italic uppercase rounded-sm bg-[linear-gradient(270deg,#F06C00_0%,#BD4B00_100%)] before:absolute before:-left-1 before:border-t-[4px] before:border-b-[4px] before:border-r-[4px] before:border-transparent before:border-r-[#BD4B00]">NEW
           </span>
         </button>
-      </div>
+      </div> -->
     </div>
 
     <!-- Pincode Checker Component -->
