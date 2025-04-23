@@ -9,18 +9,18 @@ export default defineSitemapEventHandler(async (event) => {
       priority: 1.0, // Highest priority
       changefreq: 'daily', // Frequency of changes
     },
-    {
-      loc: '/contact', // Contact page
-      lastmod: new Date().toISOString(),
-      priority: 0.8, // High priority
-      changefreq: 'monthly', // Frequency of changes
-    },
-    {
-      loc: '/about-us', // About Us page
-      lastmod: new Date().toISOString(),
-      priority: 0.8, // High priority
-      changefreq: 'monthly', // Frequency of changes
-    }
+    // {
+    //   loc: '/contact', // Contact page
+    //   lastmod: new Date().toISOString(),
+    //   priority: 0.8, // High priority
+    //   changefreq: 'monthly', // Frequency of changes
+    // },
+    // {
+    //   loc: '/about-us', // About Us page
+    //   lastmod: new Date().toISOString(),
+    //   priority: 0.8, // High priority
+    //   changefreq: 'monthly', // Frequency of changes
+    // }
   ];
 
   return urls satisfies SitemapUrlInput[];

@@ -21,6 +21,7 @@ export default defineEventHandler(async (event: H3Event) => {
     lastmod: item.lastmod,
     'image:loc': item['image:loc'] || null,
     title: item.title || null,
+    priority: 0.8, // Set a default priority, adjust as needed
   }))
 
   const escapeXml = (str: string) => str.replace(/[<>&'"]/g, (c) => {
@@ -41,6 +42,7 @@ export default defineEventHandler(async (event: H3Event) => {
   <url>
     <loc>${escapeXml(url.loc)}</loc>
     <lastmod>${escapeXml(url.lastmod)}</lastmod>
+    <priority>${url.priority}</priority>
     ${url['image:loc'] ? `
     <image:image>
       <image:loc>${escapeXml(url['image:loc'])}</image:loc>
