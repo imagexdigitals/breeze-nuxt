@@ -83,7 +83,7 @@ interface Category {
 }
 
 const config = useRuntimeConfig();
-const backendUrl = config.public.BACKEND_URL;
+const backendUrl = config.public.BACKEND_URL as string; // Assert type as string
 const router = useRouter();
 
 const searchQuery = ref('');
@@ -119,8 +119,24 @@ const searchProducts = async () => {
 
     // Directly use the data since it's already in JSON format
     console.log('Fetched data:', data); // Debugging line
-    searchResults.value = data.products;
-    searchCategories.value = data.categories;
+
+    // Ensure slugs are correctly formatted using the URL object
+    searchResults.value = data.products.map((product: Product) => {
+      const url = new URL(product.slug, backendUrl);
+      return {
+        ...product,
+        slug: url.pathname + url.search + url.hash, // Construct the slug without the base URL
+      };
+    });
+
+    searchCategories.value = data.categories.map((category: Category) => {
+      const url = new URL(category.slug, backendUrl);
+      return {
+        ...category,
+        slug: url.pathname + url.search + url.hash, // Construct the slug without the base URL
+      };
+    });
+
     seeMoreProducts.value = data.seeMoreProducts;
     seeMoreCategories.value = data.seeMoreCategories;
     selectedIndex.value = 0; // Set the first result as selected
@@ -130,6 +146,8 @@ const searchProducts = async () => {
     console.error('Error fetching search results:', error);
   }
 };
+
+
 
 const highlightMatch = (text: string): string => {
   if (!searchQuery.value.trim()) {
@@ -163,10 +181,7 @@ const handleEnterKey = (event: KeyboardEvent) => {
 };
 
 const selectResult = (slug: string) => {
-  // Remove the base URL from the slug if it exists
-  const baseUrl = 'http://localhost:3000';
-  const cleanedSlug = slug.startsWith(baseUrl) ? slug.slice(baseUrl.length) : slug;
-  router.push(cleanedSlug);
+  router.push(slug);
   resetSearch();
 };
 
@@ -184,6 +199,7 @@ const viewMoreResults = () => {
   resetSearch();
 };
 </script>
+
 
 
 
