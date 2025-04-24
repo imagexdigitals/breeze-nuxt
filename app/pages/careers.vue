@@ -29,7 +29,7 @@
       <div class="flex flex-col md:flex-row md:justify-between gap-4">
         <div class="bg-white p-4 md:p-6 md:rounded-md shadow-md w-full">
           <h3 class="text-xl font-semibold mb-3">Filter Job Openings</h3>
-          <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex flex-col md:flex-row gap-6">
             <!-- Location Filter -->
             <div>
               <h4 class="font-semibold">Location</h4>

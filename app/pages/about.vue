@@ -210,16 +210,18 @@
 
 <script lang="ts" setup>
 
+
 useHead({
-  title: 'Contact Us - Reach out to our support team anytime',
+  title: 'About Us - Learn About Nxt Kart',
   meta: [
     {
       name: 'description',
-      content: 'Contact Nxt Kart for support and assistance. Our team is ready to help you round the clock.'
+      content: 'Discover the story behind Nxt Kart. Learn about our mission, values, and the team dedicated to shaping the future of e-commerce.'
     }
   ]
-})
+});
 </script>
+
 
 <style scoped>
 /* Add any component-specific styles here */

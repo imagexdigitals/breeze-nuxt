@@ -130,9 +130,10 @@ const navigationColumns = [
   {
     title: 'Legal Information',
     links: [
-      { url: '/link6', text: 'Return & Refund' },
-      { url: '/link7', text: 'Shipping Policy' },
-      { url: '/link8', text: 'Privacy Policy' }
+      { url: '/return-and-refund', text: 'Return & Refund' },
+      { url: '/shipping-policy', text: 'Shipping Policy' },
+      { url: '/privacy-policy', text: 'Privacy Policy' },
+      { url: '/terms-and-condition', text: 'Terms and Condition' }
     ]
   },
   {
@@ -140,7 +141,7 @@ const navigationColumns = [
     links: [
       { url: '/about', text: 'About NxtKart' },
       { url: '/careers', text: 'Careers' },
-      { url: '/link11', text: 'Blog' }
+      { url: '/blog', text: 'Blog' }
     ]
   },
 ];
