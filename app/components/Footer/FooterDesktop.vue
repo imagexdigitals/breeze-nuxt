@@ -8,7 +8,7 @@
           <NuxtImg src="/images/NxtKart_Logo.svg" alt="Logo" class="w-36 h-auto md:w-48" />
         </div>
         <div class="text-center md:text-left">
-          <h3 class="font-bold">NxtKart</h3>
+          <h3 class="font-bold">Nxt Kart</h3>
           <p>No. 59, Krishna Street, Gandhi Nagar,</p>
           <p>Perumathunallur, Guduvanchery</p>
           <p>Chennai, Tamil Nadu, 603202</p>
@@ -120,11 +120,11 @@ const navigationColumns = [
   {
     title: 'Customer Support',
     links: [
-      { url: '/link1', text: 'Contact us' },
-      { url: '/link2', text: 'Track My Order' },
-      { url: '/link3', text: 'FAQ' },
-      { url: '/link4', text: 'Payment Methods' },
-      { url: '/link5', text: 'My Account' }
+      { url: '/contact', text: 'Contact us' },
+      { url: '/track-order', text: 'Track My Order' },
+      // { url: '/link3', text: 'FAQ' },
+      // { url: '/link4', text: 'Payment Methods' },
+      { url: '/my-account', text: 'My Account' }
     ]
   },
   {
@@ -138,8 +138,8 @@ const navigationColumns = [
   {
     title: 'NxtKart',
     links: [
-      { url: '/link9', text: 'About NxtKart' },
-      { url: '/link10', text: 'Careers' },
+      { url: '/about', text: 'About NxtKart' },
+      { url: '/careers', text: 'Careers' },
       { url: '/link11', text: 'Blog' }
     ]
   },
