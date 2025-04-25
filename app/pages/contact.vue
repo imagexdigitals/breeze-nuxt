@@ -8,9 +8,9 @@
           <h2 class="text-2xl md:text-3xl font-bold mb-2 text-red-600">Contact Us</h2>
           <p class="font-semibold text-lg mb-4">Reach out to our support team anytime</p>
           <p class="text-gray-700">
-            Support team ready to help. We are a highly agile and nimble-footed organization which believes in a
-            collaborative approach to solve problems of the world. And that is why the culture of customer feedback and
-            satisfaction ranks high on our agenda. We are happy to help you round the clock to the best of our ability.
+            Our support team is always ready to help. We are a flexible and fast-moving team that works together to
+            solve problems. That’s why customer feedback and satisfaction are very important to us. We’re here for you
+            24/7 and will do our best to assist you.
           </p>
         </div>
         <!-- Right Column -->
