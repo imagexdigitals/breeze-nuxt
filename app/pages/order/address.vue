@@ -6,20 +6,36 @@
         <!-- Order Left Column -->
         <div class="md:w-[70%] rounded-md md:flex gap-4 space-y-3 md:space-y-0 mb-3 md:mb-0">
           <!-- Billing Address Section -->
-          <BillingAddressBook :addresses="billingAddresses" :isLoading="isLoading"
-            :selectedAddressId="selectedBillingAddressId" :hasAddresses="status.has_billing_addresses"
-            @add-address="addBillingAddress" @select-address="selectBillingAddress"
-            :isSelecting="isSelectingBillingAddress" />
+          <BillingAddressBook
+            :addresses="billingAddresses"
+            :isLoading="isLoading"
+            :selectedAddressId="selectedBillingAddressId"
+            :hasAddresses="status.has_billing_addresses"
+            @add-address="addBillingAddress"
+            @select-address="selectBillingAddress"
+            :isSelecting="isSelectingBillingAddress"
+          />
 
           <!-- Shipping Address Section -->
-          <ShippingAddressBook :addresses="shippingAddresses" :isLoading="isLoading"
-            :selectedAddressId="selectedShippingAddressId" :hasAddresses="status.has_shipping_addresses"
-            @add-address="addShippingAddress" @select-address="selectShippingAddress"
-            :isSelecting="isSelectingShippingAddress" />
+          <ShippingAddressBook
+            :addresses="shippingAddresses"
+            :isLoading="isLoading"
+            :selectedAddressId="selectedShippingAddressId"
+            :hasAddresses="status.has_shipping_addresses"
+            @add-address="addShippingAddress"
+            @select-address="selectShippingAddress"
+            :isSelecting="isSelectingShippingAddress"
+          />
         </div>
         <!-- Order Right Column -->
-        <CartRightColumn :cartData="cartData" :isLoading="isLoading" :hasBillingAddresses="status.has_billing_addresses"
-          :hasShippingAddresses="status.has_shipping_addresses" :hasStatus2="hasStatus2" class="w-full md:w-[30%]" />
+        <CartRightColumn
+          :cartData="cartData"
+          :isLoading="isLoading"
+          :hasBillingAddresses="status.has_billing_addresses"
+          :hasShippingAddresses="status.has_shipping_addresses"
+          :hasStatus2="hasStatus2"
+          class="w-full md:w-[30%]"
+        />
       </div>
     </div>
 
@@ -30,10 +46,6 @@
 </template>
 
 <script lang="ts" setup>
-definePageMeta({
-  middleware: ['sanctum:auth'],
-});
-
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import CartRightColumn from '@/components/CartPage/CartRightColumn.vue';
@@ -41,6 +53,10 @@ import EmptyCart from '@/components/CartPage/EmptyCart.vue';
 import { toast } from 'vue3-toastify';
 import BillingAddressBook from '@/components/Order/BillingAddressBook.vue';
 import ShippingAddressBook from '@/components/Order/ShippingAddressBook.vue';
+
+definePageMeta({
+  middleware: ['sanctum:auth'],
+});
 
 // Define the User type
 interface User {
@@ -188,7 +204,6 @@ const selectAddresses = async (billingAddressId: number | null, shippingAddressI
   isSelectingBillingAddress.value = false; // Set loading state to false
   isSelectingShippingAddress.value = false; // Set loading state to false
 };
-
 
 const selectBillingAddress = async (id: number) => {
   await selectAddresses(id, selectedShippingAddressId.value);
@@ -341,10 +356,6 @@ onMounted(async () => {
   } else {
     console.error('User is not authenticated');
   }
-});
-
-definePageMeta({
-  middleware: ['sanctum:auth'],
 });
 
 useSeoMeta({
