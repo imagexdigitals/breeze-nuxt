@@ -159,9 +159,13 @@ onMounted(() => {
   pincodeStore.loadFromLocalStorage();
 });
 
-const stripHtmlTags = (html: string): string => {
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-  return doc.body.textContent || '';
+const stripHtmlTags = (html) => {
+  if (typeof window !== 'undefined' && window.DOMParser) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
+  }
+  // Fallback for SSR: return the HTML as is or use a regex to strip tags
+  return html.replace(/<\/?[^>]+(>|$)/g, "");
 };
 
 const metaTitle = computed(() => product.value?.name || 'Product Details');
