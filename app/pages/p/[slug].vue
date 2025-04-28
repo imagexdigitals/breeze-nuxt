@@ -168,7 +168,7 @@ const stripHtmlTags = (html) => {
   return html.replace(/<\/?[^>]+(>|$)/g, "");
 };
 
-const metaTitle = computed(() => product.value?.name || 'Product Details');
+const metaTitle = computed(() => product.value?.name);
 const metaDescription = computed(() => stripHtmlTags(product.value?.description || ''));
 
 // Use the useHead composable to set the meta tags
