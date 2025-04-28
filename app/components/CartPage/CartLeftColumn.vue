@@ -13,7 +13,7 @@
           <!-- Top Row: Image and Product Details -->
           <div class="flex items-center space-x-3">
             <div class="flex items-center justify-center w-[80px]">
-              <img :src="item.image" :alt="item.name || 'Product Image'" class="w-24 h-24 object-cover rounded">
+              <NuxtImg :src="item.image" :alt="item.name || 'Product Image'" class="w-24 h-24 object-cover rounded" loading="lazy"></NuxtImg>
             </div>
             <div class="flex-1">
               <NuxtLink :to="`/p/${item.slug}`" class="font-semibold hover:text-secondaryBlue">

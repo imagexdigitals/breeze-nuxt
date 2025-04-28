@@ -12,7 +12,7 @@ export const useCart = () => {
       const payload = {
         user_id: userId,
         session_id: sessionId,
-        source: 'nuxt_nxtkart', // Add the source parameter here
+        source: 'nuxt_nxtkart',
       };
 
       const response = await sanctumFetch('/api/cart-count', {
@@ -45,10 +45,11 @@ export const useCart = () => {
   };
 };
 
-export default defineNuxtPlugin(() => {
-  return {
-    provide: {
-      cart: useCart(),
-    },
-  };
+let cartPluginInitialized = false;
+
+export default defineNuxtPlugin((nuxtApp) => {
+  if (!cartPluginInitialized) {
+    nuxtApp.provide('cart', useCart());
+    cartPluginInitialized = true;
+  }
 });

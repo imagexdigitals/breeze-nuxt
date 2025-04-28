@@ -15,7 +15,6 @@
             </div>
           </div>
 
-
           <!-- Right Side Column (100% width on mobile, 80% width on desktop) -->
           <div class="w-full md:w-4/5">
             <!-- Display category icons -->
@@ -26,20 +25,13 @@
                 :to="`/category/${category.slug}`" class="flex flex-col items-center">
 
                 <div class="w-24 h-24 rounded-full flex items-center justify-center">
-                  <img :src="category.image || 'https://placehold.co/100x100'" :alt="category.name"
-                    class="w-34 h-34 object-cover rounded-full border-2 border-white p-1" />
+                  <img :src="category.image" :alt="category.name"
+                    class="w-34 h-34 object-cover rounded-full border-2 border-white p-1" loading="lazy" />
                 </div>
-
-                <!-- <div class="w-24 h-24 rounded-full flex items-center justify-center"
-                  :style="`background: linear-gradient(135deg, #43C6AC, #F8FFAE);`">
-                  <img :src="category.image || 'https://placehold.co/100x100'" :alt="category.name"
-                    class="w-20 h-20 object-cover rounded-full border-2 border-white p-1" />
-                </div> -->
 
                 <span class="text-sm text-center mt-1 hover:text-nxtkartsecondaryBlue">{{ category.name }}</span>
               </NuxtLink>
             </div>
-
 
             <!-- Title and Sort -->
             <div class="bg-white border-y md:border-none md:shadow-sm rounded-sm p-4">
@@ -354,10 +346,7 @@ useHead({
   ],
 });
 
-
-
 </script>
-
 
 <style scoped>
 /* Add any additional custom styles here if needed */
