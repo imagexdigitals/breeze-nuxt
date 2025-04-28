@@ -1,4 +1,3 @@
-// stores/cart.ts
 import { defineStore } from 'pinia';
 
 interface CartItem {
@@ -11,7 +10,7 @@ export const useCartStore = defineStore('cart', {
     items: [] as CartItem[],
   }),
   getters: {
-    totalProducts: (state) => state.items.length, // Count of unique items
+    totalProducts: (state) => state.items.length,
   },
   actions: {
     addToCart(productId: number, quantity: number) {
@@ -30,7 +29,11 @@ export const useCartStore = defineStore('cart', {
     loadFromLocalStorage() {
       const storedCart = localStorage.getItem('cart');
       if (storedCart) {
-        this.items = JSON.parse(storedCart);
+        try {
+          this.items = JSON.parse(storedCart);
+        } catch (error) {
+          console.error('Error parsing cart from localStorage:', error);
+        }
       }
     },
     saveToLocalStorage() {

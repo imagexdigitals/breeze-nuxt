@@ -1,4 +1,3 @@
-// stores/quote.ts
 import { defineStore } from 'pinia';
 
 interface Product {
@@ -63,7 +62,11 @@ export const useQuoteStore = defineStore('quote', {
     loadFromLocalStorage() {
       const quoteItems = localStorage.getItem('quoteItems');
       if (quoteItems) {
-        this.items = JSON.parse(quoteItems);
+        try {
+          this.items = JSON.parse(quoteItems);
+        } catch (error) {
+          console.error('Error parsing quote items from localStorage:', error);
+        }
       }
     },
     saveToLocalStorage() {
