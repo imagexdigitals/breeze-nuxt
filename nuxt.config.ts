@@ -86,7 +86,7 @@ export default defineNuxtConfig({
           },
         },
       },
-
+      debug: true,
       // Payment Methods, if applicable
       paymentAccepted: [
         'Credit Card',
