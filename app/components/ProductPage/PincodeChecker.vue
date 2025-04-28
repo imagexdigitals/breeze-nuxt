@@ -1,5 +1,5 @@
 <template>
-  <!-- <div class="bg-gradient-to-b from-orange-100 to-white p-3 md:p-5 rounded-sm shadow-none border-y md:border-none md:shadow-md">
+  <div class="bg-gradient-to-b from-orange-100 to-white p-3 md:p-5 rounded-sm shadow-none border-y md:border-none md:shadow-md">
     <div class="flex items-center space-x-2 mb-4">
       <NuxtImg src="/images/location-96.svg" alt="Pincode Checker" class="w-7 h-7"/>
       <h3 class="text-sm font-semibold">Check Delivery Availability</h3>
@@ -63,71 +63,71 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script lang="ts" setup>
-// import { ref, onMounted, onUnmounted } from 'vue';
-// import { useRuntimeConfig } from '#app';
-// import { usePincodeStore } from '@/stores/pincode';
-// const sanctumFetch = useSanctumClient();
+import { ref, onMounted, onUnmounted } from 'vue';
+import { useRuntimeConfig } from '#app';
+import { usePincodeStore } from '@/stores/pincode';
+const sanctumFetch = useSanctumClient();
 
-// const pincode = ref<string>('');
-// const isLoading = ref<boolean>(false);
-// const pincodeStore = usePincodeStore();
-// const config = useRuntimeConfig();
-// const backendUrl = config.public.BACKEND_URL;
-// let recheckInterval: number | undefined;
+const pincode = ref<string>('');
+const isLoading = ref<boolean>(false);
+const pincodeStore = usePincodeStore();
+const config = useRuntimeConfig();
+const backendUrl = config.public.BACKEND_URL;
+let recheckInterval: number | undefined;
 
-// const validatePincode = () => {
-//   pincode.value = pincode.value.replace(/\D/g, "").slice(0, 6);
-// };
+const validatePincode = () => {
+  pincode.value = pincode.value.replace(/\D/g, "").slice(0, 6);
+};
 
-// const checkPincode = async () => {
-//   isLoading.value = true;
-//   try {
-//     const response = await sanctumFetch('/api/check-pincode', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         delivery_postcode: pincode.value,
-//       }),
-//     });
+const checkPincode = async () => {
+  isLoading.value = true;
+  try {
+    const response = await sanctumFetch('/api/check-pincode', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        delivery_postcode: pincode.value,
+      }),
+    });
 
-//     // Assuming the response is already in JSON format
-//     const data = response;
-//     // console.log('Pincode data:', data); // Debugging log
+    // Assuming the response is already in JSON format
+    const data = response;
+    // console.log('Pincode data:', data); // Debugging log
 
-//     // Update the pincode store with the fetched data
-//     pincodeStore.setPincodeData(data);
-//     pincodeStore.saveToLocalStorage();
-//   } catch (error) {
-//     console.error('Error checking pincode:', error);
-//   } finally {
-//     isLoading.value = false;
-//   }
-// };
+    // Update the pincode store with the fetched data
+    pincodeStore.setPincodeData(data);
+    pincodeStore.saveToLocalStorage();
+  } catch (error) {
+    console.error('Error checking pincode:', error);
+  } finally {
+    isLoading.value = false;
+  }
+};
 
-// const startRecheckInterval = () => {
-//   recheckInterval = window.setInterval(() => {
-//     if (pincode.value) {
-//       checkPincode();
-//     }
-//   }, 12 * 60 * 60 * 1000); // 12 hours in milliseconds
-// };
+const startRecheckInterval = () => {
+  recheckInterval = window.setInterval(() => {
+    if (pincode.value) {
+      checkPincode();
+    }
+  }, 12 * 60 * 60 * 1000); // 12 hours in milliseconds
+};
 
-// onMounted(() => {
-//   if (pincodeStore.postcode) {
-//     pincode.value = pincodeStore.postcode;
-//   }
-//   startRecheckInterval();
-// });
+onMounted(() => {
+  if (pincodeStore.postcode) {
+    pincode.value = pincodeStore.postcode;
+  }
+  startRecheckInterval();
+});
 
-// onUnmounted(() => {
-//   if (recheckInterval) {
-//     window.clearInterval(recheckInterval);
-//   }
-// });
+onUnmounted(() => {
+  if (recheckInterval) {
+    window.clearInterval(recheckInterval);
+  }
+});
 </script>
