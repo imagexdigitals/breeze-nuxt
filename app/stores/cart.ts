@@ -48,7 +48,10 @@ export const useCartStore = defineStore('cart', {
       }
     },
   },
+  // Add this to all stores
   hydrate(state, initialState) {
-    state.items = initialState.items || [];
+    // Use Object.assign to ensure proper hydration
+    Object.assign(state, initialState || {});
   }
+  
 });

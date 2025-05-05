@@ -53,7 +53,9 @@ export const usePincodeStore = defineStore('pincode', {
       }
     },
   },
+  // Add this to all stores
   hydrate(state, initialState) {
-    Object.assign(state, initialState);
+    // Use Object.assign to ensure proper hydration
+    Object.assign(state, initialState || {});
   }
 });

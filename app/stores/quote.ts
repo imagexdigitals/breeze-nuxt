@@ -63,7 +63,9 @@ export const useQuoteStore = defineStore('quote', {
       return uniqueProducts.size;
     },
   },
+  // Add this to all stores
   hydrate(state, initialState) {
-    state.items = initialState.items || [];
+    // Use Object.assign to ensure proper hydration
+    Object.assign(state, initialState || {});
   }
 });
