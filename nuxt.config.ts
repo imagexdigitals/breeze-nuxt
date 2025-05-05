@@ -208,7 +208,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     'nuxt-auth-sanctum',
     '@nuxt/image',
-    '@pinia/nuxt',
+    // '@pinia/nuxt',
     '@nuxtjs/google-fonts',
     '@nuxt/icon',
     'nuxt-schema-org',
