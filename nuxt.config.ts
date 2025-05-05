@@ -265,7 +265,7 @@ export default defineNuxtConfig({
   },
 
   sanctum: {
-    baseUrl: 'https://localhost:80',
+    baseUrl: 'https://api.nxtkart.com',
     redirect: {
       onGuestOnly: '/',
       onLogin: '/',
