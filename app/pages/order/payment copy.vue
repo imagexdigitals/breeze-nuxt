@@ -1,44 +1,65 @@
 <template>
-  <div class="bg-gray-100 md:py-8">
+  <div class="bg-gray-100">
     <div class="mx-auto md:w-4/5 py-5" v-if="!isCartEmpty">
       <CartPageCartStepper />
       <div class="md:flex gap-4 mt-8">
         <!-- Order Left Column -->
-        <div class="md:w-[70%] rounded-md md:flex gap-4 space-y-3 md:space-y-0 mb-3 md:mb-0">
-          <!-- Billing Address Section -->
-          <BillingAddressBook
-            :addresses="billingAddresses"
-            :isLoading="isLoading"
-            :selectedAddressId="selectedBillingAddressId"
-            :hasAddresses="status.has_billing_addresses"
-            @add-address="addBillingAddress"
-            @select-address="selectBillingAddress"
-            :isSelecting="isSelectingBillingAddress"
-          />
+        <div class="md:w-[70%] rounded-md md:flex gap-4">
+          <div class="w-full">
+            <OrderPaymentMethodOffer />
+            <div class="bg-white p-4 md:rounded-md border-y md:border-none mb-4">
+              <p class="font-semibold border-b pb-2 border-dashed border-gray-300">
+                Payment Methods
+              </p>
+              <div class="mt-4 md:w-96">
+                <label class="block w-full border rounded-md mb-2">
+                  <div class="flex items-center gap-2 mb-2 px-4 pt-4">
+                    <input type="radio" name="paymentMethod" value="1" class="mr-2 mt-0.5"
+                      v-model="selectedPaymentMethod">
+                    <span>Credit / Debit Card / UPI</span>
+                  </div>
+                  <div
+                    class="w-full text-sm bg-green-600 text-white font-medium text-center py-0.5 px-2 rounded-b flex items-center justify-center gap-1">
+                    <Icon name="bxs:offer" class="w-4 h-4" />
+                    <span>SAVE ₹50</span>
+                  </div>
+                </label>
 
-          <!-- Shipping Address Section -->
-          <ShippingAddressBook
-            :addresses="shippingAddresses"
-            :isLoading="isLoading"
-            :selectedAddressId="selectedShippingAddressId"
-            :hasAddresses="status.has_shipping_addresses"
-            @add-address="addShippingAddress"
-            @select-address="selectShippingAddress"
-            :isSelecting="isSelectingShippingAddress"
-          />
+                <label class="block w-full border p-4 rounded-md mb-2">
+                  <input type="radio" name="paymentMethod" value="3" class="mr-2" v-model="selectedPaymentMethod">
+                  Partial Cash on Delivery
+                </label>
+                <!-- <label class="block w-full border p-4 rounded-md mb-2">
+                  <input type="radio" name="paymentMethod" value="2" class="mr-2" v-model="selectedPaymentMethod">
+                  Cash on Delivery
+                </label> -->
+              </div>
+            </div>
+            <div class="flex justify-center gap-6 flex-wrap py-2 mb-2">
+              <!-- Secure Payments -->
+              <div class="flex items-center space-x-2">
+                <div class="bg-red-100 p-1.5 rounded-md flex items-center justify-center">
+                  <Icon name="tdesign:secured" class="w-5 h-5 text-red-600" />
+                </div>
+                <span class="text-xs md:text-sm font-semibold text-gray-700">Secure Payments</span>
+              </div>
+
+              <!-- 365 Days Help Desk -->
+              <div class="flex items-center space-x-2">
+                <div class="bg-red-100 p-1.5 rounded-md flex items-center justify-center">
+                  <Icon name="ic:outline-support-agent" class="w-5 h-5 text-red-600" />
+                </div>
+                <span class="text-xs md:text-sm font-semibold text-gray-700">Great! Help Desk</span>
+              </div>
+            </div>
+
+          </div>
         </div>
         <!-- Order Right Column -->
-        <CartRightColumn
-          :cartData="cartData"
-          :isLoading="isLoading"
-          :hasBillingAddresses="status.has_billing_addresses"
-          :hasShippingAddresses="status.has_shipping_addresses"
-          :hasStatus2="hasStatus2"
-          class="w-full md:w-[30%]"
-        />
+        <CartRightColumn :cartData="cartData" :isLoading="isLoading" :hasBillingAddresses="status.has_billing_addresses"
+          :hasShippingAddresses="status.has_shipping_addresses" :hasStatus2="hasStatus2" class="w-full md:w-[30%]" />
       </div>
     </div>
-
     <div v-else>
       <EmptyCart />
     </div>
@@ -46,17 +67,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import CartRightColumn from '@/components/CartPage/CartRightColumn.vue';
-import EmptyCart from '@/components/CartPage/EmptyCart.vue';
+// import CartRightColumn from '@/components/CartPage/CartRightColumn.vue';
+// import EmptyCart from '@/components/CartPage/EmptyCart.vue';
 import { toast } from 'vue3-toastify';
-import BillingAddressBook from '@/components/Order/BillingAddressBook.vue';
-import ShippingAddressBook from '@/components/Order/ShippingAddressBook.vue';
-
-definePageMeta({
-  middleware: ['sanctum:auth'],
-});
 
 // Define the User type
 interface User {
@@ -97,26 +112,10 @@ interface CartData {
   BillingAddressId: number;
 }
 
-// Define an interface for the address structure
-interface Address {
-  id: number;
-  name: string;
-  type: number;
-  mobile: string;
-  address1: string;
-  address2: string;
-  city: string;
-  state: string;
-  pincode: string;
-  gst: string;
-}
-
 const { isAuthenticated, user } = useSanctumAuth();
 const sanctumFetch = useSanctumClient();
 const router = useRouter();
-const hasStatus2 = ref(false);
-const showModal = ref(false);
-const itemToRemove = ref<number | null>(null);
+
 const cartData = ref<CartData>({
   cart_details: [],
   totalSellingPricewithGST: 0,
@@ -137,121 +136,16 @@ const cartData = ref<CartData>({
 });
 const isCartEmpty = ref(false);
 const loading = ref(true); // Add loading state
-
-const billingAddresses = ref<Address[]>([]);
-const shippingAddresses = ref<Address[]>([]);
+const status = ref({
+  has_billing_addresses: false,
+  has_shipping_addresses: false,
+});
+const hasStatus2 = ref(false);
 const isLoading = ref(false);
 const selectedBillingAddressId = ref<number | null>(null);
 const selectedShippingAddressId = ref<number | null>(null);
 const userId = ref<number | null>(null);
-const sessionId = ref<string | null>(null);
-const status = ref({
-  has_billing_addresses: false,
-  has_shipping_addresses: false,
-  no_address_found: false,
-  redirect: false,
-});
-
-const isSelectingBillingAddress = ref(false); // Add loading state for billing address selection
-const isSelectingShippingAddress = ref(false); // Add loading state for shipping address selection
-
-const fetchAddresses = async () => {
-  if (!userId.value) {
-    console.error('User ID is not available');
-    return;
-  }
-
-  isLoading.value = true;
-  try {
-    const payload = {
-      user_id: userId.value,
-      source: 'nuxt_nxtkart', // Add the source parameter here
-    };
-
-    const response = await sanctumFetch(`/api/user/${userId.value}/addresses`, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (response) {
-      billingAddresses.value = response.billing_addresses;
-      shippingAddresses.value = response.shipping_addresses;
-      status.value = response.status;
-    } else {
-      console.error('No data returned from the API');
-    }
-  } catch (error) {
-    console.error('Error fetching addresses:', error);
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const selectAddresses = async (billingAddressId: number | null, shippingAddressId: number | null) => {
-  isSelectingBillingAddress.value = true; // Set loading state to true
-  isSelectingShippingAddress.value = true; // Set loading state to true
-
-  selectedBillingAddressId.value = billingAddressId;
-  selectedShippingAddressId.value = shippingAddressId;
-
-  await storeAddressIds();
-  await fetchCartData(); // Refetch cart data after updating the addresses
-
-  isSelectingBillingAddress.value = false; // Set loading state to false
-  isSelectingShippingAddress.value = false; // Set loading state to false
-};
-
-const selectBillingAddress = async (id: number) => {
-  await selectAddresses(id, selectedShippingAddressId.value);
-};
-
-const selectShippingAddress = async (id: number) => {
-  await selectAddresses(selectedBillingAddressId.value, id);
-};
-
-const addBillingAddress = () => {
-  // Implement the logic to add a billing address
-};
-
-const addShippingAddress = () => {
-  // Implement the logic to add a shipping address
-};
-
-const storeAddressIds = async () => {
-  if (!userId.value) {
-    console.error('User ID is not available');
-    return;
-  }
-
-  try {
-    const payload = {
-      billing_address_id: selectedBillingAddressId.value,
-      shipping_address_id: selectedShippingAddressId.value,
-      session_id: sessionId.value, // Include session ID in the payload
-      source: 'nuxt_nxtkart', // Add the source parameter here
-    };
-
-    const response = await sanctumFetch(`/api/store-address-ids`, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (response.status === 'success') {
-      // toast.success('Address IDs stored successfully');
-    } else {
-      toast.error('Failed to select address');
-    }
-  } catch (error) {
-    console.error('Error storing address IDs:', error);
-    toast.error('An error occurred while storing address IDs');
-  }
-};
+const selectedPaymentMethod = ref<number>(1); // Set default value to 1 for "Credit / Debit Card / UPI"
 
 const fetchCartData = async () => {
   loading.value = true; // Set loading to true before fetching data
@@ -264,13 +158,15 @@ const fetchCartData = async () => {
       source: 'nuxt_nxtkart', // Add the source parameter here
     };
 
-    const response = await sanctumFetch(`/api/cart`, {
+    isLoading.value = true;
+    const response = await sanctumFetch('/api/cart', {
       method: 'POST',
       body: JSON.stringify(payload),
       headers: {
         'Content-Type': 'application/json',
       },
     });
+    isLoading.value = false;
 
     if (response.status === 'empty') {
       isCartEmpty.value = true;
@@ -319,6 +215,38 @@ const fetchCartData = async () => {
   }
 };
 
+const storePaymentMethod = async () => {
+  if (!selectedPaymentMethod.value) return;
+
+  const payload = {
+    billing_address_id: selectedBillingAddressId.value,
+    shipping_address_id: selectedShippingAddressId.value,
+    session_id: generateSessionId(),
+    payment_method: selectedPaymentMethod.value,
+    source: 'nuxt_nxtkart', // Add the source parameter here
+  };
+
+  try {
+    const response = await sanctumFetch('/api/store-address-ids', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.status === 'success') {
+      // toast.success('Payment method stored successfully');
+      fetchCartData(); // Refetch cart data
+    } else {
+      toast.error('Failed to store payment method');
+    }
+  } catch (error) {
+    console.error('Error storing payment method:', error);
+    toast.error('Error storing payment method');
+  }
+};
+
 const generateSessionId = () => {
   // Check if a session ID already exists in localStorage
   let sessionId = localStorage.getItem('sessionId');
@@ -339,21 +267,22 @@ const generateSessionId = () => {
   return sessionId;
 };
 
-onMounted(async () => {
+onMounted(() => {
   if (user.value) {
     userId.value = (user.value as User).id;
-    await fetchAddresses(); // Fetch addresses first
-
-    // Check if redirect is true after fetching addresses
-    if (status.value.redirect) {
-      router.push('/my-account/add-address?order_address_add=true&address_store_type=new'); // Redirect to the add address page
-      return; // Stop further execution
-    }
-
     fetchCartData(); // Use user_id
   } else {
     console.error('User is not authenticated');
   }
+});
+
+// Watch for changes in the selected payment method and store it
+watch(selectedPaymentMethod, () => {
+  storePaymentMethod();
+});
+
+definePageMeta({
+  middleware: ['sanctum:auth'],
 });
 
 useSeoMeta({

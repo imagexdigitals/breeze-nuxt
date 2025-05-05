@@ -69,8 +69,8 @@
 <script lang="ts" setup>
 import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import CartRightColumn from '@/components/CartPage/CartRightColumn.vue';
-import EmptyCart from '@/components/CartPage/EmptyCart.vue';
+import CartRightColumn from '~/components/CartPage/CartRightColumn.vue';
+import EmptyCart from '~/components/CartPage/EmptyCart.vue';
 import { toast } from 'vue3-toastify';
 
 // Define the User type
@@ -116,7 +116,6 @@ const { isAuthenticated, user } = useSanctumAuth();
 const sanctumFetch = useSanctumClient();
 const router = useRouter();
 
-const cartStore = useCartStore();
 const cartData = ref<CartData>({
   cart_details: [],
   totalSellingPricewithGST: 0,
@@ -269,7 +268,6 @@ const generateSessionId = () => {
 };
 
 onMounted(() => {
-  cartStore.loadFromLocalStorage();
   if (user.value) {
     userId.value = (user.value as User).id;
     fetchCartData(); // Use user_id
@@ -291,7 +289,6 @@ useSeoMeta({
   robots: 'noindex, nofollow', // Add this line to set the robots meta tag
 });
 </script>
-
 
 <style scoped>
 /* Add any additional custom styles here if needed */
