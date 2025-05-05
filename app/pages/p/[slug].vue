@@ -27,7 +27,7 @@ import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRuntimeConfig } from '#app';
 import { useMobileDetection } from '@/composables/useMobileDetection';
-
+import { useSeoMeta } from '@unhead/vue';
 
 const { isMobile } = useMobileDetection();
 const sanctumFetch = useSanctumClient();
@@ -84,18 +84,16 @@ onMounted(() => {
   }
 });
 
-// Watch for changes in the product and update the head
+// Watch for changes in the product and update the SEO meta
 watch(product, (newProduct) => {
   if (newProduct) {
-    useHead({
+    useSeoMeta({
       title: newProduct.name,
-      meta: [
-        { name: 'description', content: newProduct.description },
-        { property: 'og:title', content: newProduct.name },
-        { property: 'og:description', content: newProduct.description },
-        { property: 'og:image', content: newProduct.image },
-        { property: 'og:type', content: 'website' },
-      ],
+      ogTitle: newProduct.name,
+      description: newProduct.description,
+      ogDescription: newProduct.description,
+      ogImage: newProduct.image,
+      twitterCard: 'summary_large_image',
     });
   }
 });
