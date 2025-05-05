@@ -66,6 +66,7 @@ import CartLeftColumn from '~/components/CartPage/CartLeftColumn.vue';
 import CartRightColumn from '~/components/CartPage/CartRightColumn.vue';
 import { useCart } from '~/plugins/cartPlugin'; // Import the useCart function
 
+
 // Define the User type
 interface User {
   id: number;
@@ -108,6 +109,7 @@ interface CartData {
 const { isAuthenticated, user } = useSanctumAuth();
 const sanctumFetch = useSanctumClient();
 const isLoading = ref(false);
+const cartStore = useCartStore();
 const showModal = ref(false);
 const showStatusModal = ref(false);
 const itemToRemove = ref<number | null>(null);
@@ -182,6 +184,7 @@ const confirmRemove = () => {
 const fetchCartData = async () => {
   try {
     const sessionId = generateSessionId(); // Ensure sessionId is generated or retrieved
+
     const payload = {
       user_id: isAuthenticated.value ? (user.value as User).id : null,
       session_id: sessionId, // Always include the sessionId
@@ -320,6 +323,7 @@ const generateSessionId = () => {
 };
 
 onMounted(() => {
+  cartStore.loadFromLocalStorage();
   fetchCartData();
 });
 
@@ -329,7 +333,9 @@ useHead({
   ]
 });
 
+
 </script>
+
 
 <style scoped>
 /* Add any additional custom styles here if needed */

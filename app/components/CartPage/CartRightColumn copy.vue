@@ -143,6 +143,7 @@
         Continue to Checkout
       </NuxtLink>
 
+
       <!-- Not Allow Checkout -->
       <button v-if="isAuthenticated && hasStatus2" :disabled="isLoading"
         class="block w-full px-4 py-2 text-center font-medium text-white bg-gray-400 rounded-md cursor-not-allowed">
@@ -169,6 +170,7 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useCartStore } from '~/stores/cart';
 import { load } from '@cashfreepayments/cashfree-js';
 import { useCart } from '@/plugins/cartPlugin'; // Import the useCart composable
 
@@ -206,6 +208,7 @@ const props = defineProps<Props>();
 const { isAuthenticated, user } = useSanctumAuth();
 const sanctumFetch = useSanctumClient();
 const router = useRouter();
+const cartStore = useCartStore();
 const couponCode = ref('');
 const couponError = ref('');
 const route = useRoute();

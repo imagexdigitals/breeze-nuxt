@@ -1,8 +1,7 @@
 <template>
   <div class="bg-gray-100">
     <div v-if="isLoading" class="flex items-center justify-center h-screen">
-      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent">
-      </div>
+      <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
     </div>
 
     <!-- PC Version -->
@@ -35,20 +34,18 @@
 
         <!-- Specification and Description -->
         <section class="rounded-sm border-y md:shadow-md overflow-y-auto w-full bg-white">
-          <SpecificationDescriptionDetails :specifications="product.specifications" :attachments="product.attachments"
-            :description="product.description" />
+          <SpecificationDescriptionDetails :specifications="product.specifications" :attachments="product.attachments" :description="product.description" />
         </section>
 
         <!-- Related Products -->
-        <ProductRelated v-if="product.related_products && product.related_products.length"
-          :relatedProducts="product.related_products" />
+        <ProductRelated v-if="product.related_products && product.related_products.length" :relatedProducts="product.related_products" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRuntimeConfig } from '#app';
 import { useCartStore } from '~/stores/cart';
@@ -62,7 +59,6 @@ import SpecificationDescriptionDetails from '@/components/ProductPage/Specificat
 import ProductRelated from '@/components/ProductPage/ProductRelated.vue';
 import { useMobileDetection } from '~/composables/useMobileDetection';
 
-// Use the composable to get the isMobile state
 const { isMobile } = useMobileDetection();
 const sanctumFetch = useSanctumClient();
 
@@ -93,7 +89,7 @@ interface Product {
   country_of_origin: string;
   attachments: Array<{ label: string; url: string }>;
   warranty: string;
-  image: string; // Use this field for the OG image
+  image: string;
   gallery: string[];
   breadcrumb: Array<{ name: string; url: string }>;
   specifications: Array<{ label: string; value: string }>;
@@ -127,7 +123,7 @@ const fetchProductDetails = async (slug: string) => {
   try {
     const payload = {
       slug: slug,
-      source: 'nuxt_nxtkart', // Add the source parameter here
+      source: 'nuxt_nxtkart',
     };
 
     const response = await sanctumFetch(`/api/product/${slug}`, {
@@ -146,6 +142,13 @@ const fetchProductDetails = async (slug: string) => {
   }
 };
 
+if (process.server) {
+  const slug = Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug;
+  if (slug) {
+    await fetchProductDetails(slug);
+  }
+}
+
 onMounted(() => {
   const slug = Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug;
   if (slug) {
@@ -156,84 +159,108 @@ onMounted(() => {
   pincodeStore.loadFromLocalStorage();
 });
 
-const stripHtmlTags = (html: string): string => {
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-  return doc.body.textContent || '';
+const stripHtmlTags = (html) => {
+  if (typeof window !== 'undefined' && window.DOMParser) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
+  }
+  // Fallback for SSR: return the HTML as is or use a regex to strip tags
+  return html.replace(/<\/?[^>]+(>|$)/g, "");
 };
-const projName = ref('my project name'); // your projName Ref
 
-const computedPageMeta = computed(() => {
-  return {
-    title: projName.value,
-    meta: [
-      { hid: 'og-title', property: 'og:title', content: projName.value },
-      { hid: 'description', name: 'description', content: 'This is a static description.' }, // Static meta tag
-      { hid: 'keywords', name: 'keywords', content: 'static, keywords, example' }, // Static meta tag
-      { hid: 'og-image', property: 'og:image', content: 'https://cdn.nxtkart.com/images/products/main/2025/1/component-kit-for-3d-printer--beginner-57845-nxtkart.webp'},
-      { hid: 'og-url', property: 'og:url', content: 'https://example.com' }, // Static meta tag
-      { hid: 'og-type', property: 'og:type', content: 'website' }, // Static meta tag
-      { hid: 'og-description', property: 'og:description', content: projName.value },
-    ]
-  };
-});
+const metaTitle = computed(() => product.value?.name);
+const metaDescription = computed(() => stripHtmlTags(product.value?.description || ''));
 
-useHead(computedPageMeta);
-
-useHead({
-  title: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details'),
+// Use the useHead composable to set the meta tags
+useHead(() => ({
+  title: metaTitle.value,
   meta: [
-    { name: 'description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
-    { name: 'keywords', content: computed(() => product.value ? `${product.value.name}, ${product.value.brand}, product details` : 'product details') },
-    // Open Graph meta tags
-    { property: 'og:title', content: computed(() => product.value ? `${product.value.name} - Product Details` : 'Product Details') },
-    { property: 'og:description', content: computed(() => product.value ? stripHtmlTags(product.value.description) : 'View details of our product.') },
-    { property: 'og:image', content: computed(() => product.value ? product.value.image : '') },
-    { property: 'og:url', content: computed(() => product.value ? `${backendUrl}/product/${product.value.slug}` : '') },
-    { property: 'og:type', content: 'product' },
-  ],
-  script: [
     {
-      type: 'application/ld+json',
-      innerHTML: computed(() => JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "name": product.value?.name || '',
-        "image": product.value?.image || '',
-        "description": product.value ? stripHtmlTags(product.value.description) : '',
-        "sku": product.value?.sku || '',
-        "brand": {
-          "@type": "Brand",
-          "name": product.value?.brand || 'Unknown'
-        },
-        "offers": {
-          "@type": "Offer",
-          "url": `${backendUrl}/product/${product.value?.slug}`,
-          "priceCurrency": "INR",
-          "price": product.value?.sale_price || '',
-          "itemCondition": product.value?.condition === 1 ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
-          "availability": product.value?.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
-        },
-      })),
+      hid: 'description',
+      name: 'description',
+      content: metaDescription.value,
+    },
+    {
+      hid: 'og:title',
+      property: 'og:title',
+      content: metaTitle.value,
+    },
+    {
+      hid: 'og:description',
+      property: 'og:description',
+      content: metaDescription.value,
+    },
+    {
+      hid: 'og:image',
+      property: 'og:image',
+      content: product.value?.image || '',
+    },
+    {
+      hid: 'og:url',
+      property: 'og:url',
+      content: `${config.public.baseURL}/products/${product.value?.slug}`,
+    },
+    {
+      hid: 'twitter:title',
+      name: 'twitter:title',
+      content: metaTitle.value,
+    },
+    {
+      hid: 'twitter:description',
+      name: 'twitter:description',
+      content: metaDescription.value,
+    },
+    {
+      hid: 'twitter:image',
+      name: 'twitter:image',
+      content: product.value?.image || '',
     },
   ],
+}));
+
+watch(product, (newVal) => {
+  if (newVal) {
+    // Remove any existing JSON-LD script to avoid duplication
+    const existingScript = document.querySelector('script[type="application/ld+json"]');
+    if (existingScript) {
+      existingScript.remove();
+    }
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.innerHTML = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": newVal.name || '',
+      "image": newVal.image || '',
+      "description": stripHtmlTags(newVal.description),
+      "sku": newVal.sku || '',
+      "brand": {
+        "@type": "Brand",
+        "name": newVal.brand || 'Unknown'
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": `${backendUrl}/product/${newVal.slug}`,
+        "priceCurrency": "INR",
+        "price": newVal.sale_price || '',
+        "itemCondition": newVal.condition === 1 ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
+        "availability": newVal.status === 1 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+      },
+    });
+    document.head.appendChild(script);
+  }
 });
-
-
-
-
 </script>
-
 
 <style scoped>
 .flex-left-column {
   flex: 0 0 75%;
-  /* Flex-grow, flex-shrink, flex-basis */
   max-width: 75%;
 }
 
 .flex-right-column {
   flex: 0 0 25%;
-  /* Flex-grow, flex-shrink, flex-basis */
   max-width: 25%;
   position: sticky;
   top: 0;

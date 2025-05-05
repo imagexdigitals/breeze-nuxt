@@ -18,9 +18,9 @@
     <div v-if="isLoading" class="mt-4 flex items-center justify-center h-52">
       <div class="w-8 h-8 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
     </div>
-    <div v-else-if="pincodeData.postcode"
-      :class="['mt-2', pincodeData.delivery_available === 1 ? 'text-gray-800' : 'text-red-600']">
-      <div v-if="pincodeData.delivery_available === 1" class="mt-4 space-y-4">
+    <div v-else-if="pincodeStore.postcode"
+      :class="['mt-2', pincodeStore.delivery_available === 1 ? 'text-gray-800' : 'text-red-600']">
+      <div v-if="pincodeStore.delivery_available === 1" class="mt-4 space-y-4">
         <div class="flex items-center text-sm">
           <NuxtImg src="/images/delivery-fast-24-ck.svg" alt="Fast Delivery" width="35" height="35" class="mr-2" />
           <div class="ml-1">
@@ -32,16 +32,16 @@
         <div class="flex items-center text-sm">
           <NuxtImg src="/images/delivery-truck-ck.svg" alt="Delivery Truck" width="35" height="35" class="mr-2" />
           <div class="ml-1">
-            <span class="block font-semibold">Delivery Available at {{ pincodeData.postcode }}</span>
-            <small class="block capitalize font-medium text-green-600">{{ pincodeData.location }}</small>
+            <span class="block font-semibold">Delivery Available at {{ pincodeStore.postcode }}</span>
+            <small class="block capitalize font-medium text-green-600">{{ pincodeStore.location }}</small>
           </div>
         </div>
 
         <div class="flex items-center text-sm">
           <NuxtImg src="/images/delivery-box-ck.svg" alt="Delivery Box" width="35" height="35" class="mr-2" />
           <div class="ml-1">
-            <span class="block font-semibold">{{ pincodeData.etd }}</span>
-            <small class="block font-medium text-green-600">Estimated Delivery Time {{ pincodeData.day }}</small>
+            <span class="block font-semibold">{{ pincodeStore.etd }}</span>
+            <small class="block font-medium text-green-600">Estimated Delivery Time {{ pincodeStore.day }}</small>
           </div>
         </div>
 
@@ -57,7 +57,8 @@
         <NuxtImg src="/images/delivery-not-available-ck.svg" alt="Delivery Not Available" width="35" height="35"
           class="mr-2" />
         <div class="ml-1 mt-2">
-          <span class="block font-semibold text-gray-800 text-sm">Delivery unavailable at {{ pincodeData.postcode }}</span>
+          <span class="block font-semibold text-gray-800 text-sm">Delivery unavailable at {{ pincodeStore.postcode
+            }}</span>
           <small class="block text-red-600">Try Another Pin Code</small>
         </div>
       </div>
@@ -68,19 +69,12 @@
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useRuntimeConfig } from '#app';
-
+import { usePincodeStore } from '@/stores/pincode';
 const sanctumFetch = useSanctumClient();
 
 const pincode = ref<string>('');
 const isLoading = ref<boolean>(false);
-const pincodeData = ref({
-  delivery_available: null,
-  location: null,
-  etd: null,
-  day: null,
-  postcode: null,
-});
-
+const pincodeStore = usePincodeStore();
 const config = useRuntimeConfig();
 const backendUrl = config.public.BACKEND_URL;
 let recheckInterval: number | undefined;
@@ -104,32 +98,15 @@ const checkPincode = async () => {
 
     // Assuming the response is already in JSON format
     const data = response;
-    // Update the local pincodeData with the fetched data
-    pincodeData.value = data;
-    savePincodeToLocalStorage();
+    // console.log('Pincode data:', data); // Debugging log
+
+    // Update the pincode store with the fetched data
+    pincodeStore.setPincodeData(data);
+    pincodeStore.saveToLocalStorage();
   } catch (error) {
     console.error('Error checking pincode:', error);
   } finally {
     isLoading.value = false;
-  }
-};
-
-const savePincodeToLocalStorage = () => {
-  if (process.client) {
-    localStorage.setItem('pincodeData', JSON.stringify(pincodeData.value));
-  }
-};
-
-const loadPincodeFromLocalStorage = () => {
-  if (process.client) {
-    const storedPincode = localStorage.getItem('pincodeData');
-    if (storedPincode) {
-      try {
-        pincodeData.value = JSON.parse(storedPincode);
-      } catch (error) {
-        console.error('Error parsing pincode data from localStorage:', error);
-      }
-    }
   }
 };
 
@@ -142,9 +119,8 @@ const startRecheckInterval = () => {
 };
 
 onMounted(() => {
-  loadPincodeFromLocalStorage();
-  if (pincodeData.value.postcode) {
-    pincode.value = pincodeData.value.postcode;
+  if (pincodeStore.postcode) {
+    pincode.value = pincodeStore.postcode;
   }
   startRecheckInterval();
 });

@@ -48,16 +48,13 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRuntimeConfig } from '#app';
-import { useCartStore } from '@/stores/cart';
-import { useQuoteStore } from '@/stores/quote';
-import { usePincodeStore } from '@/stores/pincode';
+import { useMobileDetection } from '~/composables/useMobileDetection';
 import RightSideColumn from '@/components/ProductPage/RightSideColumn.vue';
 import ProductPageOverallLeftColumn from '@/components/ProductPage/OverallLeftColumn.vue';
 import ProductBenefits from '@/components/ProductPage/ProductBenefits.vue';
 import ReturnWarrantyPolicy from '@/components/ProductPage/ReturnWarrantyPolicy.vue';
 import SpecificationDescriptionDetails from '@/components/ProductPage/SpecificationDescriptionDetails.vue';
 import ProductRelated from '@/components/ProductPage/ProductRelated.vue';
-import { useMobileDetection } from '~/composables/useMobileDetection';
 
 const { isMobile } = useMobileDetection();
 const sanctumFetch = useSanctumClient();
@@ -115,9 +112,17 @@ const backendUrl = config.public.BACKEND_URL;
 
 const product = ref<Product | null>(null);
 const isLoading = ref(true);
-const cartStore = useCartStore();
-const quoteStore = useQuoteStore();
-const pincodeStore = usePincodeStore();
+
+// Local state for cart, quote, and pincode
+const cartItems = ref([]);
+const quoteItems = ref([]);
+const pincodeData = ref({
+  delivery_available: null,
+  location: null,
+  etd: null,
+  day: null,
+  postcode: null,
+});
 
 const fetchProductDetails = async (slug: string) => {
   try {
@@ -154,9 +159,9 @@ onMounted(() => {
   if (slug) {
     fetchProductDetails(slug);
   }
-  cartStore.loadFromLocalStorage();
-  quoteStore.loadFromLocalStorage();
-  pincodeStore.loadFromLocalStorage();
+  loadCartFromLocalStorage();
+  loadQuoteFromLocalStorage();
+  loadPincodeFromLocalStorage();
 });
 
 const stripHtmlTags = (html) => {
@@ -251,6 +256,66 @@ watch(product, (newVal) => {
     document.head.appendChild(script);
   }
 });
+
+// Local storage functions for cart
+const loadCartFromLocalStorage = () => {
+  if (process.client) {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      try {
+        cartItems.value = JSON.parse(storedCart);
+      } catch (error) {
+        console.error('Error parsing cart from localStorage:', error);
+      }
+    }
+  }
+};
+
+const saveCartToLocalStorage = () => {
+  if (process.client) {
+    localStorage.setItem('cart', JSON.stringify(cartItems.value));
+  }
+};
+
+// Local storage functions for quote
+const loadQuoteFromLocalStorage = () => {
+  if (process.client) {
+    const storedQuote = localStorage.getItem('quoteItems');
+    if (storedQuote) {
+      try {
+        quoteItems.value = JSON.parse(storedQuote);
+      } catch (error) {
+        console.error('Error parsing quote items from localStorage:', error);
+      }
+    }
+  }
+};
+
+const saveQuoteToLocalStorage = () => {
+  if (process.client) {
+    localStorage.setItem('quoteItems', JSON.stringify(quoteItems.value));
+  }
+};
+
+// Local storage functions for pincode
+const loadPincodeFromLocalStorage = () => {
+  if (process.client) {
+    const storedPincode = localStorage.getItem('pincodeData');
+    if (storedPincode) {
+      try {
+        pincodeData.value = JSON.parse(storedPincode);
+      } catch (error) {
+        console.error('Error parsing pincode data from localStorage:', error);
+      }
+    }
+  }
+};
+
+const savePincodeToLocalStorage = () => {
+  if (process.client) {
+    localStorage.setItem('pincodeData', JSON.stringify(pincodeData.value));
+  }
+};
 </script>
 
 <style scoped>

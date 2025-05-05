@@ -118,7 +118,9 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
+import { useQuoteStore } from '@/stores/quote';
 import PincodeChecker from '~/components/ProductPage/PincodeChecker.vue';
+
 import type { Product } from '@/types/types';
 import AddToCart from './AddToCart.vue';
 import BuyNowButton from './BuyNowButton.vue';
@@ -129,9 +131,7 @@ interface Props {
 
 const props = defineProps<Props>();
 const quantity = ref<number>(props.product.minimum_qty);
-
-// Local state for quote items
-const quoteItems = ref<Array<{ product: Product; quantity: number }>>([]);
+const quoteStore = useQuoteStore();
 
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('en-IN', {
@@ -159,35 +159,11 @@ const allowBackspace = (event: KeyboardEvent) => {
 
 const addToQuote = () => {
   try {
-    const existingItem = quoteItems.value.find(item => item.product.id === props.product.id);
-    if (existingItem) {
-      existingItem.quantity += Number(quantity.value);
-    } else {
-      quoteItems.value.push({ product: props.product, quantity: Number(quantity.value) });
-    }
+    // Pass the entire product object and the quantity
+    quoteStore.addToQuote(props.product, Number(quantity.value));
     console.log(`Added to quote: ${props.product.name} (Quantity: ${quantity.value})`);
-    saveQuoteToLocalStorage();
   } catch (error) {
     console.error('Error adding to quote:', error);
-  }
-};
-
-const loadQuoteFromLocalStorage = () => {
-  if (process.client) {
-    const storedQuote = localStorage.getItem('quoteItems');
-    if (storedQuote) {
-      try {
-        quoteItems.value = JSON.parse(storedQuote);
-      } catch (error) {
-        console.error('Error parsing quote items from localStorage:', error);
-      }
-    }
-  }
-};
-
-const saveQuoteToLocalStorage = () => {
-  if (process.client) {
-    localStorage.setItem('quoteItems', JSON.stringify(quoteItems.value));
   }
 };
 
@@ -202,7 +178,11 @@ const addBottomPadding = () => {
 onMounted(() => {
   addBottomPadding();
   window.addEventListener('resize', addBottomPadding);
-  loadQuoteFromLocalStorage();
+});
+
+onMounted(() => {
+  addBottomPadding();
+  window.addEventListener('resize', addBottomPadding);
 });
 </script>
 
@@ -227,4 +207,5 @@ onMounted(() => {
     border-radius: 6px;
   }
 }
+
 </style>
