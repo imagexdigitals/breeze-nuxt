@@ -18,33 +18,42 @@ export const usePincodeStore = defineStore('pincode', {
   }),
   actions: {
     setPincodeData(data: PincodeState) {
-      this.delivery_available = data.delivery_available;
-      this.location = data.location;
-      this.etd = data.etd;
-      this.day = data.day;
-      this.postcode = data.postcode;
-      this.saveToLocalStorage();
+      Object.assign(this, data);
+      if (process.client) {
+        this.saveToLocalStorage();
+      }
     },
     clearPincodeData() {
-      this.delivery_available = null;
-      this.location = null;
-      this.etd = null;
-      this.day = null;
-      this.postcode = null;
-      this.saveToLocalStorage();
+      this.$reset();
+      if (process.client) {
+        localStorage.removeItem('pincodeData');
+      }
     },
     loadFromLocalStorage() {
-      const pincodeData = localStorage.getItem('pincodeData');
-      if (pincodeData) {
-        try {
-          this.setPincodeData(JSON.parse(pincodeData));
-        } catch (error) {
-          console.error('Error parsing pincode data from localStorage:', error);
+      if (process.client) {
+        const pincodeData = localStorage.getItem('pincodeData');
+        if (pincodeData) {
+          try {
+            this.setPincodeData(JSON.parse(pincodeData));
+          } catch (error) {
+            console.error('Error parsing pincode data from localStorage:', error);
+          }
         }
       }
     },
     saveToLocalStorage() {
-      localStorage.setItem('pincodeData', JSON.stringify(this.$state));
+      if (process.client) {
+        localStorage.setItem('pincodeData', JSON.stringify({
+          delivery_available: this.delivery_available,
+          location: this.location,
+          etd: this.etd,
+          day: this.day,
+          postcode: this.postcode
+        }));
+      }
     },
   },
+  hydrate(state, initialState) {
+    Object.assign(state, initialState);
+  }
 });

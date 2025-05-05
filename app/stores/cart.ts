@@ -20,24 +20,35 @@ export const useCartStore = defineStore('cart', {
       } else {
         this.items.push({ productId, quantity });
       }
-      this.saveToLocalStorage();
+      if (process.client) {
+        this.saveToLocalStorage();
+      }
     },
     removeFromCart(productId: number) {
       this.items = this.items.filter(item => item.productId !== productId);
-      this.saveToLocalStorage();
+      if (process.client) {
+        this.saveToLocalStorage();
+      }
     },
     loadFromLocalStorage() {
-      const storedCart = localStorage.getItem('cart');
-      if (storedCart) {
-        try {
-          this.items = JSON.parse(storedCart);
-        } catch (error) {
-          console.error('Error parsing cart from localStorage:', error);
+      if (process.client) {
+        const storedCart = localStorage.getItem('cart');
+        if (storedCart) {
+          try {
+            this.items = JSON.parse(storedCart);
+          } catch (error) {
+            console.error('Error parsing cart from localStorage:', error);
+          }
         }
       }
     },
     saveToLocalStorage() {
-      localStorage.setItem('cart', JSON.stringify(this.items));
+      if (process.client) {
+        localStorage.setItem('cart', JSON.stringify(this.items));
+      }
     },
   },
+  hydrate(state, initialState) {
+    state.items = initialState.items || [];
+  }
 });
