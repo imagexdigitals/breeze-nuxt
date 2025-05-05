@@ -48,13 +48,13 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRuntimeConfig } from '#app';
-import { useMobileDetection } from '~/composables/useMobileDetection';
-import RightSideColumn from '@/components/ProductPage/RightSideColumn.vue';
-import ProductPageOverallLeftColumn from '@/components/ProductPage/OverallLeftColumn.vue';
-import ProductBenefits from '@/components/ProductPage/ProductBenefits.vue';
-import ReturnWarrantyPolicy from '@/components/ProductPage/ReturnWarrantyPolicy.vue';
-import SpecificationDescriptionDetails from '@/components/ProductPage/SpecificationDescriptionDetails.vue';
-import ProductRelated from '@/components/ProductPage/ProductRelated.vue';
+import { useMobileDetection } from '@/composables/useMobileDetection';
+import RightSideColumn from '~/components/ProductPage/RightSideColumn.vue';
+import ProductPageOverallLeftColumn from '~/components/ProductPage/OverallLeftColumn.vue';
+import ProductBenefits from '~/components/ProductPage/ProductBenefits.vue';
+import ReturnWarrantyPolicy from '~/components/ProductPage/ReturnWarrantyPolicy.vue';
+import SpecificationDescriptionDetails from '~/components/ProductPage/SpecificationDescriptionDetails.vue';
+import ProductRelated from '~/components/ProductPage/ProductRelated.vue';
 
 const { isMobile } = useMobileDetection();
 const sanctumFetch = useSanctumClient();
